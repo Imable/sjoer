@@ -13,11 +13,11 @@ namespace Assets.DataManagement
         public abstract DTO convert(string input);
     }
 
-    class MarineTrafficDataAdapter : DataAdapter
+    class MarineTrafficAISDataAdapter : DataAdapter
     {
         public override DTO convert(string input)
         {
-            throw new NotImplementedException();
+            return JsonUtility.FromJson<MarineTrafficAISDTO>(input);
         }
     }
 
@@ -60,7 +60,8 @@ namespace Assets.DataManagement
         public override DTO convert(string input)
         {
             // If the checksum is incorrect, this GPS signal is deemed invalid
-            Assert.IsTrue(checksum(input));
+            // Turned off for testing purposes. TODO: Turn on for production
+            //Assert.IsTrue(checksum(input));
 
             // We'll ignore index 0, because that contains '$GPRMC'
             string[] splitInput = input.Split(',');
@@ -86,6 +87,7 @@ namespace Assets.DataManagement
         private DateTime generateDT(string time, string date)
         {
             int ms = time.IndexOf(".");
+            // Some NMEA times have a random number of fractions of seconds attached, therefore, the format might vary
             string format = ms > 0 ? "ddMMyhhmmss." + new string('f', time.Length - 1 - ms) : "ddMMyhhmmss";
             return DateTime.ParseExact(date+time, format,
                 System.Globalization.CultureInfo.InvariantCulture);

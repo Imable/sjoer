@@ -10,7 +10,7 @@ namespace Assets.DataManagement
     {
         GPSInfo,
         Postgres,
-        MarineTraffic,
+        MarineTrafficAIS,
         Mock
     }
 }

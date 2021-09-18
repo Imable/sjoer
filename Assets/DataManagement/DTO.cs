@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.DataManagement
 {
     public abstract class DTO
     {
         
+    }
+
+    [Serializable]
+    public class MarineTrafficAISDTO : DTO
+    {
+        public string Identifier;
+        public double Latitude;
+        public double Longitude;
     }
 
     public class GPSInfoDTO : DTO

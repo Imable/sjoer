@@ -25,7 +25,23 @@ namespace Assets.DataManagement
         }
         public override string get()
         {
-            return "$GPRMC,071228.00,A,5402.6015,N,00025.9797,E,0.2,332.1,180921,0.2,W,A,S*50";
+            // FROM ED: return "$GPRMC,071228.00,A,5402.6015,N,00025.9797,E,0.2,332.1,180921,0.2,W,A,S*50";
+            return "$GPRMC,071228.00,A,60.403029,N,5.322799,E,0.2,0,180921,0.2,W,A,S*50";
         }
     }
+
+    class MarineTrafficAISConnection : Connection
+    {
+        protected override void connect()
+        {
+
+        }
+
+        public override string get()
+        {
+            return "{\"Identifier\":\"VesselA\",\"Latitude\":60.404408,\"Longitude\":5.319165}";
+        }
+
+    }
+
 }

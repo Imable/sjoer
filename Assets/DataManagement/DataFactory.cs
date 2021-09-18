@@ -17,8 +17,8 @@ namespace Assets.DataManagement
                 case DataSources.Postgres:
                     dataAdapter = new PostgresDataAdapter();
                     break;
-                case DataSources.MarineTraffic:
-                    dataAdapter = new MarineTrafficDataAdapter();
+                case DataSources.MarineTrafficAIS:
+                    dataAdapter = new MarineTrafficAISDataAdapter();
                     break;
                 case DataSources.Mock:
                     dataAdapter = new MockDataAdapter();
@@ -43,8 +43,8 @@ namespace Assets.DataManagement
                 case DataSources.Postgres:
                     connection = new GPSInfoConnection();
                     break;
-                case DataSources.MarineTraffic:
-                    connection = new GPSInfoConnection();
+                case DataSources.MarineTrafficAIS:
+                    connection = new MarineTrafficAISConnection();
                     break;
                 case DataSources.Mock:
                     connection = new GPSInfoConnection();
@@ -59,6 +59,7 @@ namespace Assets.DataManagement
             return connection;
         }
 
+        // This one might be unneccessary
         public DTO getDTO(DataSources dataSource)
         {
             // TODO: Assign proper DTO's
@@ -71,7 +72,8 @@ namespace Assets.DataManagement
                     break;
                 case DataSources.Postgres:
                     break;
-                case DataSources.MarineTraffic:
+                case DataSources.MarineTrafficAIS:
+                    dto = new MarineTrafficAISDTO();
                     break;
                 case DataSources.Mock:
                     break;
