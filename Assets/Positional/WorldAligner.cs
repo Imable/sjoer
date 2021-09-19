@@ -78,7 +78,6 @@ namespace Assets.Positional
                 //}
         }
 
-
         // The rotation that transforms the Unity north axis to True north
         // This should only be executed when Hololens and vessel are aligned
         // (and thus vessel compass information and Hololens direction match)

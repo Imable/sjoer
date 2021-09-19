@@ -8,9 +8,22 @@ using System.Threading.Tasks;
 
 namespace Assets.SceneManagement
 {
-    class SceneManager : HelperClasses.Singleton<SceneManager>
+    public class SceneManager : HelperClasses.Singleton<SceneManager>
     {
         private Scenes currentScene;
         private Scenes nextScene;
+
+        public void setNextScene(Scenes scene)
+        {
+            
+        }
+
+        // This is called from the SpeechInputHandler_Global when the command 'Calibrate North' is given 
+        public void setNextSceneToCalibration()
+        {
+            this.setNextScene(Scenes.Calibration);
+        }
+
+        // TODO: Implement Scene transitions here
     }
 }
