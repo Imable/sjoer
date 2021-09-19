@@ -21,9 +21,26 @@ namespace Assets.Positional
         // Start is called before the first frame update
         void Start()
         {
+            Debug.Log($"VesselMode: {Config.Instance.conf.VesselMode}");
+
             dataRetriever = new DataRetriever(DataSources.GPSInfo);
             lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
             unityToTrueNorthRotation = unitytoTrueNorth();
+
+            DataRetriever marineTrafficAIS = new DataRetriever(DataSources.MarineTrafficAIS);
+            MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)marineTrafficAIS.fetch();
+            Debug.Log(mtAIS.Identifier);
+
+            double x, y, z;
+            HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
+            Debug.Log($"{x},{y},{z}");
+
+            Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
+
+            HelperClasses.GPSUtils.Instance.GeodeticToEnu(60.402585, 5.323235, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
+            Debug.Log($"{x},{y},{z}");
+
+            Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
 
             //updateAlignVesselAndHoloLens();
         }
@@ -40,18 +57,18 @@ namespace Assets.Positional
 
 
 
-            if (Input.GetKey(KeyCode.O))
-            {
-                DataRetriever marineTrafficAIS = new DataRetriever(DataSources.MarineTrafficAIS);
-                MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)marineTrafficAIS.fetch();
-                Debug.Log(mtAIS.Identifier);
+            //if (Input.GetKey(KeyCode.O))
+            //{
+                //DataRetriever marineTrafficAIS = new DataRetriever(DataSources.MarineTrafficAIS);
+                //MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)marineTrafficAIS.fetch();
+                //Debug.Log(mtAIS.Identifier);
 
-                double x, y, z;
-                HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
-                Debug.Log($"{x},{y},{z}");
+                //double x, y, z;
+                //HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
+                //Debug.Log($"{x},{y},{z}");
 
-                Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
-            }
+                //Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
+            //}
                 //    //Instantiate(cloneThisObject, mainCamera.transform.position + mainCamera.transform.forward * 2.0f, mainCamera.transform.rotation);
                 //}
 

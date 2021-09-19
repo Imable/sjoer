@@ -39,7 +39,7 @@ namespace Assets.DataManagement
 
         public override string get()
         {
-            return "{\"Identifier\":\"VesselA\",\"Latitude\":60.404408,\"Longitude\":5.319165}";
+            return "{\"Identifier\":\"VesselA\",\"Latitude\":60.402957,\"Longitude\":5.322762}";
         }
 
     }

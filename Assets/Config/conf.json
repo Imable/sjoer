@@ -1,0 +1,16 @@
+﻿{
+    "VesselMode": false,
+    "VesselSettings": {
+        "BridgeHeight": 15
+    },
+    "NonVesselSettings": {
+        "PlatformHeight": 15,
+        "Latitude": 60.51122,
+        "Longitude": 5.01231
+    },
+    "DbCreds": {
+        "UserName": "Test",
+        "Password": "Test",
+        "DataBaseName": "Test"
+    }
+}
