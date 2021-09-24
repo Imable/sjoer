@@ -8,7 +8,7 @@ namespace Assets.SceneManagement
 {
     public enum Scenes
     {
-        Calibration = 0,
-        AIS = 1
+        AIS = 0,
+        Calibration = 1
     }
 }

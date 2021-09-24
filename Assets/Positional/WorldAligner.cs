@@ -7,7 +7,7 @@ namespace Assets.Positional
 {
     public class WorldAligner : MonoBehaviour
     {
-        public GameObject cloneThisObject;
+        //public GameObject cloneThisObject;
         public Camera mainCamera;
 
         // Difference between vessel bearing (true north) and Hololens bearing (unity coordinates)
@@ -16,31 +16,35 @@ namespace Assets.Positional
 
         private DataRetriever dataRetriever;
 
-        private TouchScreenKeyboard keyboard;
-
         // Start is called before the first frame update
         void Start()
         {
-            Debug.Log($"VesselMode: {Config.Instance.conf.VesselMode}");
+            Debug.Log($"CalibrationSettings: {Config.Instance.conf.CalibrationSettings.Keys}");
 
             dataRetriever = new DataRetriever(DataSources.GPSInfo);
             lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
-            unityToTrueNorthRotation = unitytoTrueNorth();
+            unitytoTrueNorth();
 
             DataRetriever marineTrafficAIS = new DataRetriever(DataSources.MarineTrafficAIS);
             MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)marineTrafficAIS.fetch();
             Debug.Log(mtAIS.Identifier);
 
-            double x, y, z;
-            HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
-            Debug.Log($"{x},{y},{z}");
+            //double x, y, z;
+            //if (Config.Instance.conf.VesselMode)
+            //{
+            //    HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, -Config.Instance.conf.VesselSettings["BridgeHeight"], lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
+            //    Debug.Log($"{x},{y},{z}");
 
-            Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
+            //    Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
+            //} else
+            //{
+            //    HelperClasses.GPSUtils.Instance.GeodeticToEnu(60.402585, 5.323235, -Config.Instance.conf.NonVesselSettings["PlatformHeight"], Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], 0, out x, out y, out z);
+            //    Debug.Log($"{x},{y},{z}");
 
-            HelperClasses.GPSUtils.Instance.GeodeticToEnu(60.402585, 5.323235, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
-            Debug.Log($"{x},{y},{z}");
+            //    Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
 
-            Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
+
+            //}
 
             //updateAlignVesselAndHoloLens();
         }
@@ -81,9 +85,9 @@ namespace Assets.Positional
         // The rotation that transforms the Unity north axis to True north
         // This should only be executed when Hololens and vessel are aligned
         // (and thus vessel compass information and Hololens direction match)
-        Vector3 unitytoTrueNorth()
+        public void unitytoTrueNorth()
         {
-            return new Vector3(0, mainCamera.transform.rotation.eulerAngles.y
+            unityToTrueNorthRotation = new Vector3(0, mainCamera.transform.rotation.eulerAngles.y
                                     - (float) lastGPSUpdate.TrueCourse, 0);
         }
 
