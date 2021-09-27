@@ -159,8 +159,8 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 881731030}
-          m_TargetAssemblyTypeName: Assets.SceneManagement.SceneManager, Assembly-CSharp
-          m_MethodName: setNextSceneToCalibration
+          m_TargetAssemblyTypeName: Assets.SceneManagement.MySceneManager, Assembly-CSharp
+          m_MethodName: startCalibration
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -570,6 +570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 182394183}
+  sceneManager: {fileID: 881731029}
 --- !u!4 &897076499
 Transform:
   m_ObjectHideFlags: 0

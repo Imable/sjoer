@@ -9,24 +9,25 @@ namespace Assets.HelperClasses
 {
     class Timer : MonoBehaviour
     {
-        private float delay;
         private float time;
         private float totalTime;
         private bool done = false;
+        private Action onComplete;
 
 
         public Timer(float time, Action onComplete)
         {
             this.time = time;
             this.totalTime = time;
+            this.onComplete = onComplete;
         }
 
-        private void Start()
+        void Start()
         {
 
         }
 
-        private void Update()
+        public void Update()
         {
             if (!done)
             {
@@ -40,9 +41,15 @@ namespace Assets.HelperClasses
                 if (time == 0)
                 {
                     done = true;
+                    this.onComplete();
                 }
             }
 
+        }
+
+        public bool hasFinished()
+        {
+            return done;
         }
 
         public void restart()

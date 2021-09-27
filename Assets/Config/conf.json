@@ -18,7 +18,7 @@
     },
     "CalibrationSettings": {
         "SteadyTime": 3,
-        "PositionThreshold": 5,
-        "RotationThreshold":  5
+        "PositionThreshold": 1,
+        "RotationThreshold": 5
     }
 }

@@ -9,21 +9,61 @@ using UnityEngine.SceneManagement;
 
 namespace Assets.SceneManagement
 {
-    public class MySceneManager : HelperClasses.Singleton<MySceneManager>
+    public class MySceneManager : MonoBehaviour
     {
         // TODO: Write loop here, that loops when not calibrating.
         private bool looping = true;
 
+        void Start()
+        {
+
+        }
+
+        void Update()
+        {
+
+        }
+
         public void setNewScene(Scenes scene)
         {
-            Debug.Log($"Setting next scene to {nameof(scene)}");
+            Debug.Log($"Setting next scene to {scene.ToString()}");
             SceneManager.LoadScene((int) scene);
         }
 
-        // This is called from the SpeechInputHandler_Global when the command 'Calibrate North' is given 
-        public void setNextSceneToCalibration()
+        public void goNextScene(bool fromStart = false)
         {
+            Scenes nextScene = fromStart ? (Scenes)0 : getCurrentScene();
+
+            while (nextScene == Scenes.Calibration)
+            {
+                nextScene = getNextScene(nextScene);
+            }
+
+            setNewScene(nextScene);
+        }
+
+        private Scenes getCurrentScene()
+        {
+            return (Scenes)SceneManager.GetActiveScene().buildIndex;
+        }
+
+        private Scenes getNextScene(Scenes scene)
+        {
+            int nextScene = ((int)scene + 1);
+            return Enum.GetValues(typeof(Scenes)).Length < nextScene ? (Scenes)0 : (Scenes)nextScene;
+        }
+
+        // This is called from the SpeechInputHandler_Global when the command 'Calibrate North' is given 
+        public void startCalibration()
+        {
+            looping = false;
             this.setNewScene(Scenes.Calibration);
+        }
+
+        public void exitCalibration()
+        {
+            looping = true;
+            this.goNextScene(true);
         }
 
         // TODO: Implement Scene transitions here
