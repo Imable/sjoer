@@ -134,7 +134,13 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 1881442899647496460, guid: 50873c9e6a9c6434cb14e01e6cd8e4e5, type: 2}
+  - {fileID: 3752956539365474303, guid: 6b8259128faa40c4a877ea084109c17b, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -610,11 +616,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: ar-coastal-sailing
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 80f0423cdecad801
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: ar-coastal-sailing
