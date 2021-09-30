@@ -13,50 +13,26 @@ namespace Assets.Positional
         // Difference between vessel bearing (true north) and Hololens bearing (unity coordinates)
         private Vector3 unityToTrueNorthRotation = Vector3.zero;
         private GPSInfoDTO lastGPSUpdate;
+        private DataRetriever dataRetriever;
+
+        private async void updateGPS()
+        {
+            lastGPSUpdate = (GPSInfoDTO) await dataRetriever.fetch();
+        }
 
         // Start is called before the first frame update
         void Start()
         {
-            //dataRetriever = new DataRetriever(DataSources.GPSInfo);
-            //lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
-            //unitytoTrueNorth();
-
-            //DataRetriever ais = new DataRetriever(DataSources.AIS);
-            //MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)ais.fetch(
-            //    new string[]
-            //    {
-            //        "60.400000",
-            //        "60.404000",
-            //        "5.322000",
-            //        "5.323000"
-            //    }
-            //);
-            //Debug.Log(mtAIS.Identifier);
-
-            //double x, y, z;
-            //if (Config.Instance.conf.VesselMode)
-            //{
-            //    HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, -Config.Instance.conf.VesselSettings["BridgeHeight"], lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
-            //    Debug.Log($"{x},{y},{z}");
-
-            //    Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
-            //} else
-            //{
-            //    HelperClasses.GPSUtils.Instance.GeodeticToEnu(60.402585, 5.323235, -Config.Instance.conf.NonVesselSettings["PlatformHeight"], Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], 0, out x, out y, out z);
-            //    Debug.Log($"{x},{y},{z}");
-
-            //    Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
-
-
-            //}
-
-            //updateAlignVesselAndHoloLens();
+            dataRetriever = new DataRetriever(DataSources.GPSInfo);
         }
 
         // Update is called once per frame
         void Update()
         {
-            //lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
+            if (dataRetriever.isConnected())
+            {
+                updateGPS();
+            }
 
 
             //Debug.Log($"HoloForward: {mainCamera.transform.forward}");
