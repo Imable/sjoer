@@ -17,8 +17,8 @@ namespace Assets.DataManagement
                 case DataSources.Postgres:
                     dataAdapter = new PostgresDataAdapter();
                     break;
-                case DataSources.MarineTrafficAIS:
-                    dataAdapter = new MarineTrafficAISDataAdapter();
+                case DataSources.AIS:
+                    dataAdapter = new AISDataAdapter();
                     break;
                 case DataSources.Mock:
                     dataAdapter = new MockDataAdapter();
@@ -43,8 +43,8 @@ namespace Assets.DataManagement
                 case DataSources.Postgres:
                     connection = new GPSInfoConnection();
                     break;
-                case DataSources.MarineTrafficAIS:
-                    connection = new MarineTrafficAISConnection();
+                case DataSources.AIS:
+                    connection = new AISConnection();
                     break;
                 case DataSources.Mock:
                     connection = new GPSInfoConnection();
@@ -72,8 +72,8 @@ namespace Assets.DataManagement
                     break;
                 case DataSources.Postgres:
                     break;
-                case DataSources.MarineTrafficAIS:
-                    dto = new MarineTrafficAISDTO();
+                case DataSources.AIS:
+                    dto = new AISDTO();
                     break;
                 case DataSources.Mock:
                     break;

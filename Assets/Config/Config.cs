@@ -11,12 +11,17 @@ using Newtonsoft.Json;
 class Config : Assets.HelperClasses.Singleton<Config>
 {
     public Conf conf;
+    public BarentsConf barentswatch;
     public Config()
     {
-        
-        string path = Path.Combine(Directory.GetCurrentDirectory(), "Assets\\Config\\conf.json");
-        conf = JsonConvert.DeserializeObject<Conf>(File.ReadAllText(path));
-        Debug.Log(conf);
+        conf         = JsonConvert.DeserializeObject<Conf>(File.ReadAllText(path("conf.json")));
+        barentswatch = JsonConvert.DeserializeObject<BarentsConf>(File.ReadAllText(path("barentswatch_conf.json")));
+    }
+
+    private string path(string fname)
+    {
+        string path = Path.Combine(Directory.GetCurrentDirectory(), $"Assets\\Config\\{fname}");
+        return path;
     }
 }
 
@@ -29,4 +34,14 @@ class Conf
     public Dictionary<string, string> DbCreds;
     public Dictionary<string, int> SceneSettings;
     public Dictionary<string, int> CalibrationSettings;
+}
+
+class BarentsConf
+{
+    public string token_url;
+    public string ais_url;
+    public string auth_format;
+    public string client_id;
+    public string client_secret;
+
 }

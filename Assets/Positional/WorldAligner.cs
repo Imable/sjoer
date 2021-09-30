@@ -14,18 +14,24 @@ namespace Assets.Positional
         private Vector3 unityToTrueNorthRotation = Vector3.zero;
         private GPSInfoDTO lastGPSUpdate;
 
-        private DataRetriever dataRetriever;
-
         // Start is called before the first frame update
         void Start()
         {
-            dataRetriever = new DataRetriever(DataSources.GPSInfo);
-            lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
-            unitytoTrueNorth();
+            //dataRetriever = new DataRetriever(DataSources.GPSInfo);
+            //lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
+            //unitytoTrueNorth();
 
-            DataRetriever marineTrafficAIS = new DataRetriever(DataSources.MarineTrafficAIS);
-            MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)marineTrafficAIS.fetch();
-            Debug.Log(mtAIS.Identifier);
+            //DataRetriever ais = new DataRetriever(DataSources.AIS);
+            //MarineTrafficAISDTO mtAIS = (MarineTrafficAISDTO)ais.fetch(
+            //    new string[]
+            //    {
+            //        "60.400000",
+            //        "60.404000",
+            //        "5.322000",
+            //        "5.323000"
+            //    }
+            //);
+            //Debug.Log(mtAIS.Identifier);
 
             //double x, y, z;
             //if (Config.Instance.conf.VesselMode)
@@ -50,7 +56,7 @@ namespace Assets.Positional
         // Update is called once per frame
         void Update()
         {
-            lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
+            //lastGPSUpdate = (GPSInfoDTO)dataRetriever.fetch();
 
 
             //Debug.Log($"HoloForward: {mainCamera.transform.forward}");

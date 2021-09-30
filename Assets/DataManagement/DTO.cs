@@ -12,12 +12,32 @@ namespace Assets.DataManagement
         
     }
 
-    [Serializable]
-    public class MarineTrafficAISDTO : DTO
+    public class AISDTOs : DTO
     {
-        public string Identifier;
-        public double Latitude;
-        public double Longitude;
+        public List<AISDTO> vessels = new List<AISDTO>();
+    }
+
+    public class AISDTO : DTO
+    {
+        public DateTime TimeStamp { get; set; }
+        public int MMSI { get; set; }
+        public double SOG { get; set; }
+        public double COG { get; set; }
+        public double Rot { get; set; }
+        public double Heading { get; set; }
+        public double Draught { get; set; }
+        public double NavStat { get; set; }
+        public int ShipType { get; set; }
+        public string CallSign { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string Destination { get; set; }
+        public DateTime ETA { get; set; }
+
+        public string Name { get; set; }
+        public int IMO { get; set; }
+        public string Country { get; set; }
+
     }
 
     public class GPSInfoDTO : DTO

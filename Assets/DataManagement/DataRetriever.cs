@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace Assets.DataManagement
 {
@@ -17,9 +17,16 @@ namespace Assets.DataManagement
             connection = DataFactory.Instance.getConnection(dataSource);
         }
 
-        public DTO fetch()
+        public async Task<DTO> fetch(params string[] param)
         {
-            return this.dataAdapter.convert(this.connection.get());
+            return dataAdapter.convert(
+                await connection.get(param)
+                );
+        }
+
+        public bool isConnected()
+        {
+            return connection.connected;
         }
     }
 }

@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine.Assertions;
 using UnityEngine;
+using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Assets.DataManagement
 {
@@ -13,11 +16,60 @@ namespace Assets.DataManagement
         public abstract DTO convert(string input);
     }
 
-    class MarineTrafficAISDataAdapter : DataAdapter
+    class AISDataAdapter : DataAdapter
     {
+        private double getDouble(JObject vessel, string s)
+        {
+            JToken val = vessel.GetValue(s);
+            return val.Type != JTokenType.Null ? val.ToObject<double>() : double.NaN;
+        }
+
+        private string getString(JObject vessel, string s)
+        {
+            JToken val = vessel.GetValue(s);
+            return val.Type != JTokenType.Null ? val.ToObject<string>() : string.Empty;
+        }
+
+        private int getInt(JObject vessel, string s)
+        {
+            JToken val = vessel.GetValue(s);
+            return val.Type != JTokenType.Null ? val.ToObject<int>() : 0;
+        }
+
+        private DateTime getDateTime(JObject vessel, string s)
+        {
+            JToken val = vessel.GetValue(s);
+            return val.Type != JTokenType.Null ? val.ToObject<DateTime>() : DateTime.MinValue;
+        }
+
         public override DTO convert(string input)
         {
-            return JsonUtility.FromJson<MarineTrafficAISDTO>(input);
+            AISDTOs dto = new AISDTOs();
+            JArray vessels = JsonConvert.DeserializeObject<JArray>(input);
+            foreach (JObject vessel in vessels)
+            {
+                AISDTO vesselDTO = new AISDTO();
+
+                vesselDTO.TimeStamp   = getDateTime(vessel, "timeStamp");
+                vesselDTO.SOG         = getDouble(vessel, "sog");
+                vesselDTO.Rot         = getDouble(vessel, "rot");
+                vesselDTO.NavStat     = getDouble(vessel, "navstat");
+                vesselDTO.MMSI        = getInt(vessel, "mmsi");
+                vesselDTO.COG         = getDouble(vessel, "cog");
+                vesselDTO.ShipType    = getInt(vessel, "shipType");
+                vesselDTO.Name        = getString(vessel, "name");
+                vesselDTO.IMO         = getInt(vessel, "imo");
+                vesselDTO.CallSign    = getString(vessel, "callsign");
+                vesselDTO.Draught     = getDouble(vessel, "draught");
+                vesselDTO.Heading     = getDouble(vessel, "heading");
+                vesselDTO.Destination = getString(vessel, "destination");
+                vesselDTO.ETA         = getDateTime(vessel, "eta");
+                vesselDTO.Country     = getString(vessel, "country");
+
+                dto.vessels.Add(vesselDTO);
+            }
+
+            return dto;
         }
     }
 
