@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using Assets.InfoItems;
+using System;
 
 namespace Assets.SceneManagement
 {
     public class DefaultScene : MonoBehaviour
     {
         private InfoItem[] infoItems;
+        private DateTime lastDataUpdate = DateTime.Now;
 
         void Start()
         {
@@ -21,17 +23,23 @@ namespace Assets.SceneManagement
 
         void Update()
         {
-            foreach (InfoItem infoItem in infoItems)
+            // Only update data every `UpdateInterval` seconds
+            DateTime now = DateTime.Now;
+            if ((now - lastDataUpdate).TotalSeconds > Config.Instance.conf.DataSettings["UpdateInterval"])
             {
-                if (infoItem.isConnected())
+                lastDataUpdate = now;
+                foreach (InfoItem infoItem in infoItems)
                 {
-                    infoItem.Update(new string[]
+                    if (infoItem.isConnected())
                     {
-                        "5.259668",
-                        "5.333057",
-                        "60.393674",
-                        "60.404000"
-                    });
+                        infoItem.UpdateData(new string[]
+                        {
+                            "5.259668",
+                            "5.333057",
+                            "60.393674",
+                            "60.404000"
+                        });
+                    }
                 }
             }
         }

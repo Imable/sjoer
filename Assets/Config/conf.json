@@ -1,5 +1,8 @@
 ﻿{
     "VesselMode": false,
+    "DataSettings": {
+      "UpdateInterval": 5
+    },
     "VesselSettings": {
         "BridgeHeight": 15.0
     },

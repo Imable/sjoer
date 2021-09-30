@@ -42,6 +42,14 @@ namespace Assets.DataManagement
             return val.Type != JTokenType.Null ? val.ToObject<DateTime>() : DateTime.MinValue;
         }
 
+        private Tuple<double, double> getLatLon(JObject vessel, string s)
+        {
+            JToken val = vessel.SelectToken(s);
+            return val.Type != JTokenType.Null 
+                ? new Tuple<double, double>((double)val[0], (double)val[1]) 
+                : new Tuple<double, double>(double.NaN, double.NaN);
+        }
+
         public override DTO convert(string input)
         {
             AISDTOs dto = new AISDTOs();
@@ -65,6 +73,10 @@ namespace Assets.DataManagement
                 vesselDTO.Destination = getString(vessel, "destination");
                 vesselDTO.ETA         = getDateTime(vessel, "eta");
                 vesselDTO.Country     = getString(vessel, "country");
+
+                Tuple<double, double> LatLon = getLatLon(vessel, "geometry.coordinates");
+                vesselDTO.Longitude   = LatLon.Item1;
+                vesselDTO.Latitude    = LatLon.Item2;
 
                 dto.vessels.Add(vesselDTO);
             }

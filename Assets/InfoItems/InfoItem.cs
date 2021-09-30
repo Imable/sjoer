@@ -25,10 +25,13 @@ namespace Assets.InfoItems
         {
         }
 
-        public async void Update(params string[] param)
+        public async void UpdateData(params string[] param)
         {
             AISDTOs dto = (AISDTOs) await dataRetriever.fetch(param);
-            Debug.Log(dto.vessels.Count);
+            foreach (AISDTO aisDTO in dto.vessels)
+            {
+                Debug.Log($"Lat: {aisDTO.Latitude}  Lon: {aisDTO.Longitude}");
+            }
         }
     }
 }
