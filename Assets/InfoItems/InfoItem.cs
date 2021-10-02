@@ -5,17 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using Assets.DataManagement;
 using UnityEngine;
+using Unity;
+using Assets.Positional;
 
 namespace Assets.InfoItems
 {
-    class InfoItem
+    class InfoItem : MonoBehaviour
     {
+        GameObject markerObject;
+        Dictionary<string, GameObject> markerObjects;
         DataRetriever dataRetriever;
         AISDTOs latestVessels;
-        
-        public InfoItem(DataSources dataSource)
+        WorldAligner playerAligner;
+
+
+        public InfoItem(DataSources dataSource, GameObject markerObject, WorldAligner playerAligner)
         {
-            dataRetriever = new DataRetriever(dataSource);
+            this.dataRetriever = new DataRetriever(dataSource);
+            this.markerObjects = new Dictionary<string, GameObject>();
+            this.markerObject  = markerObject;
+            this.playerAligner = playerAligner;
+            
         }
 
         public bool isConnected()
@@ -32,31 +42,27 @@ namespace Assets.InfoItems
             AISDTOs dto = (AISDTOs) await dataRetriever.fetch(param);
             latestVessels = dto;
 
-            // v Debug purposes v
+            Debug.Log($"Got {dto.vessels.Count} vessels from BarentsWatch");
+
             foreach (AISDTO aisDTO in dto.vessels)
             {
-                Debug.Log($"Lat: {aisDTO.Latitude}  Lon: {aisDTO.Longitude}");
+                //Debug.Log($"Lat: {aisDTO.Latitude}  Lon: {aisDTO.Longitude}");
+
+                // Call to WorldAligner here and assign value
+                Tuple<Vector3, Quaternion> pos = playerAligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
+
+                if (markerObjects.ContainsKey(aisDTO.Name)) {
+                    markerObjects[aisDTO.Name].transform.position = pos.Item1;
+                    markerObjects[aisDTO.Name].transform.rotation = pos.Item2;
+                } else
+                {
+                    markerObjects.Add(aisDTO.Name, Instantiate(this.markerObject, pos.Item1, pos.Item2));
+                }
             }
         }
 
         public void Draw()
         {
-            //double x, y, z;
-            //if (Config.Instance.conf.VesselMode)
-            //{
-            //    HelperClasses.GPSUtils.Instance.GeodeticToEnu(mtAIS.Latitude, mtAIS.Longitude, -Config.Instance.conf.VesselSettings["BridgeHeight"], lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, out x, out y, out z);
-            //    Debug.Log($"{x},{y},{z}");
-
-            //    Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
-            //} else
-            //{
-            //    HelperClasses.GPSUtils.Instance.GeodeticToEnu(60.402585, 5.323235, -Config.Instance.conf.NonVesselSettings["PlatformHeight"], Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], 0, out x, out y, out z);
-            //    Debug.Log($"{x},{y},{z}");
-
-            //    Instantiate(cloneThisObject, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
-
-
-            //}
         }
     }
 }

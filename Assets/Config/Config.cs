@@ -29,7 +29,7 @@ class Config : Assets.HelperClasses.Singleton<Config>
 class Conf
 {
     public bool VesselMode;
-    public Dictionary<string, int> DataSettings;
+    public Dictionary<string, double> DataSettings;
     public Dictionary<string, double> VesselSettings;
     public Dictionary<string, double> NonVesselSettings;
     public Dictionary<string, string> DbCreds;

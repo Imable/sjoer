@@ -24,7 +24,7 @@ namespace Assets.DataManagement
     {
         protected override void connect()
         {
-
+            this.connected = true;
         }
         public override Task<string> get(params string[] param)
         {
@@ -74,12 +74,13 @@ namespace Assets.DataManagement
             return new Uri(uri);
         }
 
+        // Lat Min, Lon Min, Lat Max, Lon Max
         public override async Task<string> get(params string[] param)
         {
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
-                RequestUri = getUriwithParams(param[0], param[1], param[2], param[3])
+                RequestUri = getUriwithParams(param[1], param[3], param[0], param[2])
             };
 
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.token);

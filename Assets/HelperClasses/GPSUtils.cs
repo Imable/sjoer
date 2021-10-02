@@ -7,6 +7,7 @@
 // Taken from https://gist.github.com/govert/1b373696c9a27ff4c72a
 
 using System;
+using UnityEngine;
 
 namespace Assets.HelperClasses
 {
@@ -84,10 +85,39 @@ namespace Assets.HelperClasses
             EcefToEnu(x, y, z, lat0, lon0, h0, out xEast, out yNorth, out zUp);
         }
 
+        public Tuple<Vector2, Vector2> GetCurrentLatLonArea(double lat, double lon)
+        {
+            //offsets in meters
+            double dn = Config.Instance.conf.DataSettings["LatitudeArea"];
+            double de = Config.Instance.conf.DataSettings["LongitudeArea"];
+
+            return new Tuple<Vector2, Vector2>(
+                OffsetLatLonByMeter(lat, lon, -dn, -de),
+                OffsetLatLonByMeter(lat, lon, dn, de)
+            );
+        }
+
+        private Vector2 OffsetLatLonByMeter(double lat, double lon, double dn, double de)
+        {
+            // Code retrieved from https://gis.stackexchange.com/a/2980
+
+            // Earth’s radius, sphere
+            double R = 6378137;
+
+            // Coordinate offsets in radians
+            double dLat = dn / R;
+            double dLon = de / (R * Math.Cos(Math.PI * lat / 180));
+
+            // OffsetPosition, decimal degrees
+            double latO = lat + dLat * 180 / Math.PI;
+            double lonO = lon + dLon * 180 / Math.PI;
+
+            return new Vector2((float)latO, (float)lonO);
+        }
 
         private double DegreeToRadian(double angle)
         {
             return Math.PI * angle / 180.0;
         }
-}
+    }
 }

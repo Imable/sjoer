@@ -1,13 +1,15 @@
 ﻿{
     "VesselMode": false,
     "DataSettings": {
-      "UpdateInterval": 5
+      "UpdateInterval": 5.0,
+      "LatitudeArea": 5000,
+      "LongitudeArea": 5000
     },
     "VesselSettings": {
-        "BridgeHeight": 15.0
+        "BridgeHeight": 0.0
     },
     "NonVesselSettings": {
-        "PlatformHeight": 15.0,
+        "PlatformHeight": 0.0,
         "Latitude": 60.403055,
         "Longitude": 5.322880
     },
