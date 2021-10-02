@@ -46,14 +46,21 @@ namespace Assets.Positional
             double x, y, z;
             if (Config.Instance.conf.VesselMode)
             {
-                HelperClasses.GPSUtils.Instance.GeodeticToEnu(lat, lon, 0, lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, -Config.Instance.conf.VesselSettings["BridgeHeight"], out x, out y, out z);
+                HelperClasses.GPSUtils.Instance.GeodeticToEnu(
+                    lat, lon, 0, lastGPSUpdate.Latitude, 
+                    lastGPSUpdate.Longitude, -Config.Instance.conf.VesselSettings["BridgeHeight"], 
+                    out x, out y, out z
+                );
             }
             else
             {
-                HelperClasses.GPSUtils.Instance.GeodeticToEnu(lat, lon, 0, Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], -Config.Instance.conf.NonVesselSettings["PlatformHeight"], out x, out y, out z);
+                HelperClasses.GPSUtils.Instance.GeodeticToEnu(
+                    lat, lon, 0, Config.Instance.conf.NonVesselSettings["Latitude"], 
+                    Config.Instance.conf.NonVesselSettings["Longitude"], -Config.Instance.conf.NonVesselSettings["PlatformHeight"], 
+                    out x, out y, out z
+                );
             }
 
-            Debug.Log($"x: {x}, y: {y}, z: {z}");
             return new Tuple<Vector3, Quaternion>(mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
         }
 

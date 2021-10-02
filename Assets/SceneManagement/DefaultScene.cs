@@ -41,8 +41,6 @@ namespace Assets.SceneManagement
             {
                 lastDataUpdate = now;
                 Tuple<Vector2, Vector2> latLonArea = playerAligner.GetCurrentLatLonArea();
-                Debug.Log($"Lat min {latLonArea.Item1.x} Lon min {latLonArea.Item1.y}");
-                Debug.Log($"Lat max {latLonArea.Item2.x} Lon max {latLonArea.Item2.y}");
 
                 foreach (InfoItem infoItem in infoItems)
                 {
@@ -50,7 +48,7 @@ namespace Assets.SceneManagement
                     {
                         infoItem.UpdateData(new string[]
                         {
-                            //latmin lonmin latmax lonmax
+                            // latmin lonmin latmax lonmax
                             latLonArea.Item1.x.ToString(),
                             latLonArea.Item1.y.ToString(),
                             latLonArea.Item2.x.ToString(),

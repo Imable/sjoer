@@ -58,6 +58,11 @@ namespace Assets.InfoItems
                 {
                     markerObjects.Add(aisDTO.Name, Instantiate(this.markerObject, pos.Item1, pos.Item2));
                 }
+
+                if (!double.IsNaN(aisDTO.Heading))
+                {
+                    markerObjects[aisDTO.Name].transform.Rotate(0f, 90f + (float)aisDTO.Heading, 0f, Space.Self);
+                }
             }
         }
 

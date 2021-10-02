@@ -6,10 +6,10 @@
       "LongitudeArea": 5000
     },
     "VesselSettings": {
-        "BridgeHeight": 0.0
+        "BridgeHeight": 15.0
     },
     "NonVesselSettings": {
-        "PlatformHeight": 0.0,
+      "PlatformHeight": 10.0,
         "Latitude": 60.403055,
         "Longitude": 5.322880
     },
