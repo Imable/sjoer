@@ -171,7 +171,7 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
   persistentKeywords: 0
-  speechConfirmationTooltipPrefab: {fileID: 0}
+  speechConfirmationTooltipPrefab: {fileID: 8046114618238072051, guid: 271778f6c957b524981067a81d238394, type: 3}
 --- !u!4 &146097132
 Transform:
   m_ObjectHideFlags: 0

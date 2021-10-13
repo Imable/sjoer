@@ -1,0 +1,73 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Assets.DataManagement;
+using UnityEngine;
+using Unity;
+using Assets.Positional;
+
+namespace Assets.InfoItems
+{
+    class InfoItem : MonoBehaviour
+    {
+        GameObject markerObject;
+        Dictionary<string, GameObject> markerObjects;
+        DataRetriever dataRetriever;
+        AISDTOs latestVessels;
+        WorldAligner playerAligner;
+
+
+        public InfoItem(DataSources dataSource, GameObject markerObject, WorldAligner playerAligner)
+        {
+            this.dataRetriever = new DataRetriever(dataSource);
+            this.markerObjects = new Dictionary<string, GameObject>();
+            this.markerObject  = markerObject;
+            this.playerAligner = playerAligner;
+            
+        }
+
+        public bool isConnected()
+        {
+            return dataRetriever.isConnected();
+        }
+
+        public void Start()
+        {
+        }
+
+        public async void UpdateData(params string[] param)
+        {
+            AISDTOs dto = (AISDTOs) await dataRetriever.fetch(param);
+            latestVessels = dto;
+
+            Debug.Log($"Got {dto.vessels.Count} vessels from BarentsWatch");
+
+            foreach (AISDTO aisDTO in dto.vessels)
+            {
+                //Debug.Log($"Lat: {aisDTO.Latitude}  Lon: {aisDTO.Longitude}");
+
+                // Call to WorldAligner here and assign value
+                Tuple<Vector3, Quaternion> pos = playerAligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
+
+                if (markerObjects.ContainsKey(aisDTO.Name)) {
+                    markerObjects[aisDTO.Name].transform.position = pos.Item1;
+                    markerObjects[aisDTO.Name].transform.rotation = pos.Item2;
+                } else
+                {
+                    markerObjects.Add(aisDTO.Name, Instantiate(this.markerObject, pos.Item1, pos.Item2));
+                }
+
+                if (!double.IsNaN(aisDTO.Heading))
+                {
+                    markerObjects[aisDTO.Name].transform.Rotate(0f, 90f + (float)aisDTO.Heading, 0f, Space.Self);
+                }
+            }
+        }
+
+        public void Draw()
+        {
+        }
+    }
+}
