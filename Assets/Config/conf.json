@@ -8,11 +8,13 @@
     "VesselSettings": {
         "BridgeHeight": 15.0
     },
-    "NonVesselSettings": {
-      "PlatformHeight": 10.0,
-        "Latitude": 60.403055,
-        "Longitude": 5.322880
-    },
+  "NonVesselSettings": {
+    "PlatformHeight": 15.0,
+    "Latitude": 60.397908,
+    "Longitude": 5.317065,
+    "Latitude_home": 60.403055,
+    "Longitude_home": 5.322880
+  },
     "DbCreds": {
         "UserName": "Test",
         "Password": "Test",
