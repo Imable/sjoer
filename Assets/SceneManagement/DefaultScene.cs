@@ -7,18 +7,18 @@ namespace Assets.SceneManagement
 {
     public class DefaultScene : MonoBehaviour
     {
-        public GameObject markerObject;
+        [SerializeField]
         public GameObject player;
 
         private InfoItem[] infoItems;
-        private DateTime lastDataUpdate = DateTime.Now;
-        private WorldAligner playerAligner;
 
         void Start()
         {
-            playerAligner = player.GetComponent<WorldAligner>();
+            WorldAligner aligner = player.GetComponent<WorldAligner>();
+
+            //DelayedInfoItem: Config.Instance.conf.DataSettings["UpdateInterval"]
             this.infoItems = new InfoItem[] {
-                new InfoItem(DataManagement.DataSources.AIS, markerObject, playerAligner)
+                new DelayedInfoItem(DataManagement.DataSources.AIS, Graphics.GraphicTypes.Point3D, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
             };
 
             foreach (InfoItem infoItem in infoItems)
@@ -29,39 +29,10 @@ namespace Assets.SceneManagement
 
         void Update()
         {
-            FetchData();
-            Draw();
-        }
-
-        void FetchData()
-        {
-            // Only update data every `UpdateInterval` seconds
-            DateTime now = DateTime.Now;
-            if ((now - lastDataUpdate).TotalSeconds > Config.Instance.conf.DataSettings["UpdateInterval"])
+            foreach (InfoItem infoItem in infoItems)
             {
-                lastDataUpdate = now;
-                Tuple<Vector2, Vector2> latLonArea = playerAligner.GetCurrentLatLonArea();
-
-                foreach (InfoItem infoItem in infoItems)
-                {
-                    if (infoItem.isConnected())
-                    {
-                        infoItem.UpdateData(new string[]
-                        {
-                            // latmin lonmin latmax lonmax
-                            latLonArea.Item1.x.ToString(),
-                            latLonArea.Item1.y.ToString(),
-                            latLonArea.Item2.x.ToString(),
-                            latLonArea.Item2.y.ToString()
-                        });
-                    }
-                }
+                infoItem.Update();
             }
-        }
-
-        void Draw()
-        {
-
         }
     }
 }

@@ -613,7 +613,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a82a8efed2a3e4b953b9b57022a827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  markerObject: {fileID: 1628987464}
   player: {fileID: 182394183}
 --- !u!4 &1424894767
 Transform:

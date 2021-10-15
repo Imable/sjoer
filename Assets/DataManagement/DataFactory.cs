@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Positional;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Assets.DataManagement
 {
     class DataFactory : HelperClasses.Singleton<DataFactory>
     {
+        public WorldAligner aligner = null;
+
         public DataAdapter getDataAdapter(DataSources dataSource)
         {
             DataAdapter dataAdapter;
@@ -57,6 +60,29 @@ namespace Assets.DataManagement
             }
 
             return connection;
+        }
+
+        public ParameterExtractor getParameterExtractor(DataSources dataSource)
+        {
+            // TODO: Assign proper DTO's
+            ParameterExtractor parameterExtractor = new ParameterExtractor();
+
+            switch (dataSource)
+            {
+                case DataSources.GPSInfo:
+                    break;
+                case DataSources.Postgres:
+                    break;
+                case DataSources.AIS:
+                    parameterExtractor = new AISParameterExtractor(aligner);
+                    break;
+                case DataSources.Mock:
+                    break;
+                default:
+                    break;
+            }
+
+            return parameterExtractor;
         }
 
         // This one might be unneccessary

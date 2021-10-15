@@ -24,7 +24,7 @@ namespace Assets.Positional
         // Start is called before the first frame update
         void Start()
         {
-            dataRetriever = new DataRetriever(DataSources.GPSInfo);
+            dataRetriever = new DataRetriever(DataSources.GPSInfo, this);
         }
 
         // Update is called once per frame
