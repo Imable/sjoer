@@ -14,7 +14,7 @@ namespace Assets.DataManagement
 
     public class AISDTOs : DTO
     {
-        public List<AISDTO> vessels = new List<AISDTO>();
+        public AISDTO[] vessels;
     }
 
     public class AISDTO : DTO

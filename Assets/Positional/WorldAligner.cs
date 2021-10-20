@@ -56,7 +56,7 @@ namespace Assets.Positional
             {
                 HelperClasses.GPSUtils.Instance.GeodeticToEnu(
                     lat, lon, 0, Config.Instance.conf.NonVesselSettings["Latitude"], 
-                    Config.Instance.conf.NonVesselSettings["Longitude"], -Config.Instance.conf.NonVesselSettings["PlatformHeight"], 
+                    Config.Instance.conf.NonVesselSettings["Longitude"], Config.Instance.conf.NonVesselSettings["PlatformHeight"], 
                     out x, out y, out z
                 );
             }

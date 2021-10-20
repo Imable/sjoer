@@ -26,12 +26,13 @@ namespace Assets.Graphics
             this.drawer = GraphicFactory.Instance.getDrawer(graphicType);
         }
 
-        public void display(DTO dto)
+        public void Display(DTO dto)
         {
-            this.shape.Get(dto);
-            shape = positioner.Position(this.shape);
             AISDTOs dtos = (AISDTOs)dto;
-            Debug.Log($"Got {dtos.vessels.Count} vessels from BarentsWatch");
+            Debug.Log($"Got {dtos.vessels.Length} vessels from BarentsWatch");
+            shape.Get(dto);
+            shape = positioner.Position(shape);
+            drawer.Draw(shape);
         }
     }
 }

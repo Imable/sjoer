@@ -19,15 +19,15 @@ namespace Assets.DataManagement
 
     class AISParameterExtractor : ParameterExtractor
     {
-        WorldAligner worldAligner;
-        public AISParameterExtractor(WorldAligner worldAligner)
+        private WorldAligner aligner;
+        public AISParameterExtractor(WorldAligner aligner)
         {
-            this.worldAligner = worldAligner;
+            this.aligner = aligner;
         }
 
         public override string[] get()
         {
-            Tuple<Vector2, Vector2> latLonArea = worldAligner.GetCurrentLatLonArea();
+            Tuple<Vector2, Vector2> latLonArea = aligner.GetCurrentLatLonArea();
             return new string[]
                 {
                     // latmin lonmin latmax lonmax

@@ -21,10 +21,10 @@ namespace Assets.Graphics
             switch (graphicType)
             {
                 case GraphicTypes.Point3D:
-                    positioner = new Positioner();
+                    positioner = new AISPositioner(aligner);
                     break;
                 case GraphicTypes.HUD2D:
-                    positioner = new Positioner();
+                    positioner = new Positioner(aligner);
                     break;
                 default:
                     throw new ArgumentException("No such data source", nameof(graphicType));
@@ -54,15 +54,15 @@ namespace Assets.Graphics
 
         public Drawer getDrawer(GraphicTypes graphicType)
         {
-            Drawer drawer = new Drawer();
+            Drawer drawer = new Drawer(aligner);
 
             switch (graphicType)
             {
                 case GraphicTypes.Point3D:
-                    drawer = new Drawer();
+                    drawer = new AISDrawer(aligner);
                     break;
                 case GraphicTypes.HUD2D:
-                    drawer = new Drawer();
+                    drawer = new Drawer(aligner);
                     break;
                 default:
                     throw new ArgumentException("No such data source", nameof(graphicType));

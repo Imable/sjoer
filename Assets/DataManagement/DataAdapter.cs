@@ -54,6 +54,9 @@ namespace Assets.DataManagement
         {
             AISDTOs dto = new AISDTOs();
             JArray vessels = JsonConvert.DeserializeObject<JArray>(input);
+            dto.vessels = new AISDTO[vessels.Count];
+
+            int i = 0;
             foreach (JObject vessel in vessels)
             {
                 AISDTO vesselDTO = new AISDTO();
@@ -78,7 +81,8 @@ namespace Assets.DataManagement
                 vesselDTO.Longitude   = LatLon.Item1;
                 vesselDTO.Latitude    = LatLon.Item2;
 
-                dto.vessels.Add(vesselDTO);
+                dto.vessels[i] = vesselDTO;
+                i++;
             }
 
             return dto;

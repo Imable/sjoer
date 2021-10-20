@@ -54,7 +54,7 @@ namespace Assets.InfoItems
 
         protected void Draw(DTO dto)
         {
-            graphic.display(dto);
+            graphic.Display(dto);
         }
     }
 
