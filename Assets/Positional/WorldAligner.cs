@@ -8,7 +8,6 @@ namespace Assets.Positional
 {
     public class WorldAligner : MonoBehaviour
     {
-        //public GameObject cloneThisObject;
         public Camera mainCamera;
 
         // Difference between vessel bearing (true north) and Hololens bearing (unity coordinates)
@@ -34,11 +33,6 @@ namespace Assets.Positional
             {
                 updateGPS();
             }
-
-
-            //Debug.Log($"HoloForward: {mainCamera.transform.forward}");
-            //Debug.Log($"HoloRotationAroundY: {mainCamera.transform.rotation.eulerAngles.y}");
-            //Debug.Log($"UnityToTrueNorth: {unityToTrueNorthRotation}");
         }
 
         public Tuple<Vector3, Quaternion> GetWorldTransform(double lat, double lon)
@@ -47,16 +41,16 @@ namespace Assets.Positional
             if (Config.Instance.conf.VesselMode)
             {
                 HelperClasses.GPSUtils.Instance.GeodeticToEnu(
-                    lat, lon, 0, lastGPSUpdate.Latitude, 
-                    lastGPSUpdate.Longitude, -Config.Instance.conf.VesselSettings["BridgeHeight"], 
+                    lat, lon, 0, 
+                    lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, -Config.Instance.conf.VesselSettingsD["BridgeHeight"], 
                     out x, out y, out z
                 );
             }
             else
             {
                 HelperClasses.GPSUtils.Instance.GeodeticToEnu(
-                    lat, lon, 0, Config.Instance.conf.NonVesselSettings["Latitude"], 
-                    Config.Instance.conf.NonVesselSettings["Longitude"], Config.Instance.conf.NonVesselSettings["PlatformHeight"], 
+                    lat, lon, 0, 
+                    Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], -Config.Instance.conf.NonVesselSettings["PlatformHeight"], 
                     out x, out y, out z
                 );
             }

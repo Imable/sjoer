@@ -1,13 +1,17 @@
 ﻿{
-    "VesselMode": false,
-    "DataSettings": {
-      "UpdateInterval": 5.0,
-      "LatitudeArea": 5000,
-      "LongitudeArea": 5000
-    },
-    "VesselSettings": {
-        "BridgeHeight": 15.0
-    },
+  "VesselMode": false,
+  "DataSettings": {
+    "UpdateInterval": 5.0,
+    "LatitudeArea": 5000,
+    "LongitudeArea": 5000,
+    "UIElementHeight":  20
+  },
+  "VesselSettingsS": {
+    "VesselName": "Name"
+  },
+  "VesselSettingsD": {
+    "BridgeHeight": 15.0 
+  },
   "NonVesselSettings": {
     "PlatformHeight": 15.0,
     "Latitude": 60.397908,
@@ -15,17 +19,17 @@
     "Latitude_home": 60.403055,
     "Longitude_home": 5.322880
   },
-    "DbCreds": {
-        "UserName": "Test",
-        "Password": "Test",
-        "DataBaseName": "Test"
-    },
-    "SceneSettings": {
-        "SceneInterval": 10
-    },
-    "CalibrationSettings": {
-        "SteadyTime": 3,
-        "PositionThreshold": 1,
-        "RotationThreshold": 5
-    }
+  "DbCreds": {
+    "UserName": "Test",
+    "Password": "Test",
+    "DataBaseName": "Test"
+  },
+  "SceneSettings": {
+    "SceneInterval": 10
+  },
+  "CalibrationSettings": {
+    "SteadyTime": 3,
+    "PositionThreshold": 1,
+    "RotationThreshold": 5
+  }
 }

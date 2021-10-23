@@ -30,7 +30,10 @@ class Conf
 {
     public bool VesselMode;
     public Dictionary<string, double> DataSettings;
-    public Dictionary<string, double> VesselSettings;
+    // Double typed vessel settings
+    public Dictionary<string, double> VesselSettingsD;
+    // String typed vessel settings
+    public Dictionary<string, string> VesselSettingsS;
     public Dictionary<string, double> NonVesselSettings;
     public Dictionary<string, string> DbCreds;
     public Dictionary<string, int> SceneSettings;

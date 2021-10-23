@@ -60,7 +60,7 @@ namespace Assets.Graphics.Positioners
         {
             AISDTO aisDTO = (AISDTO)dto;
             Tuple<Vector3, Quaternion> pos = aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
-            gameObject.transform.position = pos.Item1;
+            gameObject.transform.position = pos.Item1 + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
             gameObject.transform.rotation = pos.Item2;
         }
     }

@@ -59,7 +59,15 @@ namespace Assets.DataManagement
             int i = 0;
             foreach (JObject vessel in vessels)
             {
+
                 AISDTO vesselDTO = new AISDTO();
+
+                vesselDTO.Name        = getString(vessel, "name");
+
+                // Skip our own vessel when we are in vessel mode
+                if (Config.Instance.conf.VesselMode &&
+                    vesselDTO.Name == Config.Instance.conf.VesselSettingsS["VesselName"])
+                    continue;
 
                 vesselDTO.TimeStamp   = getDateTime(vessel, "timeStamp");
                 vesselDTO.SOG         = getDouble(vessel, "sog");
@@ -68,7 +76,6 @@ namespace Assets.DataManagement
                 vesselDTO.MMSI        = getInt(vessel, "mmsi");
                 vesselDTO.COG         = getDouble(vessel, "cog");
                 vesselDTO.ShipType    = getInt(vessel, "shipType");
-                vesselDTO.Name        = getString(vessel, "name");
                 vesselDTO.IMO         = getInt(vessel, "imo");
                 vesselDTO.CallSign    = getString(vessel, "callsign");
                 vesselDTO.Draught     = getDouble(vessel, "draught");
