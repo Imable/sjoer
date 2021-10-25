@@ -60,9 +60,17 @@ namespace Assets.DataManagement
                 )
             };
 
-            HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
-            response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync();
+            string content = "";
+
+            try
+            {
+                HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
+                response.EnsureSuccessStatusCode();
+                content = await response.Content.ReadAsStringAsync();
+            } catch (Exception e)
+            {
+                Debug.Log(e);
+            }
 
             this.token = JObject.Parse(content)["access_token"].ToString();
             this.connected = true;
@@ -85,8 +93,17 @@ namespace Assets.DataManagement
 
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.token);
 
-            HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
-            response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = null;
+
+            try
+            {
+                response = await httpClient.SendAsync(httpRequestMessage);
+                response.EnsureSuccessStatusCode();
+
+            } catch (Exception e)
+            {
+                Debug.Log(e);
+            }
 
             return await response.Content.ReadAsStringAsync();
  
