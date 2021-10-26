@@ -60,7 +60,8 @@ namespace Assets.Graphics.Positioners
         {
             AISDTO aisDTO = (AISDTO)dto;
             Tuple<Vector3, Quaternion> pos = aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
-            gameObject.transform.position = pos.Item1 + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
+            double ownElevation = Config.Instance.conf.VesselMode ? Config.Instance.conf.VesselSettingsD["BridgeHeight"] : Config.Instance.conf.NonVesselSettings["PlatformHeight"];
+            gameObject.transform.position = pos.Item1 - Vector3.up * (float)ownElevation + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
             gameObject.transform.rotation = pos.Item2;
         }
     }

@@ -2,6 +2,7 @@ using Assets.Positional;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.DataManagement
 {
@@ -22,6 +23,7 @@ namespace Assets.DataManagement
 
         public async Task<DTO> fetch()
         {
+            //Debug.Log(await connection.get(parameterExtractor.get()));
             return dataAdapter.convert(
                 await connection.get(parameterExtractor.get())
                 );

@@ -1,4 +1,5 @@
 using Assets.DataManagement;
+using Assets.HelperClasses;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Assets.Positional
         private Vector3 unityToTrueNorthRotation = Vector3.zero;
         private GPSInfoDTO lastGPSUpdate;
         private DataRetriever dataRetriever;
+        Timer GPSTimer;
 
         private async void updateGPS()
         {
@@ -24,15 +26,25 @@ namespace Assets.Positional
         void Start()
         {
             dataRetriever = new DataRetriever(DataSources.GPSInfo, this);
+            GPSTimer = new Timer(1, updateGPS);
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (dataRetriever.isConnected())
+            //  Temporary not insanely swift GPS update hack
+            if (!dataRetriever.isConnected() || GPSTimer.hasFinished())
             {
-                updateGPS();
+                GPSTimer.restart();
             }
+            GPSTimer.Update();
+
+            // The regular code
+            //if (dataRetriever.isConnected())
+            //{
+            //    updateGPS();
+            //}
+
         }
 
         public Tuple<Vector3, Quaternion> GetWorldTransform(double lat, double lon)
@@ -42,7 +54,7 @@ namespace Assets.Positional
             {
                 HelperClasses.GPSUtils.Instance.GeodeticToEnu(
                     lat, lon, 0, 
-                    lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, -Config.Instance.conf.VesselSettingsD["BridgeHeight"], 
+                    lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, 
                     out x, out y, out z
                 );
             }
@@ -50,7 +62,7 @@ namespace Assets.Positional
             {
                 HelperClasses.GPSUtils.Instance.GeodeticToEnu(
                     lat, lon, 0, 
-                    Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], -Config.Instance.conf.NonVesselSettings["PlatformHeight"], 
+                    Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], 0, 
                     out x, out y, out z
                 );
             }
