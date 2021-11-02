@@ -37,6 +37,7 @@ namespace Assets.Graphics.Shapes
             {
                 throw new FileNotFoundException($"Cannot load prefab {fname}");
             }
+            Debug.Log($"Got obj {obj.name}");
             return obj;
         }
     }
