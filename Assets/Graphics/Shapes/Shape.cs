@@ -22,23 +22,16 @@ namespace Assets.Graphics.Shapes
 
         protected GameObject GetShape(string fname)
         {
-            return (GameObject) GameObject.Instantiate(
-                    LoadPrefabFromFile(fname), 
+            GameObject gameObject = GameObject.Instantiate(
+                    AssetManager.Instance.objects["AISPin"], 
                     Vector3.zero, 
                     Quaternion.identity
                 );
-        }
+            gameObject.transform.localScale = gameObject.transform.localScale * 2f;
+            HelperClasses.InfoAreaUtils.Instance.ScaleStick(gameObject, 2f);
+            HelperClasses.InfoAreaUtils.Instance.ScalePin(gameObject, 2f);
 
-        // Source: https://answers.unity.com/questions/313398/is-it-possible-to-get-a-prefab-object-from-its-ass.html
-        protected UnityEngine.Object LoadPrefabFromFile (string fname)
-        {
-            UnityEngine.Object obj = AssetManager.Instance.objects["AISPin"];
-            if (obj == null)
-            {
-                throw new FileNotFoundException($"Cannot load prefab {fname}");
-            }
-            Debug.Log($"Got obj {obj.name}");
-            return obj;
+            return gameObject;
         }
     }
 

@@ -31,9 +31,9 @@ namespace Assets.Resources
         // String typed vessel settings
         public Dictionary<string, string> VesselSettingsS;
         public Dictionary<string, double> NonVesselSettings;
-        public Dictionary<string, string> DbCreds;
         public Dictionary<string, int> SceneSettings;
         public Dictionary<string, int> CalibrationSettings;
+        public Dictionary<string, double> UISettings;
     }
 
     public class BarentsConf

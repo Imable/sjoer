@@ -62,23 +62,13 @@ namespace Assets.Graphics.Positioners
             Tuple<Vector3, Quaternion> position = GetWorldTransform(aisDTO);
             //double ownElevation = Config.Instance.conf.VesselMode ? Config.Instance.conf.VesselSettingsD["BridgeHeight"] : Config.Instance.conf.NonVesselSettings["PlatformHeight"];
             //gameObject.transform.position = position.Item1 - Vector3.up * (float)ownElevation + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
-            gameObject.transform.position = MapToHorizonPlane(position.Item1);
+            gameObject.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position.Item1, aligner.mainCamera.transform.position);
             //gameObject.transform.rotation = position.Item2;
-            Debug.Log($"Positioned at {gameObject.transform.position}");
         }
 
         private Tuple<Vector3, Quaternion> GetWorldTransform(AISDTO aisDTO)
         {
             return aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
-        }
-
-        private Vector3 MapToHorizonPlane(Vector3 position)
-        {
-            return new Vector3(
-                position.x,
-                0,
-                1
-            );
         }
     }
 }
