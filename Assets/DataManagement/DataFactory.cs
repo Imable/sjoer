@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Assets.DataManagement
 {
-    class DataFactory : HelperClasses.Singleton<DataFactory>
+    class DataFactory : HelperClasses.CSSingleton<DataFactory>
     {
         public WorldAligner aligner = null;
 

@@ -45,7 +45,7 @@ namespace Assets.Graphics.Drawers
 
         private void InjectDTO(AISDTO dto, GameObject obj)
         {
-            FillTextField("Name", dto.Name, obj);
+            //FillTextField("Name", dto.Name, obj);
         }
 
         private void FillTextField(string fname, string value, GameObject g)

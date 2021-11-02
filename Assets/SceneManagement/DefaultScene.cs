@@ -2,6 +2,7 @@
 using Assets.InfoItems;
 using System;
 using Assets.Positional;
+using Assets.Resources;
 
 namespace Assets.SceneManagement
 {
@@ -16,7 +17,6 @@ namespace Assets.SceneManagement
         {
             WorldAligner aligner = player.GetComponent<WorldAligner>();
 
-            //DelayedInfoItem: Config.Instance.conf.DataSettings["UpdateInterval"]
             this.infoItems = new InfoItem[] {
                 new DelayedInfoItem(DataManagement.DataSources.AIS, Graphics.GraphicTypes.Point3D, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
             };

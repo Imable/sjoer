@@ -8,6 +8,7 @@ using UnityEngine;
 using TMPro;
 using System.IO;
 using Assets.DataManagement;
+using Assets.Resources;
 
 namespace Assets.Graphics.Shapes
 {
@@ -31,7 +32,7 @@ namespace Assets.Graphics.Shapes
         // Source: https://answers.unity.com/questions/313398/is-it-possible-to-get-a-prefab-object-from-its-ass.html
         protected UnityEngine.Object LoadPrefabFromFile (string fname)
         {
-            UnityEngine.Object obj = Resources.Load(fname);
+            UnityEngine.Object obj = AssetManager.Instance.objects["AISPin"];
             if (obj == null)
             {
                 throw new FileNotFoundException($"Cannot load prefab {fname}");
@@ -61,7 +62,8 @@ namespace Assets.Graphics.Shapes
 
         private void RemoveObjects(HashSet<string> newKeys)
         {
-            foreach(string key in objects.Keys)
+            List<string> keys = objects.Keys.ToList();
+            foreach (string key in keys)
             {
                 // If the newly added key in the AIS data does not contain the old key from the program
                 // Then we have to remove it from the program
@@ -86,7 +88,7 @@ namespace Assets.Graphics.Shapes
         // Add the DTO and create a new GameObject
         private void AddNewDTO(AISDTO dto)
         {
-            objects[dto.Name] = new Tuple<AISDTO, GameObject>(dto, GetShape("Cube"));
+            objects[dto.Name] = new Tuple<AISDTO, GameObject>(dto, GetShape("AISPin/AISPinPrefab"));
         }
 
         // Update the DTO while leaving GameObject intact

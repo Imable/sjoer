@@ -59,10 +59,25 @@ namespace Assets.Graphics.Positioners
         protected override void MoveShape(DTO dto, GameObject gameObject)
         {
             AISDTO aisDTO = (AISDTO)dto;
-            Tuple<Vector3, Quaternion> pos = aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
-            double ownElevation = Config.Instance.conf.VesselMode ? Config.Instance.conf.VesselSettingsD["BridgeHeight"] : Config.Instance.conf.NonVesselSettings["PlatformHeight"];
-            gameObject.transform.position = pos.Item1 - Vector3.up * (float)ownElevation + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
-            gameObject.transform.rotation = pos.Item2;
+            Tuple<Vector3, Quaternion> position = GetWorldTransform(aisDTO);
+            //double ownElevation = Config.Instance.conf.VesselMode ? Config.Instance.conf.VesselSettingsD["BridgeHeight"] : Config.Instance.conf.NonVesselSettings["PlatformHeight"];
+            //gameObject.transform.position = position.Item1 - Vector3.up * (float)ownElevation + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
+            gameObject.transform.position = MapToHorizonPlane(position.Item1);
+            //gameObject.transform.rotation = position.Item2;
+        }
+
+        private Tuple<Vector3, Quaternion> GetWorldTransform(AISDTO aisDTO)
+        {
+            return aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
+        }
+
+        private Vector3 MapToHorizonPlane(Vector3 position)
+        {
+            return new Vector3(
+                position.x,
+                0,
+                200
+            );
         }
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using Assets.Resources;
 
 namespace Assets.DataManagement
 {

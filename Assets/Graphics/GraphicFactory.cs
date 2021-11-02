@@ -10,7 +10,7 @@ using Assets.Positional;
 
 namespace Assets.Graphics
 {
-    class GraphicFactory : HelperClasses.Singleton<GraphicFactory>
+    class GraphicFactory : HelperClasses.CSSingleton<GraphicFactory>
     {
         public WorldAligner aligner = null;
 
