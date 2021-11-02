@@ -8,10 +8,11 @@
 
 using System;
 using UnityEngine;
+using Assets.Resources;
 
 namespace Assets.HelperClasses
 {
-    public class GPSUtils : Singleton<GPSUtils>
+    public class GPSUtils : CSSingleton<GPSUtils>
     {
         // WGS-84 geodetic constants
         const double a = 6378137;           // WGS-84 Earth semimajor axis (m)

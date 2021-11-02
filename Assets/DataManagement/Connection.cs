@@ -2,9 +2,10 @@
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
+using Assets.Resources;
 
 namespace Assets.DataManagement
 {
@@ -60,12 +61,20 @@ namespace Assets.DataManagement
                 )
             };
 
-            HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
-            response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync();
+            string content = "";
 
-            this.token = JObject.Parse(content)["access_token"].ToString();
-            this.connected = true;
+            try
+            {
+                HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
+                response.EnsureSuccessStatusCode();
+                content = await response.Content.ReadAsStringAsync();
+                this.token = JObject.Parse(content)["access_token"].ToString();
+                this.connected = true;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
         }
 
         private Uri getUriwithParams(string lonMin, string lonMax, string latMin, string latMax)
@@ -77,6 +86,9 @@ namespace Assets.DataManagement
         // Lat Min, Lon Min, Lat Max, Lon Max
         public override async Task<string> get(params string[] param)
         {
+            //return await Task.Run(() => "[{\"timeStamp\":\"2021-10-26T18:04:11Z\",\"sog\":0.0,\"rot\":0.0,\"navstat\":5,\"mmsi\":258465000,\"cog\":142.3,\"geometry\":{\"type\":\"Point\",\"coordinates\":[5.317615,60.398463]},\"shipType\":60,\"name\":\"TROLLFJORD\",\"imo\":9233258,\"callsign\":\"LLVT\",\"country\":\"Norge\",\"eta\":\"2021-05-03T17:00:00\",\"destination\":\"BERGEN\",\"isSurvey\":false,\"heading\":142,\"draught\":5.5,\"a\":19,\"b\":117,\"c\":11,\"d\":11}]");
+
+
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Get,
@@ -85,12 +97,19 @@ namespace Assets.DataManagement
 
             httpRequestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", this.token);
 
-            HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                HttpResponseMessage response = await httpClient.SendAsync(httpRequestMessage);
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+                return await Task.Run(() => "[]");
 
-            return await response.Content.ReadAsStringAsync();
- 
-            //return "{\"Identifier\":\"VesselA\",\"Latitude\":60.402957,\"Longitude\":5.322762}";
+            }
+
         }
 
     }

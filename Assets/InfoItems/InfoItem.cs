@@ -7,25 +7,19 @@ using Assets.DataManagement;
 using UnityEngine;
 using Unity;
 using Assets.Positional;
+using Assets.Graphics;
 
 namespace Assets.InfoItems
 {
     class InfoItem : MonoBehaviour
     {
-        GameObject markerObject;
-        Dictionary<string, GameObject> markerObjects;
         DataRetriever dataRetriever;
-        AISDTOs latestVessels;
-        WorldAligner playerAligner;
+        Graphic graphic;
 
-
-        public InfoItem(DataSources dataSource, GameObject markerObject, WorldAligner playerAligner)
+        public InfoItem(DataSources dataSource, GraphicTypes graphicType, WorldAligner aligner)
         {
-            this.dataRetriever = new DataRetriever(dataSource);
-            this.markerObjects = new Dictionary<string, GameObject>();
-            this.markerObject  = markerObject;
-            this.playerAligner = playerAligner;
-            
+            this.dataRetriever = new DataRetriever(dataSource, aligner);
+            this.graphic       = new Graphic(graphicType, aligner);
         }
 
         public bool isConnected()
@@ -35,39 +29,54 @@ namespace Assets.InfoItems
 
         public void Start()
         {
+            
         }
 
-        public async void UpdateData(params string[] param)
+        public virtual void Update()
         {
-            AISDTOs dto = (AISDTOs) await dataRetriever.fetch(param);
-            latestVessels = dto;
+            Tick();
+        }
 
-            Debug.Log($"Got {dto.vessels.Count} vessels from BarentsWatch");
 
-            foreach (AISDTO aisDTO in dto.vessels)
+        protected async void Tick()
+        {
+            // Stop execution if not connected yet
+            if (!dataRetriever.isConnected()) return;
+
+            DTO dto = await UpdateData();
+            Draw(dto);
+        }
+
+        protected Task<DTO> UpdateData()
+        {
+            return dataRetriever.fetch();
+        }
+
+        protected void Draw(DTO dto)
+        {
+            graphic.Display(dto);
+        }
+    }
+
+     class DelayedInfoItem : InfoItem
+    {
+        float delay = 0;
+        private DateTime lastDataUpdate = DateTime.Now;
+
+        public DelayedInfoItem(DataSources dataSource, GraphicTypes graphicType, WorldAligner aligner, float delay) : base(dataSource, graphicType, aligner)
+        {
+            this.delay = delay;
+        }
+
+        public override void Update()
+        {
+            // Only update data every `UpdateInterval` seconds
+            DateTime now = DateTime.Now;
+            if ((now - lastDataUpdate).TotalSeconds > delay)
             {
-                //Debug.Log($"Lat: {aisDTO.Latitude}  Lon: {aisDTO.Longitude}");
-
-                // Call to WorldAligner here and assign value
-                Tuple<Vector3, Quaternion> pos = playerAligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
-
-                if (markerObjects.ContainsKey(aisDTO.Name)) {
-                    markerObjects[aisDTO.Name].transform.position = pos.Item1;
-                    markerObjects[aisDTO.Name].transform.rotation = pos.Item2;
-                } else
-                {
-                    markerObjects.Add(aisDTO.Name, Instantiate(this.markerObject, pos.Item1, pos.Item2));
-                }
-
-                if (!double.IsNaN(aisDTO.Heading))
-                {
-                    markerObjects[aisDTO.Name].transform.Rotate(0f, 90f + (float)aisDTO.Heading, 0f, Space.Self);
-                }
+                lastDataUpdate = now;
+                Tick();
             }
-        }
-
-        public void Draw()
-        {
         }
     }
 }

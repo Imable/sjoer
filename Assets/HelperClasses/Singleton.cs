@@ -2,11 +2,29 @@
 
 namespace Assets.HelperClasses
 {
-    /// <summary>
-    /// Inherit from this base class to create a singleton.
-    /// e.g. public class MyClassName : Singleton<MyClassName> {}
-    /// </summary>
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public abstract class CSSingleton<T> where T : new()
+    {
+        static T _instance;
+        static readonly object _padlock = new object();
+
+        public static T Instance
+        {
+            get
+            {
+                lock (_padlock)
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new T();
+                    }
+
+                    return _instance;
+                }
+            }
+        }
+    }
+
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         // Check to see if we're about to be destroyed.
         private static bool m_ShuttingDown = false;
