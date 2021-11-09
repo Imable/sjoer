@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using Assets.HelperClasses;
 
 namespace Assets.SceneManagement
 {
-    public class MySceneManager : MonoBehaviour
+    public class MySceneManager : MonoSingleton<MySceneManager>
     {
         // TODO: Write loop here, that loops when not calibrating.
         private bool looping = true;

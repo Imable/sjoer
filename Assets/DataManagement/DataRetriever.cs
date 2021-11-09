@@ -12,7 +12,7 @@ namespace Assets.DataManagement
         private Connection dataConnection;
         private ParameterExtractor parameterExtractor;
 
-        public DataRetriever(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, WorldAligner aligner)
+        public DataRetriever(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, Player aligner)
         {
             // Assign aligner to the DataFactory if DataFactory.Instance.aligner is null
             DataFactory.Instance.aligner ??= aligner;
@@ -34,9 +34,9 @@ namespace Assets.DataManagement
             return dataConnection.connected;
         }
 
-        public void OnApplicationQuit()
+        public void OnDestroy()
         {
-            dataConnection.OnApplicationQuit();
+            dataConnection.OnDestroy();
         }
     }
 }

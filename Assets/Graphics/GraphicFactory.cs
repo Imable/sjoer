@@ -12,7 +12,7 @@ namespace Assets.Graphics
 {
     class GraphicFactory : HelperClasses.CSSingleton<GraphicFactory>
     {
-        public WorldAligner aligner = null;
+        public Player aligner = null;
 
         public Positioner getPositioner(GraphicTypes graphicType)
         {

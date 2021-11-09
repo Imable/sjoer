@@ -29,7 +29,7 @@ namespace Assets.DataManagement
 
         protected abstract void connect();
         public abstract Task<string> get(params string[] param);
-        public virtual void OnApplicationQuit()
+        public virtual void OnDestroy()
         {
 
         }
@@ -184,7 +184,7 @@ namespace Assets.DataManagement
             }
         }
 
-        public override void OnApplicationQuit()
+        public override void OnDestroy()
         {
             running = false;
         }

@@ -13,8 +13,8 @@ namespace Assets.Graphics.Drawers
 {
     class Drawer
     {
-        protected WorldAligner aligner;
-        public Drawer(WorldAligner aligner)
+        protected Player aligner;
+        public Drawer(Player aligner)
         {
             this.aligner = aligner;
         }
@@ -28,7 +28,7 @@ namespace Assets.Graphics.Drawers
     class AISDrawer : Drawer
     {
         // VS was complaining, so I added this, but it shouldn't be necessary...
-        public AISDrawer(WorldAligner aligner) : base(aligner)
+        public AISDrawer(Player aligner) : base(aligner)
         {
             this.aligner = aligner;
         }

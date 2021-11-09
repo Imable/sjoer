@@ -16,7 +16,7 @@ namespace Assets.InfoItems
         DataRetriever dataRetriever;
         Graphic graphic;
 
-        public InfoItem(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, GraphicTypes graphicType, WorldAligner aligner)
+        public InfoItem(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, GraphicTypes graphicType, Player aligner)
         {
             this.dataRetriever = new DataRetriever(connection, adapter, extractor, aligner);
             this.graphic       = new Graphic(graphicType, aligner);
@@ -63,7 +63,7 @@ namespace Assets.InfoItems
         float delay = 0;
         private DateTime lastDataUpdate = DateTime.Now;
 
-        public DelayedInfoItem(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, GraphicTypes graphicType, WorldAligner aligner, float delay) : base(connection, adapter, extractor, graphicType, aligner)
+        public DelayedInfoItem(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, GraphicTypes graphicType, Player aligner, float delay) : base(connection, adapter, extractor, graphicType, aligner)
         {
             this.delay = delay;
         }

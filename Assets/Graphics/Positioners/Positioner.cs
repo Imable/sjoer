@@ -12,9 +12,9 @@ namespace Assets.Graphics.Positioners
 {
     class Positioner
     {
-        protected WorldAligner aligner;
+        protected Player aligner;
 
-        public Positioner(WorldAligner aligner)
+        public Positioner(Player aligner)
         {
             this.aligner = aligner;
         }
@@ -39,7 +39,7 @@ namespace Assets.Graphics.Positioners
     class AISPositioner : Positioner
     {
         // VS was complaining, so I added this, but it shouldn't be necessary...
-        public AISPositioner(WorldAligner aligner) : base(aligner)
+        public AISPositioner(Player aligner) : base(aligner)
         {
             this.aligner = aligner;
         }
@@ -61,9 +61,7 @@ namespace Assets.Graphics.Positioners
             AISDTO aisDTO = (AISDTO)dto;
             Vector3 position = GetWorldTransform(aisDTO);
             //double ownElevation = Config.Instance.conf.VesselMode ? Config.Instance.conf.VesselSettingsD["BridgeHeight"] : Config.Instance.conf.NonVesselSettings["PlatformHeight"];
-            //gameObject.transform.position = position.Item1 - Vector3.up * (float)ownElevation + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
             gameObject.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
-            //gameObject.transform.rotation = position.Item2;
         }
 
         private Vector3 GetWorldTransform(AISDTO aisDTO)

@@ -9,7 +9,7 @@ namespace Assets.DataManagement
 {
     class DataFactory : HelperClasses.CSSingleton<DataFactory>
     {
-        public WorldAligner aligner = null;
+        public Player aligner = null;
 
         public DataAdapter getDataAdapter(DataAdapters dataAdapter)
         {

@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Resources;
+using Assets.SceneManagement;
 
 namespace Assets.Positional
 {
     public class Calibrator : MonoBehaviour
     {
-        public GameObject player;
-        public GameObject sceneManager;
-
         private Camera mainCamera;
         private HelperClasses.Timer steadyTimer;
         private Quaternion rot = Quaternion.identity;
@@ -22,7 +20,7 @@ namespace Assets.Positional
         {
             Debug.Log("Calibrating. Hold head steady for 3 seconds.");
 
-            this.mainCamera = player.GetComponent<WorldAligner>().mainCamera;
+            this.mainCamera = Player.Instance.GetMainCamera();
             this.steadyTimer = new HelperClasses.Timer(
                 (float)Config.Instance.conf.CalibrationSettings["SteadyTime"],
                 this.calibrate
@@ -79,8 +77,8 @@ namespace Assets.Positional
         // Is executed when the timer completes
         private void calibrate()
         {
-            this.player.GetComponent<WorldAligner>().calibrate();
-            this.sceneManager.GetComponent<SceneManagement.MySceneManager>().exitCalibration();
+            Player.Instance.calibrate();
+            MySceneManager.Instance.exitCalibration();
         }
     }
 }

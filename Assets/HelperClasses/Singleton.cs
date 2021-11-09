@@ -31,6 +31,11 @@ namespace Assets.HelperClasses
         private static object m_Lock = new object();
         private static T m_Instance;
 
+        public void Awake()
+        {
+            m_Instance = Instance;
+        }
+
         /// <summary>
         /// Access singleton instance through this propriety.
         /// </summary>
@@ -62,6 +67,8 @@ namespace Assets.HelperClasses
 
                             // Make instance persistent.
                             DontDestroyOnLoad(singletonObject);
+                        } else { 
+                            DontDestroyOnLoad(m_Instance);
                         }
                     }
 
@@ -79,7 +86,6 @@ namespace Assets.HelperClasses
 
         private void OnDestroy()
         {
-            m_ShuttingDown = true;
         }
     }
 }

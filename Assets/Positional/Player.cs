@@ -3,10 +3,11 @@ using Assets.HelperClasses;
 using System;
 using UnityEngine;
 using Assets.Resources;
+using Microsoft.MixedReality.Toolkit;
 
 namespace Assets.Positional
 {
-    public class WorldAligner : MonoBehaviour
+    public class Player : MonoSingleton<Player>
     {
         public Camera mainCamera;
 
@@ -19,7 +20,6 @@ namespace Assets.Positional
         private async void updateGPS()
         {
             lastGPSUpdate = (AISDTO) await gpsRetriever.fetch();
-            unitytoTrueNorth();
         }
 
         // Start is called before the first frame update
@@ -29,9 +29,26 @@ namespace Assets.Positional
             GPSTimer = new Timer(1f, updateGPS);
         }
 
+        public Camera GetMainCamera()
+        {
+            EnsureMainCamera();
+            return mainCamera;
+        }
+
+        void EnsureMainCamera ()
+        {
+            if (!mainCamera)
+            {
+                Debug.Log("Refetching camera object");
+                mainCamera = (Camera)GameObject.Find("MixedRealityPlayspace").transform.GetChild(0).gameObject.GetComponent<Camera>();
+            }
+        }
+
         // Update is called once per frame
         void Update()
         {
+            EnsureMainCamera();
+
             //  Temporary not insanely swift GPS update hack
             if (!gpsRetriever.isConnected() || GPSTimer.hasFinished())
             {
@@ -47,9 +64,9 @@ namespace Assets.Positional
 
         }
 
-        private void OnApplicationQuit()
+        private void OnDestroy()
         {
-            gpsRetriever.OnApplicationQuit();
+            gpsRetriever.OnDestroy();
         }
 
         public Vector3 GetWorldTransform(double lat, double lon)

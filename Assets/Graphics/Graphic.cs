@@ -18,7 +18,7 @@ namespace Assets.Graphics
         Shape shape;
         Drawer drawer;
 
-        public Graphic(GraphicTypes graphicType, WorldAligner aligner)
+        public Graphic(GraphicTypes graphicType, Player aligner)
         {
             GraphicFactory.Instance.aligner ??= aligner;
             this.shape = GraphicFactory.Instance.getShape(graphicType);
