@@ -11,103 +11,95 @@ namespace Assets.DataManagement
     {
         public WorldAligner aligner = null;
 
-        public DataAdapter getDataAdapter(DataSources dataSource)
+        public DataAdapter getDataAdapter(DataAdapters dataAdapter)
         {
-            DataAdapter dataAdapter;
+            DataAdapter adapter;
 
-            switch (dataSource)
+            switch (dataAdapter)
             {
-                case DataSources.Postgres:
-                    dataAdapter = new PostgresDataAdapter();
+                case DataAdapters.GPSInfo:
+                    adapter = new GPSInfoAdapter();
                     break;
-                case DataSources.AIS:
-                    dataAdapter = new AISDataAdapter();
-                    break;
-                case DataSources.Mock:
-                    dataAdapter = new MockDataAdapter();
-                    break;
-                case DataSources.GPSInfo:
-                    dataAdapter = new GPSInfoAdapter();
+                case DataAdapters.BarentswatchAIS:
+                    adapter = new BarentswatchAISDataAdapter();
                     break;
                 default:
-                    throw new ArgumentException("No such data source", nameof(dataSource));
+                    throw new ArgumentException("No such data adapter", nameof(dataAdapter));
             }
 
-            return dataAdapter;
+            return adapter;
         }
 
-        public Connection getConnection(DataSources dataSource)
+        public Connection getConnection(DataConnections dataConnection)
         {
             Connection connection;
 
             // TODO: Change returned connection to appropriate ones
-            switch (dataSource)
+            switch (dataConnection)
             {
-                case DataSources.Postgres:
-                    connection = new GPSInfoConnection();
+                case DataConnections.BarentswatchAIS:
+                    connection = new BarentswatchAISConnection();
                     break;
-                case DataSources.AIS:
-                    connection = new AISConnection();
+                case DataConnections.BluetoothGPS:
+                    connection = new BluetoothGPSConnection();
                     break;
-                case DataSources.Mock:
-                    connection = new GPSInfoConnection();
+                case DataConnections.HardcodedGPS:
+                    connection = new HardcodedGPSConnection();
                     break;
-                case DataSources.GPSInfo:
-                    connection = new GPSInfoConnection();
+                case DataConnections.VesselGPS:
+                    connection = new HardcodedGPSConnection();
                     break;
                 default:
-                    throw new ArgumentException("No such data source", nameof(dataSource));
+                    throw new ArgumentException("No such data connection", nameof(dataConnection));
             }
 
             return connection;
         }
 
-        public ParameterExtractor getParameterExtractor(DataSources dataSource)
+        public ParameterExtractor getParameterExtractor(ParameterExtractors parameterExtractor)
         {
-            // TODO: Assign proper DTO's
-            ParameterExtractor parameterExtractor = new ParameterExtractor();
+            // The base class doesn't have any functionality
+            ParameterExtractor extractor;
 
-            switch (dataSource)
+            switch (parameterExtractor)
             {
-                case DataSources.GPSInfo:
+                case ParameterExtractors.BarentswatchAIS:
+                    extractor = new BarentswatchAISParameterExtractor(aligner);
                     break;
-                case DataSources.Postgres:
-                    break;
-                case DataSources.AIS:
-                    parameterExtractor = new AISParameterExtractor(aligner);
-                    break;
-                case DataSources.Mock:
+                case ParameterExtractors.None:
+                    extractor = new ParameterExtractor();
                     break;
                 default:
+                    extractor = new ParameterExtractor();
                     break;
             }
 
-            return parameterExtractor;
+            return extractor;
         }
 
-        // This one might be unneccessary
-        public DTO getDTO(DataSources dataSource)
-        {
-            // TODO: Assign proper DTO's
-            DTO dto = new GPSInfoDTO();
+        //// This one might be unneccessary
+        //public DTO getDTO(DataSources dataSource)
+        //{
+        //    // TODO: Assign proper DTO's
+        //    DTO dto = new GPSInfoDTO();
 
-            switch (dataSource)
-            {
-                case DataSources.GPSInfo:
-                    dto = new GPSInfoDTO();
-                    break;
-                case DataSources.Postgres:
-                    break;
-                case DataSources.AIS:
-                    dto = new AISDTO();
-                    break;
-                case DataSources.Mock:
-                    break;
-                default:
-                    break;
-            }
+        //    switch (dataSource)
+        //    {
+        //        case DataSources.GPSInfo:
+        //            dto = new GPSInfoDTO();
+        //            break;
+        //        case DataSources.Postgres:
+        //            break;
+        //        case DataSources.AIS:
+        //            dto = new AISDTO();
+        //            break;
+        //        case DataSources.Mock:
+        //            break;
+        //        default:
+        //            break;
+        //    }
 
-            return dto;
-        }
+        //    return dto;
+        //}
     }
 }

@@ -9,29 +9,34 @@ namespace Assets.DataManagement
     public class DataRetriever
     {
         private DataAdapter dataAdapter;
-        private Connection connection;
+        private Connection dataConnection;
         private ParameterExtractor parameterExtractor;
 
-        public DataRetriever(DataSources dataSource, WorldAligner aligner)
+        public DataRetriever(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, WorldAligner aligner)
         {
             // Assign aligner to the DataFactory if DataFactory.Instance.aligner is null
             DataFactory.Instance.aligner ??= aligner;
-            dataAdapter = DataFactory.Instance.getDataAdapter(dataSource);
-            connection = DataFactory.Instance.getConnection(dataSource);
-            parameterExtractor = DataFactory.Instance.getParameterExtractor(dataSource);
+            dataConnection = DataFactory.Instance.getConnection(connection);
+            dataAdapter = DataFactory.Instance.getDataAdapter(adapter);
+            parameterExtractor = DataFactory.Instance.getParameterExtractor(extractor);
         }
 
         public async Task<DTO> fetch()
         {
             //Debug.Log(await connection.get(parameterExtractor.get()));
             return dataAdapter.convert(
-                await connection.get(parameterExtractor.get())
+                await dataConnection.get(parameterExtractor.get())
                 );
         }
 
         public bool isConnected()
         {
-            return connection.connected;
+            return dataConnection.connected;
+        }
+
+        public void OnApplicationQuit()
+        {
+            dataConnection.OnApplicationQuit();
         }
     }
 }

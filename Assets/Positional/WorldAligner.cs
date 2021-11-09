@@ -1,8 +1,6 @@
 using Assets.DataManagement;
 using Assets.HelperClasses;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Assets.Resources;
 
@@ -13,28 +11,29 @@ namespace Assets.Positional
         public Camera mainCamera;
 
         // Difference between vessel bearing (true north) and Hololens bearing (unity coordinates)
-        private Vector3 unityToTrueNorthRotation = Vector3.zero;
-        private GPSInfoDTO lastGPSUpdate;
-        private DataRetriever dataRetriever;
+        private Quaternion unityToTrueNorthRotation = Quaternion.identity;
+        private AISDTO lastGPSUpdate;
+        private DataRetriever gpsRetriever;
         Timer GPSTimer;
 
         private async void updateGPS()
         {
-            lastGPSUpdate = (GPSInfoDTO) await dataRetriever.fetch();
+            lastGPSUpdate = (AISDTO) await gpsRetriever.fetch();
+            unitytoTrueNorth();
         }
 
         // Start is called before the first frame update
         void Start()
         {
-            dataRetriever = new DataRetriever(DataSources.GPSInfo, this);
-            GPSTimer = new Timer(1, updateGPS);
+            gpsRetriever = new DataRetriever(DataConnections.BluetoothGPS, DataAdapters.GPSInfo, ParameterExtractors.None, this);
+            GPSTimer = new Timer(1f, updateGPS);
         }
 
         // Update is called once per frame
         void Update()
         {
             //  Temporary not insanely swift GPS update hack
-            if (!dataRetriever.isConnected() || GPSTimer.hasFinished())
+            if (!gpsRetriever.isConnected() || GPSTimer.hasFinished())
             {
                 GPSTimer.restart();
             }
@@ -48,10 +47,15 @@ namespace Assets.Positional
 
         }
 
-        public Tuple<Vector3, Quaternion> GetWorldTransform(double lat, double lon)
+        private void OnApplicationQuit()
+        {
+            gpsRetriever.OnApplicationQuit();
+        }
+
+        public Vector3 GetWorldTransform(double lat, double lon)
         {
             double x, y, z;
-            if (Config.Instance.conf.VesselMode)
+            if (lastGPSUpdate != null && lastGPSUpdate.Valid)
             {
                 HelperClasses.GPSUtils.Instance.GeodeticToEnu(
                     lat, lon, 0, 
@@ -68,7 +72,11 @@ namespace Assets.Positional
                 );
             }
 
-            return new Tuple<Vector3, Quaternion>(mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), Quaternion.Euler(unityToTrueNorthRotation));
+            Vector3 newPos = unityToTrueNorthRotation * (new Vector3((float)x, (float)z, (float)y) - mainCamera.transform.position) + mainCamera.transform.position;
+
+            return newPos;
+
+            //return mainCamera.transform.RotateAround(mainCamera.transform.position, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), unityToTrueNorthRotation.y);
         }
 
         public Vector2 GetCurrentLatLon()
@@ -78,17 +86,25 @@ namespace Assets.Positional
 
         public Tuple<Vector2, Vector2> GetCurrentLatLonArea()
         {
-            Tuple<Vector2, Vector2> response = new Tuple<Vector2, Vector2>(Vector2.zero, Vector2.zero);
+            double lat, lon;
 
-            if (lastGPSUpdate != null)
+            // Use the harcoded values if the GPS reading is invalid
+            if (lastGPSUpdate != null && lastGPSUpdate.Valid)
             {
-                response = HelperClasses.GPSUtils.Instance.GetCurrentLatLonArea(
-                    lastGPSUpdate.Latitude, 
-                    lastGPSUpdate.Longitude
-                );
+                lat = lastGPSUpdate.Latitude;
+                lon = lastGPSUpdate.Longitude;
+            }
+            else
+            {
+                Debug.Log("Invalid GPS, using hardcoded one");
+                lat = Config.Instance.conf.NonVesselSettings["Latitude"];
+                lon = Config.Instance.conf.NonVesselSettings["Longitude"];
             }
 
-            return response;
+            return HelperClasses.GPSUtils.Instance.GetCurrentLatLonArea(
+                    lat,
+                    lon
+                );
         }
 
 
@@ -101,8 +117,11 @@ namespace Assets.Positional
         }
         private void unitytoTrueNorth()
         {
-            unityToTrueNorthRotation = new Vector3(0, mainCamera.transform.rotation.eulerAngles.y
-                                    - (float) lastGPSUpdate.TrueCourse, 0);
+            Debug.Log("Unity to true north");
+            float heading = lastGPSUpdate != null ? (float)lastGPSUpdate.Heading : 0;
+            unityToTrueNorthRotation = Quaternion.Euler(0, mainCamera.transform.rotation.eulerAngles.y
+                                    - heading, 0);
+            Debug.Log(heading);
         }
     }
 

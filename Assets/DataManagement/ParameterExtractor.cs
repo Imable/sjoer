@@ -17,10 +17,10 @@ namespace Assets.DataManagement
         }
     }
 
-    class AISParameterExtractor : ParameterExtractor
+    class BarentswatchAISParameterExtractor : ParameterExtractor
     {
         private WorldAligner aligner;
-        public AISParameterExtractor(WorldAligner aligner)
+        public BarentswatchAISParameterExtractor(WorldAligner aligner)
         {
             this.aligner = aligner;
         }

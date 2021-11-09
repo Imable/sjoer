@@ -6,6 +6,16 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using Assets.Resources;
+using System.Net.Sockets;
+using System.IO;
+using System.Threading;
+
+#if WINDOWS_UWP
+using Windows.Devices.Bluetooth.Advertisement;
+using Windows.Devices.Bluetooth;
+#endif
+//using System.Runtime.InteropServices.WindowsRuntime;
+//using Windows.Storage.Streams;
 
 namespace Assets.DataManagement
 {
@@ -19,9 +29,13 @@ namespace Assets.DataManagement
 
         protected abstract void connect();
         public abstract Task<string> get(params string[] param);
+        public virtual void OnApplicationQuit()
+        {
+
+        }
     }
 
-    class GPSInfoConnection : Connection
+    class HardcodedGPSConnection : Connection
     {
         protected override void connect()
         {
@@ -34,7 +48,7 @@ namespace Assets.DataManagement
         }
     }
 
-    class AISConnection : Connection
+    class BarentswatchAISConnection : Connection
     {
         private HttpClient httpClient = new HttpClient();
         private string token = "";
@@ -111,7 +125,73 @@ namespace Assets.DataManagement
             }
 
         }
-
     }
 
+    class BluetoothGPSConnection : Connection
+    {
+        private TcpClient tcpClient;
+        private Thread clientReceiveThread;
+        public volatile bool running;
+        private string lastReading = "";
+
+        protected override void connect()
+        {
+            try
+            {
+                running = true;
+                clientReceiveThread = new Thread(new ThreadStart(ListenForData));
+                clientReceiveThread.IsBackground = true;
+                clientReceiveThread.Start();
+            } catch (Exception e)
+            {
+                Debug.Log("On client connect exception " + e);
+            }
+
+            this.connected = true;
+        }
+
+        private void ListenForData()
+        {
+            try
+            {
+                tcpClient = new TcpClient("10.0.0.17", int.Parse("6000"));
+
+                Byte[] bytes = new Byte[1024];
+                while (running)
+                {
+                    // Get a stream object for reading 				
+                    using (NetworkStream stream = tcpClient.GetStream())
+                    {
+                        int length;
+                        // Read incomming stream into byte arrary. 					
+                        while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        {
+                            var incommingData = new byte[length];
+                            Array.Copy(bytes, 0, incommingData, 0, length);
+                            // Convert byte array to string message. 						
+                            string gpsString = Encoding.ASCII.GetString(incommingData);
+                            // Only store GPRMC strings
+                            if (gpsString.Length > 5 && gpsString.Substring(0, 5) == "GPRMC")
+                            {
+                                lastReading = gpsString.Substring(0, gpsString.IndexOf(Environment.NewLine));
+                            }
+                        }
+                    }
+                }
+            } catch (SocketException e)
+            {
+                Debug.Log("Socket Exception: " + e);
+            }
+        }
+
+        public override void OnApplicationQuit()
+        {
+            running = false;
+        }
+
+        public override async Task<string> get(params string[] param)
+        {
+            return await Task.Run(() => lastReading);
+        }
+    }
 }

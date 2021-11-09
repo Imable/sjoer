@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using Assets.InfoItems;
-using System;
 using Assets.Positional;
 using Assets.Resources;
+using Assets.DataManagement;
 
 namespace Assets.SceneManagement
 {
@@ -18,7 +18,7 @@ namespace Assets.SceneManagement
             WorldAligner aligner = player.GetComponent<WorldAligner>();
 
             this.infoItems = new InfoItem[] {
-                new DelayedInfoItem(DataManagement.DataSources.AIS, Graphics.GraphicTypes.Point3D, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
+                new DelayedInfoItem(DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, Graphics.GraphicTypes.Point3D, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
             };
 
             foreach (InfoItem infoItem in infoItems)

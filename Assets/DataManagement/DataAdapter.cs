@@ -17,7 +17,7 @@ namespace Assets.DataManagement
         public abstract DTO convert(string input);
     }
 
-    class AISDataAdapter : DataAdapter
+    class BarentswatchAISDataAdapter : DataAdapter
     {
         private double getDouble(JObject vessel, string s)
         {
@@ -70,6 +70,7 @@ namespace Assets.DataManagement
                     vesselDTO.Name == Config.Instance.conf.VesselSettingsS["VesselName"])
                     continue;
 
+                vesselDTO.Valid       = true;
                 vesselDTO.TimeStamp   = getDateTime(vessel, "timeStamp");
                 vesselDTO.SOG         = getDouble(vessel, "sog");
                 vesselDTO.Rot         = getDouble(vessel, "rot");
@@ -97,22 +98,6 @@ namespace Assets.DataManagement
         }
     }
 
-    class MockDataAdapter : DataAdapter
-    {
-        public override DTO convert(string input)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    class PostgresDataAdapter : DataAdapter
-    {
-        public override DTO convert(string input)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
     class GPSInfoAdapter : DataAdapter
     {
         // Code courtesy of Carson63000 at https://stackoverflow.com/questions/5089791/nmea-checksum-in-c-sharp-net-cf
@@ -135,38 +120,49 @@ namespace Assets.DataManagement
         // Input: $GPRMC,071228.00,A,5402.6015,N,00025.9797,E,0.2,332.1,180921,0.2,W,A,S*50
         public override DTO convert(string input)
         {
-            // If the checksum is incorrect, this GPS signal is deemed invalid
-            // Turned off for testing purposes. TODO: Turn on for production
-            //Assert.IsTrue(checksum(input));
-
             // We'll ignore index 0, because that contains '$GPRMC'
             string[] splitInput = input.Split(',');
 
-            GPSInfoDTO dto = new GPSInfoDTO();
+            AISDTO dto = new AISDTO();
 
-            string t = splitInput[1];
-            dto.Valid = splitInput[2] == "A";
-            dto.Latitude = double.Parse(splitInput[3]);
-            dto.LatNS = splitInput[4];
-            dto.Longitude = double.Parse(splitInput[5]);
-            dto.LongEW = splitInput[6];
-            dto.SOG = double.Parse(splitInput[7]);
-            dto.TrueCourse = double.Parse(splitInput[8]);
-            string d = splitInput[9];
-            dto.DT = this.generateDT(t, d);
-            dto.Variation = double.Parse(splitInput[10]);
-            dto.VarEW = splitInput[11];
+            // Catch invalid DTO
+            if (splitInput.Length < 13 || !checksum(input) || splitInput[2] == "V")
+            {
+                dto.Valid = false;
+            } else
+            {
+                dto.Valid = true;
+
+                string t = splitInput[1];
+                dto.Latitude = double.Parse(splitInput[3]) * 0.01;
+                //dto.LatNS = splitInput[4];
+                dto.Longitude = double.Parse(splitInput[5]) * 0.01;
+                //dto.LongEW = splitInput[6];
+                dto.SOG = double.Parse(splitInput[7]);
+                dto.Heading = splitInput[8] == "" ? 0.0 : double.Parse(splitInput[8]);
+                string d = splitInput[9];
+                dto.TimeStamp = this.generateDT(t, d);
+                //dto.Variation = double.Parse(splitInput[10]);
+                //dto.VarEW = splitInput[11];
+            }
 
             return dto;
         }
 
         private DateTime generateDT(string time, string date)
         {
-            int ms = time.IndexOf(".");
-            // Some NMEA times have a random number of fractions of seconds attached, therefore, the format might vary
-            string format = ms > 0 ? "ddMMyhhmmss." + new string('f', time.Length - 1 - ms) : "ddMMyhhmmss";
-            return DateTime.ParseExact(date+time, format,
-                System.Globalization.CultureInfo.InvariantCulture);
+            try
+            {
+                int ms = time.IndexOf(".");
+                // Some NMEA times have a random number of fractions of seconds attached, therefore, the format might vary
+                string format = ms > 0 ? "ddMMyyHHmmss." + new string('f', time.Length - 1 - ms) : "ddMMyyHHmmss";
+                return DateTime.ParseExact(date+time, format,
+                    System.Globalization.CultureInfo.InvariantCulture);
+            } catch (Exception e)
+            {
+                Debug.Log($"Error parrsing \"{date+time}\" DateTime: " + e);
+                return DateTime.Now;
+            }
         }
     }
 }

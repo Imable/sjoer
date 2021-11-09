@@ -59,14 +59,14 @@ namespace Assets.Graphics.Positioners
         protected override void MoveShape(DTO dto, GameObject gameObject)
         {
             AISDTO aisDTO = (AISDTO)dto;
-            Tuple<Vector3, Quaternion> position = GetWorldTransform(aisDTO);
+            Vector3 position = GetWorldTransform(aisDTO);
             //double ownElevation = Config.Instance.conf.VesselMode ? Config.Instance.conf.VesselSettingsD["BridgeHeight"] : Config.Instance.conf.NonVesselSettings["PlatformHeight"];
             //gameObject.transform.position = position.Item1 - Vector3.up * (float)ownElevation + Vector3.up * (float)Config.Instance.conf.DataSettings["UIElementHeight"];
-            gameObject.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position.Item1, aligner.mainCamera.transform.position);
+            gameObject.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
             //gameObject.transform.rotation = position.Item2;
         }
 
-        private Tuple<Vector3, Quaternion> GetWorldTransform(AISDTO aisDTO)
+        private Vector3 GetWorldTransform(AISDTO aisDTO)
         {
             return aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
         }
