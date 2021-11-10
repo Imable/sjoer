@@ -27,6 +27,7 @@ namespace Assets.Positional
         {
             gpsRetriever = new DataRetriever(DataConnections.BluetoothGPS, DataAdapters.GPSInfo, ParameterExtractors.None, this);
             GPSTimer = new Timer(1f, updateGPS);
+            SetLightIntensity();
         }
 
         public Camera GetMainCamera()
@@ -35,12 +36,22 @@ namespace Assets.Positional
             return mainCamera;
         }
 
+        // Black becomes transparent on HoloLens (and so do shadows)
+        // Therefore, this code ensures that the scene is brightly lit
+        private void SetLightIntensity()
+        {
+            Light playerLight = mainCamera.transform.GetChild(0).gameObject.GetComponent<Light>();
+            playerLight.range = (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"] + 1;
+            playerLight.intensity = (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"];
+        }
+
         void EnsureMainCamera ()
         {
             if (!mainCamera)
             {
                 Debug.Log("Refetching camera object");
                 mainCamera = (Camera)GameObject.Find("MixedRealityPlayspace").transform.GetChild(0).gameObject.GetComponent<Camera>();
+                SetLightIntensity();
             }
         }
 

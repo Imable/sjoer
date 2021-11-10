@@ -51,7 +51,6 @@ namespace Assets.Graphics.Shapes
             }
 
             RemoveObjects(newKeys);
-            
         }
 
         private void RemoveObjects(HashSet<string> newKeys)
