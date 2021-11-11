@@ -44,12 +44,18 @@ namespace Assets.InfoItems
             if (!dataRetriever.isConnected()) return;
 
             DTO dto = await UpdateData();
+            HandleInteractions();
             Draw(dto);
         }
 
         protected Task<DTO> UpdateData()
         {
             return dataRetriever.fetch();
+        }
+
+        protected void HandleInteractions()
+        {
+
         }
 
         protected void Draw(DTO dto)
