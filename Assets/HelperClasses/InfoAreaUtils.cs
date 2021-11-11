@@ -30,5 +30,18 @@ namespace Assets.HelperClasses
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
             pin.transform.localScale = new Vector3(pin.transform.localScale.x * scale, pin.transform.localScale.y * scale, pin.transform.localScale.z);
         }
+
+        public void PinToLayerOne(GameObject target)
+        {
+            HelperClasses.InfoAreaUtils.Instance.ScaleStick(target, 1f);
+            //HelperClasses.InfoAreaUtils.Instance.ScalePin(gameObject, 2f);
+        }
+
+        public void PinToLayerTwo(GameObject target)
+        {
+            HelperClasses.InfoAreaUtils.Instance.ScaleStick(target, 2f);
+
+        }
+
     }
 }

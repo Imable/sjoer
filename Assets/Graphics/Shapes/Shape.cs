@@ -23,13 +23,16 @@ namespace Assets.Graphics.Shapes
         protected GameObject GetShape(string fname)
         {
             GameObject gameObject = GameObject.Instantiate(
-                    AssetManager.Instance.objects["AISPin"], 
+                    AssetManager.Instance.objects[fname], 
                     Vector3.zero, 
                     Quaternion.identity
                 );
-            gameObject.transform.localScale = gameObject.transform.localScale * 2f;
-            HelperClasses.InfoAreaUtils.Instance.ScaleStick(gameObject, 2f);
-            HelperClasses.InfoAreaUtils.Instance.ScalePin(gameObject, 2f);
+
+            // 30/15 = 2, 150/15
+            gameObject.transform.localScale = gameObject.transform.localScale * ((float)Config.Instance.conf.UISettings["HorizonPlaneRadius"] / 15);
+            //HelperClasses.InfoAreaUtils.Instance.ScaleStick(gameObject, 2f);
+            //HelperClasses.InfoAreaUtils.Instance.ScalePin(gameObject, 2f);
+
 
             return gameObject;
         }
@@ -81,13 +84,29 @@ namespace Assets.Graphics.Shapes
         // Add the DTO and create a new GameObject
         private void AddNewDTO(AISDTO dto)
         {
-            objects[dto.Name] = new Tuple<AISDTO, GameObject>(dto, GetShape("AISPin/AISPinPrefab"));
+            string shapeName = "AISPin";
+            if (dto.Target) shapeName = "AISPinTarget";
+
+            objects[dto.Name] = new Tuple<AISDTO, GameObject>(dto, GetShape(shapeName));
+
+            if (dto.Target)
+            {
+                HelperClasses.InfoAreaUtils.Instance.PinToLayerTwo(objects[dto.Name].Item2);
+            }
         }
 
         // Update the DTO while leaving GameObject intact
         private void InjectNewDTO(AISDTO dto)
         {
-            objects[dto.Name] = new Tuple<AISDTO, GameObject>(dto, objects[dto.Name].Item2);
+            // If the target of this object has changed, change both the DTO and the Prefab
+            if (objects[dto.Name].Item1.Target != dto.Target)
+            {
+                AddNewDTO(dto);
+            }
+            else
+            {
+                objects[dto.Name] = new Tuple<AISDTO, GameObject>(dto, objects[dto.Name].Item2);
+            }
         }
     }
 }

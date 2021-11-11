@@ -32,7 +32,7 @@ namespace Assets.Graphics.Positioners
 
         protected void FaceUser(GameObject g)
         {
-            g.transform.rotation = Quaternion.LookRotation(g.transform.position - aligner.mainCamera.transform.position);
+            g.transform.rotation = Quaternion.LookRotation(aligner.mainCamera.transform.position - g.transform.position);
         }
     }
 

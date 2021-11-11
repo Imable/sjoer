@@ -49,7 +49,6 @@ namespace Assets.Positional
         {
             if (!mainCamera)
             {
-                Debug.Log("Refetching camera object");
                 mainCamera = (Camera)GameObject.Find("MixedRealityPlayspace").transform.GetChild(0).gameObject.GetComponent<Camera>();
                 SetLightIntensity();
             }

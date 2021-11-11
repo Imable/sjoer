@@ -28,6 +28,6 @@
     "RotationThreshold": 5
   },
   "UISettings": {
-    "HorizonPlaneRadius": 30
+    "HorizonPlaneRadius": 150
   }
 }

@@ -70,6 +70,9 @@ namespace Assets.DataManagement
                     vesselDTO.Name == Config.Instance.conf.VesselSettingsS["VesselName"])
                     continue;
 
+                //Hack to make approx 50 percent a pin and other selected
+                vesselDTO.Target      = getDouble(vessel, "heading") > 180;
+
                 vesselDTO.Valid       = true;
                 vesselDTO.TimeStamp   = getDateTime(vessel, "timeStamp");
                 vesselDTO.SOG         = getDouble(vessel, "sog");

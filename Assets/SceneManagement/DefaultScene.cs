@@ -3,6 +3,7 @@ using Assets.InfoItems;
 using Assets.Positional;
 using Assets.Resources;
 using Assets.DataManagement;
+using Assets.Graphics;
 
 namespace Assets.SceneManagement
 {
@@ -18,7 +19,7 @@ namespace Assets.SceneManagement
             Player aligner = player.GetComponent<Player>();
 
             this.infoItems = new InfoItem[] {
-                new DelayedInfoItem(DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, Graphics.GraphicTypes.Point3D, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
+                new DelayedInfoItem(DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, GraphicTypes.AIS, DisplayArea.HorizonPlane, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
             };
 
             foreach (InfoItem infoItem in infoItems)

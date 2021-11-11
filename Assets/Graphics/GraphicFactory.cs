@@ -14,20 +14,17 @@ namespace Assets.Graphics
     {
         public Player aligner = null;
 
-        public Positioner getPositioner(GraphicTypes graphicType)
+        public Positioner getPositioner(DisplayArea displayArea)
         {
             Positioner positioner;
 
-            switch (graphicType)
+            switch (displayArea)
             {
-                case GraphicTypes.Point3D:
+                case DisplayArea.HorizonPlane:
                     positioner = new AISPositioner(aligner);
                     break;
-                case GraphicTypes.HUD2D:
-                    positioner = new Positioner(aligner);
-                    break;
                 default:
-                    throw new ArgumentException("No such data source", nameof(graphicType));
+                    throw new ArgumentException("No such data source", nameof(displayArea));
             }
 
             return positioner;
@@ -39,7 +36,7 @@ namespace Assets.Graphics
 
             switch (graphicType)
             {
-                case GraphicTypes.Point3D:
+                case GraphicTypes.AIS:
                     shape = new AISShape();
                     break;
                 case GraphicTypes.HUD2D:
@@ -58,7 +55,7 @@ namespace Assets.Graphics
 
             switch (graphicType)
             {
-                case GraphicTypes.Point3D:
+                case GraphicTypes.AIS:
                     drawer = new AISDrawer(aligner);
                     break;
                 case GraphicTypes.HUD2D:

@@ -39,19 +39,24 @@ namespace Assets.Graphics.Drawers
 
             foreach (Tuple<AISDTO, GameObject> obj in shape.objects.Values) 
             {
-                InjectDTO(obj.Item1, obj.Item2);
+                if (obj.Item1.Target) InjectDTO(obj.Item1, obj.Item2);
             }
         }
 
         private void InjectDTO(AISDTO dto, GameObject obj)
         {
-            //FillTextField("Name", dto.Name, obj);
+            string name = dto.Name.Length > 16 ? dto.Name.Substring(0, 16) : dto.Name;
+            FillTextField("Name", name, obj);
+            FillTextField("HDGValue", dto.Heading.ToString(), obj);
+            FillTextField("COGValue", dto.COG.ToString(), obj);
+            FillTextField("SOGValue", dto.SOG.ToString(), obj);
+            FillTextField("CPAValue", "Test", obj);
         }
 
         private void FillTextField(string fname, string value, GameObject g)
         {
-            GameObject obj = g.transform.Find($"TextField/{fname}").gameObject;
-            TextMeshPro tmp = obj.GetComponent<TextMeshPro>();
+            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/Canvas/{fname}").gameObject;
+            TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
             tmp.text = value;
         }
     }

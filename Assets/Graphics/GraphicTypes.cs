@@ -8,7 +8,12 @@ namespace Assets.Graphics
 {
     public enum GraphicTypes
     {
-        Point3D,
+        AIS,
         HUD2D
+    }
+
+    public enum DisplayArea
+    {
+        HorizonPlane
     }
 }

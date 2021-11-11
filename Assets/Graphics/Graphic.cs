@@ -18,11 +18,11 @@ namespace Assets.Graphics
         Shape shape;
         Drawer drawer;
 
-        public Graphic(GraphicTypes graphicType, Player aligner)
+        public Graphic(GraphicTypes graphicType, DisplayArea displayArea, Player aligner)
         {
             GraphicFactory.Instance.aligner ??= aligner;
             this.shape = GraphicFactory.Instance.getShape(graphicType);
-            this.positioner = GraphicFactory.Instance.getPositioner(graphicType);
+            this.positioner = GraphicFactory.Instance.getPositioner(displayArea);
             this.drawer = GraphicFactory.Instance.getDrawer(graphicType);
         }
 
