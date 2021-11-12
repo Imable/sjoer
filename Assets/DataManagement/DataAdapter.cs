@@ -64,14 +64,15 @@ namespace Assets.DataManagement
                 AISDTO vesselDTO = new AISDTO();
 
                 vesselDTO.Name        = getString(vessel, "name");
+                vesselDTO.Key         = vesselDTO.Name;
 
                 // Skip our own vessel when we are in vessel mode
                 if (Config.Instance.conf.VesselMode &&
                     vesselDTO.Name == Config.Instance.conf.VesselSettingsS["VesselName"])
                     continue;
 
-                //Hack to make approx 50 percent a pin and other selected
-                vesselDTO.Target      = getDouble(vessel, "heading") > 180;
+                //Hack to make approx 25 percent a pin and other selected
+                vesselDTO.Target      = getDouble(vessel, "heading") > 270;
 
                 vesselDTO.Valid       = true;
                 vesselDTO.TimeStamp   = getDateTime(vessel, "timeStamp");

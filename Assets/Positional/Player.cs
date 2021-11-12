@@ -42,7 +42,7 @@ namespace Assets.Positional
         {
             Light playerLight = mainCamera.transform.GetChild(0).gameObject.GetComponent<Light>();
             playerLight.range = (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"] + 1;
-            playerLight.intensity = (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"];
+            playerLight.intensity = 30;
         }
 
         void EnsureMainCamera ()

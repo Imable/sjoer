@@ -12,27 +12,30 @@ namespace Assets.SceneManagement
         [SerializeField]
         public GameObject player;
 
-        private InfoItem[] infoItems;
+        Player aligner;
+
+        private InfoCategory[] infoCategories;
+        private InfoItem[] allInfoItems;
 
         void Start()
         {
             Player aligner = player.GetComponent<Player>();
+            GraphicFactory.Instance.aligner ??= aligner;
 
-            this.infoItems = new InfoItem[] {
-                new DelayedInfoItem(DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, GraphicTypes.AIS, DisplayArea.HorizonPlane, aligner, (float) Config.Instance.conf.DataSettings["UpdateInterval"])
-            };
-
-            foreach (InfoItem infoItem in infoItems)
+            infoCategories = new InfoCategory[1]
             {
-                infoItem.Start();
-            }
+                new DelayedInfoCategory(
+                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, 
+                    aligner, 
+                    DataType.AIS, DisplayArea.HorizonPlane,
+                    (float) Config.Instance.conf.DataSettings["UpdateInterval"])
+            };
         }
 
         void Update()
         {
-            foreach (InfoItem infoItem in infoItems)
-            {
-                infoItem.Update();
+            foreach (InfoCategory infoCategory in infoCategories) {
+                infoCategory.Update();
             }
         }
     }

@@ -6,11 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.TargetManagement
+namespace Assets.InfoItems
 {
-    class TargettableObject : MonoBehaviour, IMixedRealityPointerHandler
+    class TargettableInfoItem : MonoBehaviour, IMixedRealityPointerHandler
     {
         private bool target = false;
+
+        public bool IsTarget
+        {
+            get { return target; }
+            set { target = value; }
+        }
 
         public void OnPointerClicked(MixedRealityPointerEventData eventData)
         {

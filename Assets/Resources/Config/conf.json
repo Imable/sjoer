@@ -1,7 +1,7 @@
 ﻿{
   "VesselMode": false,
   "DataSettings": {
-    "UpdateInterval": 5.0,
+    "UpdateInterval": 2.0,
     "LatitudeArea": 5000,
     "LongitudeArea": 5000,
     "UIElementHeight": 15.0
@@ -28,6 +28,6 @@
     "RotationThreshold": 5
   },
   "UISettings": {
-    "HorizonPlaneRadius": 150
+    "HorizonPlaneRadius": 300
   }
 }
