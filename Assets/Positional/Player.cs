@@ -20,6 +20,7 @@ namespace Assets.Positional
         private async void updateGPS()
         {
             lastGPSUpdate = (AISDTO) await gpsRetriever.fetch();
+            Debug.Log("Heading: " + lastGPSUpdate.Heading);
         }
 
         // Start is called before the first frame update
@@ -84,7 +85,7 @@ namespace Assets.Positional
             double x, y, z;
             if (lastGPSUpdate != null && lastGPSUpdate.Valid)
             {
-                HelperClasses.GPSUtils.Instance.GeodeticToEnu(
+                GPSUtils.Instance.GeodeticToEnu(
                     lat, lon, 0, 
                     lastGPSUpdate.Latitude, lastGPSUpdate.Longitude, 0, 
                     out x, out y, out z
@@ -92,7 +93,7 @@ namespace Assets.Positional
             }
             else
             {
-                HelperClasses.GPSUtils.Instance.GeodeticToEnu(
+                GPSUtils.Instance.GeodeticToEnu(
                     lat, lon, 0, 
                     Config.Instance.conf.NonVesselSettings["Latitude"], Config.Instance.conf.NonVesselSettings["Longitude"], 0, 
                     out x, out y, out z

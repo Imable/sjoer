@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using Assets.Resources;
+using Assets.HelperClasses;
 
 namespace Assets.DataManagement
 {
@@ -138,9 +139,9 @@ namespace Assets.DataManagement
                 dto.Valid = true;
 
                 string t = splitInput[1];
-                dto.Latitude = double.Parse(splitInput[3]) * 0.01;
+                dto.Latitude = GPSUtils.Instance.DMSToDecimal(splitInput[3]);
                 //dto.LatNS = splitInput[4];
-                dto.Longitude = double.Parse(splitInput[5]) * 0.01;
+                dto.Longitude = GPSUtils.Instance.DMSToDecimal(splitInput[5].Remove(0, 1));
                 //dto.LongEW = splitInput[6];
                 dto.SOG = double.Parse(splitInput[7]);
                 dto.Heading = splitInput[8] == "" ? 0.0 : double.Parse(splitInput[8]);

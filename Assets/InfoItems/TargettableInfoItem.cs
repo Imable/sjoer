@@ -20,11 +20,13 @@ namespace Assets.InfoItems
 
         public void OnPointerClicked(MixedRealityPointerEventData eventData)
         {
+            Debug.Log("Clicked on!");
             target = !target;
         }
 
         public void OnPointerDown(MixedRealityPointerEventData eventData)
         {
+            Debug.Log("Pointed down!");
         }
 
         public void OnPointerDragged(MixedRealityPointerEventData eventData)
