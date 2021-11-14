@@ -1,7 +1,7 @@
 ﻿{
   "VesselMode": false,
   "DataSettings": {
-    "UpdateInterval": 2.0,
+    "UpdateInterval": 1.0,
     "LatitudeArea": 5000,
     "LongitudeArea": 5000,
     "UIElementHeight": 15.0
@@ -28,6 +28,10 @@
     "RotationThreshold": 5
   },
   "UISettings": {
-    "HorizonPlaneRadius": 300
+    "HorizonPlaneRadius": 5
+  },
+  "PhoneGPS": {
+    "IP": "10.0.0.17",
+    "port":  "6000"
   }
 }

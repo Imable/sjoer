@@ -19,6 +19,11 @@ namespace Assets.Resources
             conf = JsonConvert.DeserializeObject<Conf>(AssetManager.Instance.config["generic"].text);
             barentswatch = JsonConvert.DeserializeObject<BarentsConf>(AssetManager.Instance.config["barentswatch"].text);
         }
+
+        public void EnsureInstance()
+        {
+            // Callable to instantiate instance if it does not exists yet
+        }
     }
 
     [Serializable]
@@ -34,8 +39,11 @@ namespace Assets.Resources
         public Dictionary<string, int> SceneSettings;
         public Dictionary<string, int> CalibrationSettings;
         public Dictionary<string, double> UISettings;
+        public Dictionary<string, string> PhoneGPS;
+
     }
 
+    [Serializable]
     public class BarentsConf
     {
         public string token_url;

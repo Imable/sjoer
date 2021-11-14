@@ -40,8 +40,8 @@ namespace Assets.DataManagement
                 case DataConnections.BarentswatchAIS:
                     connection = new BarentswatchAISConnection();
                     break;
-                case DataConnections.BluetoothGPS:
-                    connection = new BluetoothGPSConnection();
+                case DataConnections.PhoneGPS:
+                    connection = new PhoneGPSConnection();
                     break;
                 case DataConnections.HardcodedGPS:
                     connection = new HardcodedGPSConnection();

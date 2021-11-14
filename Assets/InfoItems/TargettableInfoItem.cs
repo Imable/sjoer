@@ -1,15 +1,17 @@
-﻿using Microsoft.MixedReality.Toolkit.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.MixedReality.Toolkit;
+using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
+
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 
 namespace Assets.InfoItems
 {
-    class TargettableInfoItem : MonoBehaviour, IMixedRealityPointerHandler
+    public class TargettableInfoItem : BaseInputHandler, IMixedRealityInputHandler
     {
+        [SerializeField]
+        private MixedRealityInputAction selectAction = MixedRealityInputAction.None;
+
         private bool target = false;
 
         public bool IsTarget
@@ -18,23 +20,32 @@ namespace Assets.InfoItems
             set { target = value; }
         }
 
-        public void OnPointerClicked(MixedRealityPointerEventData eventData)
+        public bool ChangedThisRender
         {
-            Debug.Log("Clicked on!");
-            target = !target;
+            set { target = value; }
         }
 
-        public void OnPointerDown(MixedRealityPointerEventData eventData)
+        protected override void RegisterHandlers()
         {
-            Debug.Log("Pointed down!");
+            CoreServices.InputSystem?.RegisterHandler<IMixedRealityInputHandler>(this);
         }
 
-        public void OnPointerDragged(MixedRealityPointerEventData eventData)
+        protected override void UnregisterHandlers()
+        {
+            CoreServices.InputSystem?.UnregisterHandler<IMixedRealityInputHandler>(this);
+        }
+
+        public void OnInputUp(InputEventData eventData)
         {
         }
 
-        public void OnPointerUp(MixedRealityPointerEventData eventData)
+        public void OnInputDown(InputEventData eventData)
         {
+            if (eventData.MixedRealityInputAction == selectAction)
+            {
+                Debug.Log("Select!");
+                target = !target;
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Assets.DataManagement
 
     public enum DataConnections
     {
-        BluetoothGPS,
+        PhoneGPS,
         VesselGPS,
         HardcodedGPS,
         BarentswatchAIS

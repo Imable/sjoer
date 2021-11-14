@@ -30,7 +30,7 @@ namespace Assets.Graphics
                 );
 
             // 30/15 = 2, 150/15
-            gameObject.transform.localScale = gameObject.transform.localScale * ((float)Config.Instance.conf.UISettings["HorizonPlaneRadius"] / 15);
+            gameObject.transform.localScale = gameObject.transform.localScale * ((float)Config.Instance.conf.UISettings["HorizonPlaneRadius"] / 23);
             //HelperClasses.InfoAreaUtils.Instance.ScaleStick(gameObject, 2f);
             //HelperClasses.InfoAreaUtils.Instance.ScalePin(gameObject, 2f);
 
@@ -51,8 +51,8 @@ namespace Assets.Graphics
         {
             bool target = infoItem.GetTargetHandler().IsTarget;
             UnityEngine.Object.Destroy(infoItem.Shape);
-            InjectNewShape(infoItem);
-            infoItem.GetTargetHandler().IsTarget = target;
+            Inject(infoItem);
+            infoItem.GetTargetHandler(true).IsTarget = target;
         }
 
         private void InjectNewShape(InfoItem infoItem)

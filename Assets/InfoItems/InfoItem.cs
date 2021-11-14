@@ -17,6 +17,7 @@ namespace Assets.InfoItems
         protected GameObject gameObject;
         protected Meta meta;
 
+        private TargettableInfoItem targetHandler;
 
         public InfoItem(DTO dto, DataType dataType, DisplayArea displayArea)
         {
@@ -65,12 +66,17 @@ namespace Assets.InfoItems
         // Update target in meta according to selected in scene or selected previously
         protected void Retarget ()
         {
-            this.meta.Target = this.meta.Target || (GetTargetHandler() && GetTargetHandler().IsTarget);
+            this.meta.Target = IsTarget || (GetTargetHandler() && GetTargetHandler().IsTarget);
         }
 
-        public TargettableInfoItem GetTargetHandler()
+        public TargettableInfoItem GetTargetHandler(bool forceUpdate = false)
         {
-            return this.gameObject ? this.gameObject.GetComponent<TargettableInfoItem>() : null;
+            // If the target changes, a new GameObject is created in ShapeProvider, which forces and update of `targetHandler`
+            if (!targetHandler || forceUpdate)
+            {
+                targetHandler = this.gameObject ? this.gameObject.GetComponent<TargettableInfoItem>() : null;
+            }
+            return targetHandler;
         }
 
         public bool TargetHasChanged()
@@ -113,7 +119,11 @@ namespace Assets.InfoItems
 
             for (int i = 0; i < aisDTOs.vessels.Length; i++)
             {
-                yield return new AISInfoItem(aisDTOs.vessels[i], dataType, displayArea);
+                AISDTO aisDTO = aisDTOs.vessels[i];
+                if (aisDTO.Valid)
+                {
+                    yield return new AISInfoItem(aisDTOs.vessels[i], dataType, displayArea);
+                }
             }
         }
     }

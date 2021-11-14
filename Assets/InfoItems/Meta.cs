@@ -21,7 +21,7 @@ namespace Assets.InfoItems
             this.layer = layer;
             this.dataType = dataType;
             this.displayArea = displayArea;
-            this.previousTarget = false;
+            this.previousTarget = target;
         }
 
         public bool Target 

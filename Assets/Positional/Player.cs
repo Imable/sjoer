@@ -26,8 +26,8 @@ namespace Assets.Positional
         // Start is called before the first frame update
         void Start()
         {
-            gpsRetriever = new DataRetriever(DataConnections.BluetoothGPS, DataAdapters.GPSInfo, ParameterExtractors.None, this);
-            GPSTimer = new Timer(1f, updateGPS);
+            gpsRetriever = new DataRetriever(DataConnections.PhoneGPS, DataAdapters.GPSInfo, ParameterExtractors.None, this);
+            GPSTimer = new Timer(2, updateGPS);
             SetLightIntensity();
         }
 
@@ -107,11 +107,6 @@ namespace Assets.Positional
             //return mainCamera.transform.RotateAround(mainCamera.transform.position, mainCamera.transform.position + new Vector3((float)x, (float)z, (float)y), unityToTrueNorthRotation.y);
         }
 
-        public Vector2 GetCurrentLatLon()
-        {
-            return new Vector2((float)lastGPSUpdate.Latitude, (float)lastGPSUpdate.Longitude);
-        }
-
         public Tuple<Vector2, Vector2> GetCurrentLatLonArea()
         {
             double lat, lon;
@@ -124,7 +119,7 @@ namespace Assets.Positional
             }
             else
             {
-                Debug.Log("Invalid GPS, using hardcoded one");
+                Debug.Log("Invalid GPS. Using default.");
                 lat = Config.Instance.conf.NonVesselSettings["Latitude"];
                 lon = Config.Instance.conf.NonVesselSettings["Longitude"];
             }
@@ -146,7 +141,7 @@ namespace Assets.Positional
         private void unitytoTrueNorth()
         {
             Debug.Log("Unity to true north");
-            float heading = lastGPSUpdate != null ? (float)lastGPSUpdate.Heading : 0;
+            float heading = lastGPSUpdate != null && lastGPSUpdate.Valid ? (float)lastGPSUpdate.Heading : 0;
             unityToTrueNorthRotation = Quaternion.Euler(0, mainCamera.transform.rotation.eulerAngles.y
                                     - heading, 0);
             Debug.Log(heading);

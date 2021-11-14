@@ -72,8 +72,8 @@ namespace Assets.DataManagement
                     vesselDTO.Name == Config.Instance.conf.VesselSettingsS["VesselName"])
                     continue;
 
-                //Hack to make approx 25 percent a pin and other selected
-                vesselDTO.Target      = getDouble(vessel, "heading") > 270;
+                // By default, no target. When connecting to ECDIS this could become useful
+                vesselDTO.Target      = false;
 
                 vesselDTO.Valid       = true;
                 vesselDTO.TimeStamp   = getDateTime(vessel, "timeStamp");

@@ -10,13 +10,6 @@ using System.Net.Sockets;
 using System.IO;
 using System.Threading;
 
-#if WINDOWS_UWP
-using Windows.Devices.Bluetooth.Advertisement;
-using Windows.Devices.Bluetooth;
-#endif
-//using System.Runtime.InteropServices.WindowsRuntime;
-//using Windows.Storage.Streams;
-
 namespace Assets.DataManagement
 {
     abstract class Connection
@@ -127,7 +120,7 @@ namespace Assets.DataManagement
         }
     }
 
-    class BluetoothGPSConnection : Connection
+    class PhoneGPSConnection : Connection
     {
         private TcpClient tcpClient;
         private Thread clientReceiveThread;
@@ -139,6 +132,7 @@ namespace Assets.DataManagement
             try
             {
                 running = true;
+                Config.Instance.EnsureInstance();
                 clientReceiveThread = new Thread(new ThreadStart(ListenForData));
                 clientReceiveThread.IsBackground = true;
                 clientReceiveThread.Start();
@@ -154,7 +148,7 @@ namespace Assets.DataManagement
         {
             try
             {
-                tcpClient = new TcpClient("10.0.0.17", int.Parse("6000"));
+                tcpClient = new TcpClient(Config.Instance.conf.PhoneGPS["IP"], int.Parse(Config.Instance.conf.PhoneGPS["port"]));
 
                 Byte[] bytes = new Byte[1024];
                 while (running)
@@ -166,10 +160,10 @@ namespace Assets.DataManagement
                         // Read incomming stream into byte arrary. 					
                         while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
                         {
-                            var incommingData = new byte[length];
-                            Array.Copy(bytes, 0, incommingData, 0, length);
+                            var incomingData = new byte[length];
+                            Array.Copy(bytes, 0, incomingData, 0, length);
                             // Convert byte array to string message. 						
-                            string gpsString = Encoding.ASCII.GetString(incommingData);
+                            string gpsString = Encoding.ASCII.GetString(incomingData);
                             // Only store GPRMC strings
                             if (gpsString.Length > 5 && gpsString.Substring(0, 5) == "GPRMC")
                             {
@@ -187,6 +181,7 @@ namespace Assets.DataManagement
         public override void OnDestroy()
         {
             running = false;
+            clientReceiveThread.Join();
         }
 
         public override async Task<string> get(params string[] param)
