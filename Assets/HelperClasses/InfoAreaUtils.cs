@@ -9,10 +9,10 @@ namespace Assets.HelperClasses
         public Vector3 UnityCoordsToHorizonPlane(Vector3 obj, Vector3 player)
         {
             Vector3 dir = (obj - player).normalized;
-            Vector3 newPosition = dir * (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"];
+            Vector3 newPosition = player + dir * (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"];
             return new Vector3(
                     newPosition.x,
-                    0, // newPosition.y > align with the horizon. TODO: Get layer number
+                    (float)Config.Instance.conf.VesselSettingsD["BridgeHeight"] - (float)Config.Instance.conf.DataSettings["UIElementHeight"], // newPosition.y > align with the horizon. TODO: Get layer number
                     newPosition.z
                 );
         }

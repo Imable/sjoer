@@ -4,13 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Resources;
 using Assets.SceneManagement;
+using Assets.Positional;
+using Assets.HelperClasses;
+using TMPro;
 
-namespace Assets.Positional
+namespace Assets.Calibration
 {
     public class Calibrator : MonoBehaviour
     {
+        [SerializeField]
         private Camera mainCamera;
-        private HelperClasses.Timer steadyTimer;
+
+        [SerializeField]
+        private TextMeshProUGUI countDown;
+
+        private Timer steadyTimer;
         private Quaternion rot = Quaternion.identity;
         private Vector3 pos = Vector3.zero;
         private DateTime startTime;
@@ -20,8 +28,7 @@ namespace Assets.Positional
         {
             Debug.Log("Calibrating. Hold head steady for 3 seconds.");
 
-            this.mainCamera = Player.Instance.GetMainCamera();
-            this.steadyTimer = new HelperClasses.Timer(
+            this.steadyTimer = new Timer(
                 (float)Config.Instance.conf.CalibrationSettings["SteadyTime"],
                 this.calibrate
                 );
@@ -34,18 +41,20 @@ namespace Assets.Positional
             // We need to manually call the update of the Timer instance
             this.steadyTimer.Update();
 
-            // Check for steadyness every second
-            DateTime now = DateTime.Now;
-            if ((now - this.startTime).TotalSeconds > 1)
-            {
-                this.startTime = now;
+            countDown.text = $"Face bow in {this.steadyTimer.GetSecondsRemaining()}s";
 
-                // If the rotation and position are shaky, restart the timer
-                if (isShakyRot(mainCamera.transform.rotation) || isShakyPos(mainCamera.transform.position))
-                {
-                    this.steadyTimer.restart();
-                }
-            }
+            // Check for steadyness every second
+            //DateTime now = DateTime.Now;
+            //if ((now - this.startTime).TotalSeconds > 1)
+            //{
+            //    this.startTime = now;
+
+            //    // If the rotation and position are shaky, restart the timer
+            //    if (isShakyRot(mainCamera.transform.rotation) || isShakyPos(mainCamera.transform.position))
+            //    {
+            //        this.steadyTimer.restart();
+            //    }
+            //}
         }
 
         private bool isShakyRot(Quaternion incoming)

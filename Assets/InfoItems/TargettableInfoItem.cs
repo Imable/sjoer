@@ -7,11 +7,32 @@ using UnityEngine;
 
 namespace Assets.InfoItems
 {
-    public class TargettableInfoItem : BaseInputHandler, IMixedRealityInputHandler
+    public class Targettable : BaseInputHandler, IMixedRealityInputHandler
     {
         [SerializeField]
-        private MixedRealityInputAction selectAction = MixedRealityInputAction.None;
+        protected MixedRealityInputAction selectAction = MixedRealityInputAction.None;
 
+        protected override void RegisterHandlers()
+        {
+            CoreServices.InputSystem?.RegisterHandler<IMixedRealityInputHandler>(this);
+        }
+
+        protected override void UnregisterHandlers()
+        {
+            CoreServices.InputSystem?.UnregisterHandler<IMixedRealityInputHandler>(this);
+        }
+
+        public virtual void OnInputDown(InputEventData eventData)
+        {
+        }
+
+        public virtual void OnInputUp(InputEventData eventData)
+        {
+        }
+    }
+
+    public class TargettableInfoItem : Targettable
+    {
         private bool target = false;
 
         public bool IsTarget
@@ -25,21 +46,7 @@ namespace Assets.InfoItems
             set { target = value; }
         }
 
-        protected override void RegisterHandlers()
-        {
-            CoreServices.InputSystem?.RegisterHandler<IMixedRealityInputHandler>(this);
-        }
-
-        protected override void UnregisterHandlers()
-        {
-            CoreServices.InputSystem?.UnregisterHandler<IMixedRealityInputHandler>(this);
-        }
-
-        public void OnInputUp(InputEventData eventData)
-        {
-        }
-
-        public void OnInputDown(InputEventData eventData)
+        public override void OnInputDown(InputEventData eventData)
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {

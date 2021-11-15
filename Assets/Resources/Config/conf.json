@@ -4,13 +4,13 @@
     "UpdateInterval": 1.0,
     "LatitudeArea": 5000,
     "LongitudeArea": 5000,
-    "UIElementHeight": 15.0
+    "UIElementHeight": 0.0
   },
   "VesselSettingsS": {
     "VesselName": "Name"
   },
   "VesselSettingsD": {
-    "BridgeHeight": 15.0
+    "BridgeHeight": 0.0
   },
   "NonVesselSettings": {
     "PlatformHeight": 15.0,
@@ -23,9 +23,9 @@
     "SceneInterval": 10
   },
   "CalibrationSettings": {
-    "SteadyTime": 3,
-    "PositionThreshold": 1,
-    "RotationThreshold": 5
+    "SteadyTime": 7,
+    "PositionThreshold": 10,
+    "RotationThreshold": 30
   },
   "UISettings": {
     "HorizonPlaneRadius": 5
