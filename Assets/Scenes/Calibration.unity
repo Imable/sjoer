@@ -791,7 +791,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf83170f22d7f5a4cb7b99bf75a3bd1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCamera: {fileID: 760956857}
   countDown: {fileID: 673509769}
 --- !u!4 &897076499
 Transform:
@@ -920,7 +919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dash: {fileID: 1750027075}
   mainCamera: {fileID: 760956857}
-  dashCount: 10
+  dashCount: 5
 --- !u!1 &1263511912
 GameObject:
   m_ObjectHideFlags: 0

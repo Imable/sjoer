@@ -14,6 +14,7 @@ namespace Assets.DataManagement
 
     public enum DataConnections
     {
+        MockPhoneGPS,
         PhoneGPS,
         VesselGPS,
         HardcodedGPS,

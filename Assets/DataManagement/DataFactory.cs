@@ -43,6 +43,9 @@ namespace Assets.DataManagement
                 case DataConnections.PhoneGPS:
                     connection = new PhoneGPSConnection();
                     break;
+                case DataConnections.MockPhoneGPS:
+                    connection = new MockNMEAConnection();
+                    break;
                 case DataConnections.HardcodedGPS:
                     connection = new HardcodedGPSConnection();
                     break;

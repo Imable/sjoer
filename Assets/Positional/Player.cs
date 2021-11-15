@@ -13,6 +13,7 @@ namespace Assets.Positional
 
         // Difference between vessel bearing (true north) and Hololens bearing (unity coordinates)
         private Quaternion unityToTrueNorthRotation = Quaternion.identity;
+        private float calibrationDirection = 0;
         private AISDTO lastGPSUpdate;
         private DataRetriever gpsRetriever;
         Timer GPSTimer;
@@ -20,14 +21,20 @@ namespace Assets.Positional
         private async void updateGPS()
         {
             lastGPSUpdate = (AISDTO) await gpsRetriever.fetch();
+            unitytoTrueNorth();
             Debug.Log("Heading: " + lastGPSUpdate.Heading);
+            Debug.Log("SOG: " + lastGPSUpdate.SOG);
+            Debug.Log("Lat: " + lastGPSUpdate.Latitude);
+            Debug.Log("Lon: " + lastGPSUpdate.Longitude);
+
+
         }
 
         // Start is called before the first frame update
         void Start()
         {
             gpsRetriever = new DataRetriever(DataConnections.PhoneGPS, DataAdapters.GPSInfo, ParameterExtractors.None, this);
-            GPSTimer = new Timer(2, updateGPS);
+            GPSTimer = new Timer(0.5f, updateGPS);
             SetLightIntensity();
         }
 
@@ -136,15 +143,14 @@ namespace Assets.Positional
         // (and thus vessel compass information and Hololens direction match)
         public void calibrate()
         {
-            this.unitytoTrueNorth();
+            this.unitytoTrueNorth(true);
         }
-        private void unitytoTrueNorth()
+        private void unitytoTrueNorth(bool calibrate = false)
         {
+            if (calibrate) calibrationDirection = mainCamera.transform.rotation.eulerAngles.y;
             Debug.Log("Unity to true north");
             float heading = lastGPSUpdate != null && lastGPSUpdate.Valid ? (float)lastGPSUpdate.Heading : 0;
-            unityToTrueNorthRotation = Quaternion.Euler(0, mainCamera.transform.rotation.eulerAngles.y
-                                    - heading, 0);
-            Debug.Log(heading);
+            unityToTrueNorthRotation = Quaternion.Euler(0, calibrationDirection - heading, 0);
         }
     }
 
