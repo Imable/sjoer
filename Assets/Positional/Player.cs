@@ -39,14 +39,14 @@ namespace Assets.Positional
 
         // Black becomes transparent on HoloLens (and so do shadows)
         // Therefore, this code ensures that the scene is brightly lit
-        private void SetLightIntensity()
+        public void SetLightIntensity(int value = 30)
         {
             Light playerLight = mainCamera.transform.GetChild(0).gameObject.GetComponent<Light>();
             playerLight.range = (float)Config.Instance.conf.UISettings["HorizonPlaneRadius"] + 1;
-            playerLight.intensity = 30;
+            playerLight.intensity = value;
         }
 
-        void EnsureMainCamera ()
+        public void EnsureMainCamera ()
         {
             if (!mainCamera)
             {

@@ -13,9 +13,6 @@ namespace Assets.Calibration
     public class Calibrator : MonoBehaviour
     {
         [SerializeField]
-        private Camera mainCamera;
-
-        [SerializeField]
         private TextMeshProUGUI countDown;
 
         private Timer steadyTimer;
@@ -27,6 +24,8 @@ namespace Assets.Calibration
         void Start()
         {
             Debug.Log("Calibrating. Hold head steady for 3 seconds.");
+            Player.Instance.EnsureMainCamera();
+            Player.Instance.SetLightIntensity(5);
 
             this.steadyTimer = new Timer(
                 (float)Config.Instance.conf.CalibrationSettings["SteadyTime"],

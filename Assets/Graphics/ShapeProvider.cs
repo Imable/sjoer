@@ -61,8 +61,12 @@ namespace Assets.Graphics
             if (infoItem.IsTarget)
             {
                 prefab = "AISPinTarget";
+                infoItem.Shape = GetShape(prefab);
+                HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
+            } else
+            {
+                infoItem.Shape = GetShape(prefab);
             }
-            infoItem.Shape = GetShape(prefab);
         }
     }
 }

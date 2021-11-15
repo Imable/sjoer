@@ -19,16 +19,24 @@ namespace Assets.HelperClasses
 
         public void ScaleStick(GameObject target, float scale)
         {
+            BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject stick = target.transform.Find($"StickAnchor").gameObject;
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
             stick.transform.localScale = new Vector3(stick.transform.localScale.x, stick.transform.localScale.y * scale, stick.transform.localScale.y);
             pin.transform.localScale = new Vector3(pin.transform.localScale.x, pin.transform.localScale.y * (1/scale), pin.transform.localScale.z);
+
+            boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + (scale / boxCollider.size.y) * boxCollider.size.y, boxCollider.size.z);
+            boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.center.y + (scale / boxCollider.center.y) * boxCollider.center.y, boxCollider.center.z);
         }
 
         public void ScalePin(GameObject target, float scale)
         {
+            BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
             pin.transform.localScale = new Vector3(pin.transform.localScale.x * scale, pin.transform.localScale.y * scale, pin.transform.localScale.z);
+
+            boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + (scale / boxCollider.size.y) * boxCollider.size.y, boxCollider.size.z);
+            boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.center.y + (scale / boxCollider.center.y) * boxCollider.center.y, boxCollider.center.z);
         }
 
         public void PinToLayerOne(GameObject target)

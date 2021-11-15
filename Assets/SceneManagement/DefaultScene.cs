@@ -38,5 +38,18 @@ namespace Assets.SceneManagement
                 infoCategory.Update();
             }
         }
+
+        private void OnApplicationQuit()
+        {
+            OnDestroy();
+        }
+
+        void OnDestroy()
+        {
+            foreach (InfoCategory i in infoCategories)
+            {
+                i.OnDestroy();
+            }
+        }
     }
 }

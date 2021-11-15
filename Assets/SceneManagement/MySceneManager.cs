@@ -27,7 +27,7 @@ namespace Assets.SceneManagement
 
         public void setNewScene(Scenes scene)
         {
-            Debug.Log($"Setting next scene to {scene.ToString()}");
+            Debug.Log($"Setting next scene to {scene}");
             SceneManager.LoadScene((int) scene);
         }
 

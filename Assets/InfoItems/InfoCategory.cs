@@ -76,6 +76,11 @@ namespace Assets.InfoItems
             infoItem.Merge(infoItems[infoItem.Key]);
             AddNewInfoItem(infoItem);
         }
+
+        public void OnDestroy()
+        {
+            dataRetriever.OnDestroy();
+        }
     }
 
     class DelayedInfoCategory : InfoCategory

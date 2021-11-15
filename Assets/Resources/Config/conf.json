@@ -1,7 +1,7 @@
 ﻿{
   "VesselMode": false,
   "DataSettings": {
-    "UpdateInterval": 1.0,
+    "UpdateInterval": 0.5,
     "LatitudeArea": 5000,
     "LongitudeArea": 5000,
     "UIElementHeight": 0.0
@@ -13,7 +13,6 @@
     "BridgeHeight": 0.0
   },
   "NonVesselSettings": {
-    "PlatformHeight": 15.0,
     "Latitude": 60.397908,
     "Longitude": 5.317065,
     "Latitude_home": 60.403055,
@@ -31,7 +30,7 @@
     "HorizonPlaneRadius": 5
   },
   "PhoneGPS": {
-    "IP": "10.0.0.17",
+    "IP": "192.168.43.1",
     "port":  "6000"
   }
 }
