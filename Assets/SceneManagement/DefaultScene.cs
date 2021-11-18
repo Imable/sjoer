@@ -4,6 +4,7 @@ using Assets.Positional;
 using Assets.Resources;
 using Assets.DataManagement;
 using Assets.Graphics;
+using UnityEngine.SceneManagement;
 
 namespace Assets.SceneManagement
 {
@@ -39,16 +40,35 @@ namespace Assets.SceneManagement
             }
         }
 
-        private void OnApplicationQuit()
+        void OnApplicationQuit()
+        {
+            OnDestroy();
+        }
+
+        void OnDisable()
+        {
+            OnDestroy();
+        }
+
+        void OnEnable()
+        {
+            SceneManager.activeSceneChanged += OnSceneLoaded;
+        }
+
+        void OnSceneLoaded(Scene o, Scene i)
         {
             OnDestroy();
         }
 
         void OnDestroy()
         {
-            foreach (InfoCategory i in infoCategories)
+            if (infoCategories != null)
             {
-                i.OnDestroy();
+                foreach (InfoCategory i in infoCategories)
+                {
+                    i.OnDestroy();
+                }
+
             }
         }
     }

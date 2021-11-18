@@ -109,11 +109,13 @@ namespace Assets.DataManagement
         private bool checksum(string input)
         {
             string cs = input.Split('*')[1];
+            int dollarIndex = input.IndexOf('$');
 
             //Start with first Item
-            int checksum = Convert.ToByte(input[input.IndexOf('$') + 1]);
+            int checksum = Convert.ToByte(input[dollarIndex + 1]);
             // Loop through all chars to get a checksum
-            for (int i = input.IndexOf('$') + 2; i < input.IndexOf('*'); i++)
+            int starIndex = input.IndexOf('*');
+            for (int i = dollarIndex + 2; i < starIndex; i++)
             {
                 // No. XOR the checksum with this character's value
                 checksum ^= Convert.ToByte(input[i]);
@@ -123,6 +125,8 @@ namespace Assets.DataManagement
         }
 
         // Input: $GPRMC,071228.00,A,5402.6015,N,00025.9797,E,0.2,332.1,180921,0.2,W,A,S*50
+        // Input: $GPRMC,153415.692,A,6023.762,N,00519.311,E,082.0,289.8,151121,000.0,W* 7C --> phone mock
+
         public override DTO convert(string input)
         {
             // We'll ignore index 0, because that contains '$GPRMC'
@@ -131,7 +135,7 @@ namespace Assets.DataManagement
             AISDTO dto = new AISDTO();
 
             // Catch invalid DTO
-            if (splitInput.Length < 13 || !checksum(input) || splitInput[2] == "V")
+            if (splitInput.Length < 12) // || !checksum(input) || splitInput[2] == "V")
             {
                 dto.Valid = false;
             } else

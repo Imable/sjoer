@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 6627001860105249513}
   - component: {fileID: 1326581553938468271}
   m_Layer: 5
-  m_Name: CPA
+  m_Name: DRG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CPA
+  m_text: DRG
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 96833c9fda311cb429749574f3130654, type: 2}
   m_sharedMaterial: {fileID: 5040297266024992611, guid: 96833c9fda311cb429749574f3130654, type: 2}
@@ -1041,7 +1041,7 @@ GameObject:
   - component: {fileID: 9175710849362352228}
   - component: {fileID: 1033551504147467624}
   m_Layer: 5
-  m_Name: CPAValue
+  m_Name: DRGValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

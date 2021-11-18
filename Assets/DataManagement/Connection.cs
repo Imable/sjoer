@@ -169,6 +169,11 @@ namespace Assets.DataManagement
                             {
                                 lastReading = gpsString.Substring(0, gpsString.IndexOf(Environment.NewLine));
                             }
+
+                            if (!running)
+                            {
+                                break;
+                            }
                         }
                     }
                 }
@@ -194,7 +199,6 @@ namespace Assets.DataManagement
 
     class MockNMEAConnection : Connection
     {
-        HelperClasses.Timer timer; 
         string text = @"$GPGGA,153415.692,6023.762,N,00519.311,E,1,12,1.0,0.0,M,0.0,M,,*6E
                         $GPGSA,A,3,01,02,03,04,05,06,07,08,09,10,11,12,1.0,1.0,1.0 * 30
                         $GPRMC,153415.692,A,6023.762,N,00519.311,E,082.0,289.8,151121,000.0,W * 7C
@@ -392,19 +396,26 @@ namespace Assets.DataManagement
                         $GPRMC,153519.692,A,6024.386,N,00513.634,E,075.8,316.8,151121,000.0,W * 77";
         string[] splitText;
         private string lastReading = "";
-        int index = 2;
+        int index = 3;
+        DateTime last;
+        float span;
 
         public override async Task<string> get(params string[] param)
         {
-            if (timer.hasFinished()) timer.restart();
-            timer.Update();
+            DateTime now = DateTime.Now;
+            if ((now - last).TotalSeconds > span)
+            {
+                last = now;
+                TakeNext();
+            }
             return await Task.Run(() => lastReading);
         }
 
         protected override void connect()
         {
+            last = DateTime.Now;
+            span = 2;
             splitText = text.Split('$');
-            timer = new HelperClasses.Timer(2, TakeNext);
             connected = true;
         }
 

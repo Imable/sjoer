@@ -53,6 +53,23 @@ namespace Assets.InfoItems
 
         private void HandleNewInfoItems(DTO dto)
         {
+            if (((AISDTOs)dto).vessels.Length > 0)
+            {
+                Vector2 LatLon = Player.Instance.GetLatLon;
+                ((AISDTOs)dto).vessels[0] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "NORTH",
+                    Key = "NORTH",
+                    Target = true,
+                    Latitude = LatLon.x + 1,
+                    Longitude = LatLon.y
+                };
+            }
+
             foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
             {
                 if (infoItems.ContainsKey(infoItem.Key))

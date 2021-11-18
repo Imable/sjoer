@@ -34,7 +34,7 @@ namespace Assets.Graphics
             FillTextField("HDGValue", dto.Heading.ToString(), infoItem.Shape);
             FillTextField("COGValue", dto.COG.ToString(), infoItem.Shape);
             FillTextField("SOGValue", dto.SOG.ToString(), infoItem.Shape);
-            FillTextField("CPAValue", "Test", infoItem.Shape);
+            FillTextField("DRGValue", dto.Draught.ToString(), infoItem.Shape);
         }
 
         private void FillTextField(string fname, string value, GameObject g)
