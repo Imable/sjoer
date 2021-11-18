@@ -86,6 +86,15 @@ namespace Assets.HelperClasses
             EcefToEnu(x, y, z, lat0, lon0, h0, out xEast, out yNorth, out zUp);
         }
 
+        public double DMSToDecimal(string dms)
+        {
+            // format: 6024.1234567 and 0519.12345
+            double degrees = double.Parse(dms.Substring(0, 2));
+            double minutes = double.Parse(dms.Remove(0, 2));
+
+            return degrees + (minutes / 60);
+        }
+
         public Tuple<Vector2, Vector2> GetCurrentLatLonArea(double lat, double lon)
         {
             //offsets in meters

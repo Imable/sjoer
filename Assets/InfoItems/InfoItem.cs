@@ -11,72 +11,121 @@ using Assets.Graphics;
 
 namespace Assets.InfoItems
 {
-    class InfoItem : MonoBehaviour
+    class InfoItem
     {
-        DataRetriever dataRetriever;
-        Graphic graphic;
+        protected DTO dto;
+        protected GameObject gameObject;
+        protected Meta meta;
 
-        public InfoItem(DataSources dataSource, GraphicTypes graphicType, WorldAligner aligner)
+        private TargettableInfoItem targetHandler;
+
+        public InfoItem(DTO dto, DataType dataType, DisplayArea displayArea)
         {
-            this.dataRetriever = new DataRetriever(dataSource, aligner);
-            this.graphic       = new Graphic(graphicType, aligner);
+            this.meta = new Meta(dto.Target, 0, dataType, displayArea);
+            this.dto  = dto;
         }
 
-        public bool isConnected()
+        public bool IsTarget
         {
-            return dataRetriever.isConnected();
+            get { return this.meta.Target; }
         }
 
-        public void Start()
+        public virtual string Key
         {
-            
+            get { return dto.Key; }
         }
 
-        public virtual void Update()
+        public GameObject Shape
         {
-            Tick();
+            get { return gameObject; }
+            set { gameObject = value; }
         }
 
-
-        protected async void Tick()
+        public DTO GetDTO
         {
-            // Stop execution if not connected yet
-            if (!dataRetriever.isConnected()) return;
-
-            DTO dto = await UpdateData();
-            Draw(dto);
+            get { return dto; }
         }
 
-        protected Task<DTO> UpdateData()
+        public static IEnumerable<InfoItem> Generate(DTO dto, DataType dataType, DisplayArea displayArea)
         {
-            return dataRetriever.fetch();
+            throw new NotImplementedException();
         }
 
-        protected void Draw(DTO dto)
+        public void Update()
         {
-            graphic.Display(dto);
+            // First update the target from interactions
+            Retarget();
+            // Get new shape
+            Reshape();
+            // Fill new shape if necessary
+            Refill();
+            // Positional shape
+            Reposition();
+        }
+
+        // Update target in meta according to selected in scene or selected previously
+        protected void Retarget ()
+        {
+            this.meta.Target = IsTarget || (GetTargetHandler() && GetTargetHandler().IsTarget);
+        }
+
+        public TargettableInfoItem GetTargetHandler(bool forceUpdate = false)
+        {
+            // If the target changes, a new GameObject is created in ShapeProvider, which forces and update of `targetHandler`
+            if (!targetHandler || forceUpdate)
+            {
+                targetHandler = this.gameObject ? this.gameObject.GetComponent<TargettableInfoItem>() : null;
+            }
+            return targetHandler;
+        }
+
+        public bool TargetHasChanged()
+        {
+            return this.meta.Target != this.meta.PreviousTarget;
+        }
+
+        protected virtual void Reshape()
+        {
+            GraphicFactory.Instance.getShapeProvider(meta.DataType).Get(this);
+        }
+
+        protected virtual void Refill()
+        {
+            if (IsTarget) GraphicFactory.Instance.GetFiller(meta.DataType).Fill(this);
+        }
+
+        protected virtual void Reposition()
+        {
+            GraphicFactory.Instance.getPositioner(meta.DataType).Position(this, meta.DisplayArea);
+        }
+
+        // Called on the new InfoItem
+        public void Merge(InfoItem oldInfoItem)
+        {
+            this.meta.PreviousTarget = oldInfoItem.IsTarget;
+            this.gameObject = oldInfoItem.gameObject;
         }
     }
 
-     class DelayedInfoItem : InfoItem
+    class AISInfoItem : InfoItem
     {
-        float delay = 0;
-        private DateTime lastDataUpdate = DateTime.Now;
-
-        public DelayedInfoItem(DataSources dataSource, GraphicTypes graphicType, WorldAligner aligner, float delay) : base(dataSource, graphicType, aligner)
+        public AISInfoItem(DTO dto, DataType dataType, DisplayArea displayArea) : base(dto, dataType, displayArea)
         {
-            this.delay = delay;
         }
 
-        public override void Update()
+        public static new IEnumerable<InfoItem> Generate(DTO dto, DataType dataType, DisplayArea displayArea)
         {
-            // Only update data every `UpdateInterval` seconds
-            DateTime now = DateTime.Now;
-            if ((now - lastDataUpdate).TotalSeconds > delay)
+            AISDTOs aisDTOs = (AISDTOs)dto;
+
+            for (int i = 0; i < aisDTOs.vessels.Length; i++)
             {
-                lastDataUpdate = now;
-                Tick();
+                AISDTO aisDTO = aisDTOs.vessels[i];
+                if (aisDTO.Valid)
+                {
+                    yield return new AISInfoItem(aisDTOs.vessels[i], dataType, displayArea);
+                }
             }
         }
     }
 }
+

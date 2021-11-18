@@ -14,7 +14,6 @@ namespace Assets.HelperClasses
         private bool done = false;
         private Action onComplete;
 
-
         public Timer(float time, Action onComplete)
         {
             this.time = time;
@@ -45,6 +44,11 @@ namespace Assets.HelperClasses
                 }
             }
 
+        }
+
+        public double GetSecondsRemaining()
+        {
+            return Math.Round(time);
         }
 
         public bool hasFinished()

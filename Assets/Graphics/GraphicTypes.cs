@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Assets.Graphics
 {
-    public enum GraphicTypes
+    public enum DataType
     {
-        Point3D,
-        HUD2D
+        AIS
+    }
+
+    public enum DisplayArea
+    {
+        HorizonPlane,
+        HUD
     }
 }

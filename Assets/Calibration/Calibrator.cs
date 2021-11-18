@@ -3,16 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Resources;
+using Assets.SceneManagement;
+using Assets.Positional;
+using Assets.HelperClasses;
+using TMPro;
 
-namespace Assets.Positional
+namespace Assets.Calibration
 {
     public class Calibrator : MonoBehaviour
     {
-        public GameObject player;
-        public GameObject sceneManager;
+        [SerializeField]
+        private TextMeshProUGUI countDown;
 
-        private Camera mainCamera;
-        private HelperClasses.Timer steadyTimer;
+        private Timer steadyTimer;
         private Quaternion rot = Quaternion.identity;
         private Vector3 pos = Vector3.zero;
         private DateTime startTime;
@@ -21,9 +24,10 @@ namespace Assets.Positional
         void Start()
         {
             Debug.Log("Calibrating. Hold head steady for 3 seconds.");
+            Player.Instance.EnsureMainCamera();
+            Player.Instance.SetLightIntensity(5);
 
-            this.mainCamera = player.GetComponent<WorldAligner>().mainCamera;
-            this.steadyTimer = new HelperClasses.Timer(
+            this.steadyTimer = new Timer(
                 (float)Config.Instance.conf.CalibrationSettings["SteadyTime"],
                 this.calibrate
                 );
@@ -36,18 +40,20 @@ namespace Assets.Positional
             // We need to manually call the update of the Timer instance
             this.steadyTimer.Update();
 
-            // Check for steadyness every second
-            DateTime now = DateTime.Now;
-            if ((now - this.startTime).TotalSeconds > 1)
-            {
-                this.startTime = now;
+            countDown.text = $"Face bow in {this.steadyTimer.GetSecondsRemaining()}s";
 
-                // If the rotation and position are shaky, restart the timer
-                if (isShakyRot(mainCamera.transform.rotation) || isShakyPos(mainCamera.transform.position))
-                {
-                    this.steadyTimer.restart();
-                }
-            }
+            // Check for steadyness every second
+            //DateTime now = DateTime.Now;
+            //if ((now - this.startTime).TotalSeconds > 1)
+            //{
+            //    this.startTime = now;
+
+            //    // If the rotation and position are shaky, restart the timer
+            //    if (isShakyRot(mainCamera.transform.rotation) || isShakyPos(mainCamera.transform.position))
+            //    {
+            //        this.steadyTimer.restart();
+            //    }
+            //}
         }
 
         private bool isShakyRot(Quaternion incoming)
@@ -79,8 +85,8 @@ namespace Assets.Positional
         // Is executed when the timer completes
         private void calibrate()
         {
-            this.player.GetComponent<WorldAligner>().calibrate();
-            this.sceneManager.GetComponent<SceneManagement.MySceneManager>().exitCalibration();
+            Player.Instance.calibrate();
+            MySceneManager.Instance.exitCalibration();
         }
     }
 }

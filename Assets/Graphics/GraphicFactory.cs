@@ -3,72 +3,72 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Assets.Graphics.Drawers;
-using Assets.Graphics.Positioners;
-using Assets.Graphics.Shapes;
 using Assets.Positional;
 
 namespace Assets.Graphics
 {
     class GraphicFactory : HelperClasses.CSSingleton<GraphicFactory>
     {
-        public WorldAligner aligner = null;
+        public Player aligner = null;
 
-        public Positioner getPositioner(GraphicTypes graphicType)
+        AISShapeProvider aisShapeProvider;
+        AISFiller aisFiller;
+        AISPositioner aisPositioner;
+
+        public GraphicFactory()
+        {
+            aisShapeProvider = new AISShapeProvider();
+            aisFiller = new AISFiller();
+            aisPositioner = new AISPositioner(aligner);
+        }
+
+        public Filler GetFiller(DataType dataType)
+        {
+            Filler filler;
+
+            switch (dataType)
+            {
+                case DataType.AIS:
+                    filler = aisFiller;
+                    break;
+                default:
+                    throw new ArgumentException("No such data type", nameof(dataType));
+            }
+
+            return filler;
+        }
+
+        public Positioner getPositioner(DataType dataType)
         {
             Positioner positioner;
 
-            switch (graphicType)
+            switch (dataType)
             {
-                case GraphicTypes.Point3D:
-                    positioner = new AISPositioner(aligner);
-                    break;
-                case GraphicTypes.HUD2D:
-                    positioner = new Positioner(aligner);
+                case DataType.AIS:
+                    aisPositioner.SetAligner(aligner);
+                    positioner = aisPositioner;
                     break;
                 default:
-                    throw new ArgumentException("No such data source", nameof(graphicType));
+                    throw new ArgumentException("No such data source", nameof(dataType));
             }
 
             return positioner;
         }
 
-        public Shape getShape(GraphicTypes graphicType)
+        public ShapeProvider getShapeProvider(DataType dataType)
         {
-            Shape shape;
+            ShapeProvider shape;
 
-            switch (graphicType)
+            switch (dataType)
             {
-                case GraphicTypes.Point3D:
-                    shape = new AISShape();
-                    break;
-                case GraphicTypes.HUD2D:
-                    shape = new Shape();
+                case DataType.AIS:
+                    shape = aisShapeProvider;
                     break;
                 default:
-                    throw new ArgumentException("No such data source", nameof(graphicType));
+                    throw new ArgumentException("No such data type", nameof(dataType));
             }
 
             return shape;
-        }
-
-        public Drawer getDrawer(GraphicTypes graphicType)
-        {
-            Drawer drawer = new Drawer(aligner);
-
-            switch (graphicType)
-            {
-                case GraphicTypes.Point3D:
-                    drawer = new AISDrawer(aligner);
-                    break;
-                case GraphicTypes.HUD2D:
-                    drawer = new Drawer(aligner);
-                    break;
-                default:
-                    throw new ArgumentException("No such data source", nameof(graphicType));
-            }
-
-            return drawer;
         }
     }
 }

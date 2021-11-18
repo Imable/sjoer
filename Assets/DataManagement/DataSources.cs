@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace Assets.DataManagement
 {
-    public enum DataSources
+    public enum DataAdapters
     {
         GPSInfo,
-        Postgres,
-        AIS,
-        Mock
+        BarentswatchAIS
+    }
+
+    public enum DataConnections
+    {
+        MockPhoneGPS,
+        PhoneGPS,
+        VesselGPS,
+        HardcodedGPS,
+        BarentswatchAIS
+    }
+
+    public enum ParameterExtractors
+    {
+        BarentswatchAIS,
+        None
     }
 }

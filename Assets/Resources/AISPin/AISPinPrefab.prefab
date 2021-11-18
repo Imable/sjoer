@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8511639765938613350}
+  - component: {fileID: 8570524290987556011}
+  - component: {fileID: 4444214494830106172}
   m_Layer: 0
   m_Name: AISPinPrefab
   m_TagString: Untagged
@@ -31,6 +33,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8570524290987556011
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249124949357603249}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 4, z: 1}
+  m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &4444214494830106172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249124949357603249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a5d0ebc317232d4f9b8ceeb38234638, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFocusRequired: 1
+  selectAction:
+    id: 1
+    description: Select
+    axisConstraint: 2
 --- !u!1 &5495526258258002604
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,7 +136,6 @@ GameObject:
   - component: {fileID: 4715535736107828377}
   - component: {fileID: 6879420579392014569}
   - component: {fileID: 3570354062163100286}
-  - component: {fileID: 5052266135872021090}
   m_Layer: 0
   m_Name: Stick
   m_TagString: Untagged
@@ -176,20 +207,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5052266135872021090
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8599208343910814628}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!1001 &1461176762287667643
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -219,7 +236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 1.04
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalPosition.z
@@ -227,7 +244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalRotation.x
@@ -239,7 +256,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -247,7 +264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4acb2c166ed07634c96d86eac9f99f83, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
