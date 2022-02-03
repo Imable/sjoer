@@ -50,6 +50,13 @@ Build Configuration: Release
 _The remaining checkboxes should be deselected when creating a release build_
 
 * Click `Build`
+* Select a folder where the project should be built to
+* Go into the export folder and open the Visual Studio project by double-clicking `ar-coastal-sailing.sln`
+* Now connect the HoloLens 2 to your PC using USB and wait until Windows recognizes it
+* In Visual Studio, switch `Debug` to `Release`, `ARM` to `ARM64` and `Remote Device` to `Device` (by clicking the small arrow on the right side of `ARM`)
+* Then click the `Debug` tab on top of Visual Studio and select `Start without debugging`
+
+_The project is now being build and compiled for HoloLens. This will take around 5-10 minutes, depending on your system. Leave the HoloLens plugged into your PC until it makes a sound and the project is opened automatically_
 
 ### Connect to GPS on your phone
 * Download the NetGPS Android app (https://play.google.com/store/apps/details?id=com.meowsbox.netgps&hl=en&gl=US)
