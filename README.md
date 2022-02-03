@@ -8,7 +8,8 @@
 * Unity 2020.3.17f1
 * Mixed Reality Toolkit 2.7.2 (included in the project)
 * Visual Studio 2019 (16.3)
-  _Inlcude in installation_
+
+  _Include in installation_
   * Desktop development with C++
   * Universal Windows Platform (UWP) development
   * Windows 10 SDK version 10.0.19041.0 or 10.0.18362.0
@@ -37,6 +38,7 @@
 ### Connect to GPS on your phone
 * Download the NetGPS Android app (https://play.google.com/store/apps/details?id=com.meowsbox.netgps&hl=en&gl=US)
 *  Disconnect your phone from WiFi and create a hotspot with your phone and connect the HoloLens to it
+
   _Note that this will use mobile data (but it should not be a crazy amount)_
 * In NetGPS, open the second tab and create and enable a server with _type: TCP_, _port: 6000_
 * Then click the arrow on top to show your IP address
