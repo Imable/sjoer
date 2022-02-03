@@ -17,6 +17,15 @@
   * C++ (v142) Universal Windows Platform tools (required when using Unity)
 * Git (to download the project)
 
+### Enable Developer Mode on HoloLens 2
+* Turn on your HoloLens 2 and navigate to `Settings` > `Updates` > `For Developers`
+* Enable `Use Developer Features` in order to deploy applications from Visual Studio
+* I recommend to enable `Windows Device Portal` in this menu too (https://docs.microsoft.com/en-us/windows/mixed-reality/develop/advanced-concepts/using-the-windows-device-portal)
+
+### Enable Developer Mode on your PC
+* Navigate to `Settings` > `Updates and Security` > `For Developers`
+* Enable `Developer Mode` and click `Yes` to accept the change
+
 ### Get the project up and running
 * Clone the project in a directory using `git clone https://github.com/Imable/ar-coastal-sailing.git`
 * Go to https://www.barentswatch.no/minside/
