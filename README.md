@@ -33,7 +33,23 @@
 }
 ```
 * Open the project in Unity
-* ...
+* Go to `File > Build Settings`
+* Make sure the settings match the ones below
+
+```
+Target Device: HoloLens
+Architecture: ARM64
+Build Type: D3D Project
+Target SDK Version: Latest Installed
+Minimum Platform Version: 10.0.10240.0
+Visual Studio Version: Latest Installed
+Build and Run on: USB Device
+Build Configuration: Release
+```
+
+_The remaining checkboxes should be deselected when creating a release build_
+
+* Click `Build`
 
 ### Connect to GPS on your phone
 * Download the NetGPS Android app (https://play.google.com/store/apps/details?id=com.meowsbox.netgps&hl=en&gl=US)
