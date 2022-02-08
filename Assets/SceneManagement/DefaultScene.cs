@@ -27,12 +27,16 @@ namespace Assets.SceneManagement
             Player aligner = player.GetComponent<Player>();
             GraphicFactory.Instance.aligner ??= aligner;
 
-            infoCategories = new InfoCategory[1]
+            infoCategories = new InfoCategory[2]
             {
-                new InfoCategory(
-                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, 
+                new ConnectedInfoCategory(
                     aligner, 
-                    DataType.AIS, DisplayArea.HorizonPlane)
+                    DataType.AIS, DisplayArea.HorizonPlane,
+                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
+                new ConnectedInfoCategory(
+                    aligner,
+                    DataType.AIS, DisplayArea.SkyArea,
+                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
             };
         }
 

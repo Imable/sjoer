@@ -10,29 +10,28 @@ using UnityEngine;
 
 namespace Assets.InfoItems
 {
-    class InfoCategory
+    abstract class InfoCategory
     {
-        private Dictionary<string, InfoItem> infoItems = new Dictionary<string, InfoItem>();
+        protected Dictionary<string, InfoItem> infoItems = new Dictionary<string, InfoItem>();
 
-        private DataRetriever dataRetriever;
-        private DataType dataType;
-        private DisplayArea displayArea;
+        protected DataType dataType;
+        protected DisplayArea displayArea;
 
-        private DTO lastDTO;
+        protected DTO lastDTO;
 
-        public InfoCategory(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, 
+        public InfoCategory(
             Player aligner,
             DataType dataType, DisplayArea displayArea)
         {
-            this.dataRetriever = new DataRetriever(connection, adapter, extractor, aligner);
             this.dataType = dataType;
             this.displayArea = displayArea;
         }
 
-        public virtual void Update()
+        public Dictionary<string, InfoItem> Update()
         {
             RetrieveInfoItems();
             Tick();
+            return infoItems;
         }
 
         protected void Tick()
@@ -45,18 +44,9 @@ namespace Assets.InfoItems
             Debug.Log($"There are {infoItems.Count} InfoItems in the scene.");
         }
 
-        public async void RetrieveInfoItems()
-        {
-            DTO dto = null;
-            // If we can connect, get data
-            if (dataRetriever.isConnected()) dto = await this.dataRetriever.fetch();
-            // If we could connect and data is valid, store that data
-            if (dto != null && dto.Valid) lastDTO = dto;
-            // Process new data is that was available, otherwise process old data if that is available
-            if (lastDTO != null) HandleNewInfoItems(dto);
-        }
+        protected abstract void RetrieveInfoItems();
 
-        private void HandleNewInfoItems(DTO dto)
+        protected void HandleNewInfoItems(DTO dto)
         {
             //if (((AISDTOs)dto).vessels.Length > 0)
             //{
@@ -99,9 +89,69 @@ namespace Assets.InfoItems
             AddNewInfoItem(infoItem);
         }
 
-        public void OnDestroy()
+        public abstract void OnDestroy();
+    }
+
+    class ConnectedInfoCategory : InfoCategory
+    {
+        private DataRetriever dataRetriever;
+
+        public ConnectedInfoCategory(
+            Player aligner,
+            DataType dataType, DisplayArea displayArea,
+            DataConnections connection, DataAdapters adapter, ParameterExtractors extractor)
+            : base(aligner, dataType, displayArea)
+        {
+            this.dataRetriever = new DataRetriever(connection, adapter, extractor, aligner);
+        }
+
+        protected override async void RetrieveInfoItems()
+        {
+            DTO dto = null;
+            // If we can connect, get data
+            if (dataRetriever.isConnected()) dto = await this.dataRetriever.fetch();
+
+            // If we could connect and data is valid, store that data
+            if (dto != null && dto.Valid) {
+                lastDTO = dto;
+                // Process new data is that was available, otherwise process old data if that is available
+                HandleNewInfoItems(dto);
+            }
+        }
+
+        public override void OnDestroy()
         {
             dataRetriever.OnDestroy();
+        }
+    }
+
+    class InjectedInfoCategory : InfoCategory
+    {
+        Func<List<InfoItem>> InfoItemInjector;
+
+        public InjectedInfoCategory(
+            Player aligner,
+            DataType dataType, DisplayArea displayArea,
+            Func<List<InfoItem>> InfoItemInjector)
+            : base(aligner, dataType, displayArea)
+        {
+            this.InfoItemInjector = InfoItemInjector;
+        }
+
+        protected override async void RetrieveInfoItems()
+        {
+            //DTO dto = null;
+            //// If we can connect, get data
+            //if (dataRetriever.isConnected()) dto = await this.dataRetriever.fetch();
+            //// If we could connect and data is valid, store that data
+            //if (dto != null && dto.Valid) lastDTO = dto;
+            //// Process new data is that was available, otherwise process old data if that is available
+            //if (lastDTO != null) HandleNewInfoItems(dto);
+        }
+
+        public override void OnDestroy()
+        {
+            //dataRetriever.OnDestroy();
         }
     }
 }
