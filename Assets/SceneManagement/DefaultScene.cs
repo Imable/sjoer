@@ -5,6 +5,7 @@ using Assets.Resources;
 using Assets.DataManagement;
 using Assets.Graphics;
 using UnityEngine.SceneManagement;
+using System;
 
 namespace Assets.SceneManagement
 {
@@ -18,24 +19,37 @@ namespace Assets.SceneManagement
         private InfoCategory[] infoCategories;
         private InfoItem[] allInfoItems;
 
+        private DateTime lastUpdate;
+
         void Start()
         {
+            lastUpdate = DateTime.Now;
             Player aligner = player.GetComponent<Player>();
             GraphicFactory.Instance.aligner ??= aligner;
 
             infoCategories = new InfoCategory[1]
             {
-                new DelayedInfoCategory(
+                new InfoCategory(
                     DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, 
                     aligner, 
-                    DataType.AIS, DisplayArea.HorizonPlane,
-                    (float) Config.Instance.conf.DataSettings["UpdateInterval"])
+                    DataType.AIS, DisplayArea.HorizonPlane)
             };
         }
 
         void Update()
         {
-            foreach (InfoCategory infoCategory in infoCategories) {
+            DateTime now = DateTime.Now;
+            if ((now - lastUpdate).TotalSeconds > Config.Instance.conf.DataSettings["UpdateInterval"])
+            {
+                lastUpdate = now;
+                UpdateInfoCategoriesInOrder();
+            }
+        }
+
+        void UpdateInfoCategoriesInOrder()
+        {
+            foreach (InfoCategory infoCategory in infoCategories)
+            {
                 infoCategory.Update();
             }
         }

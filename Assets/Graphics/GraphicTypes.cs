@@ -14,6 +14,7 @@ namespace Assets.Graphics
     public enum DisplayArea
     {
         HorizonPlane,
+        SkyArea,
         HUD
     }
 }

@@ -54,6 +54,9 @@ namespace Assets.Graphics
                 case DisplayArea.HorizonPlane:
                     positionFunc = HorizonPlane;
                     break;
+                case DisplayArea.SkyArea:
+                    positionFunc = SkyArea;
+                    break;
                 case DisplayArea.HUD:
                     break;
                 default:
@@ -67,6 +70,13 @@ namespace Assets.Graphics
         {
             Vector3 position = GetWorldTransform((AISDTO)infoItem.GetDTO);
             infoItem.Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
+            FaceUser(infoItem.Shape);
+        }
+
+        protected void SkyArea(InfoItem infoItem)
+        {
+            Vector3 position = GetWorldTransform((AISDTO)infoItem.GetDTO);
+            infoItem.Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToSkyArea(position, aligner.mainCamera.transform.position);
             FaceUser(infoItem.Shape);
         }
 

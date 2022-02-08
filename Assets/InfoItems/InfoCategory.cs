@@ -18,6 +18,8 @@ namespace Assets.InfoItems
         private DataType dataType;
         private DisplayArea displayArea;
 
+        private DTO lastDTO;
+
         public InfoCategory(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor, 
             Player aligner,
             DataType dataType, DisplayArea displayArea)
@@ -29,12 +31,12 @@ namespace Assets.InfoItems
 
         public virtual void Update()
         {
+            RetrieveInfoItems();
             Tick();
         }
 
         protected void Tick()
         {
-            RetrieveInfoItems();
             foreach (InfoItem infoItem in infoItems.Values)
             {
                 infoItem.Update();
@@ -45,10 +47,13 @@ namespace Assets.InfoItems
 
         public async void RetrieveInfoItems()
         {
-            if (!dataRetriever.isConnected()) return;
-
-            DTO dto = await this.dataRetriever.fetch();
-            HandleNewInfoItems(dto);
+            DTO dto = null;
+            // If we can connect, get data
+            if (dataRetriever.isConnected()) dto = await this.dataRetriever.fetch();
+            // If we could connect and data is valid, store that data
+            if (dto != null && dto.Valid) lastDTO = dto;
+            // Process new data is that was available, otherwise process old data if that is available
+            if (lastDTO != null) HandleNewInfoItems(dto);
         }
 
         private void HandleNewInfoItems(DTO dto)
@@ -97,31 +102,6 @@ namespace Assets.InfoItems
         public void OnDestroy()
         {
             dataRetriever.OnDestroy();
-        }
-    }
-
-    class DelayedInfoCategory : InfoCategory
-    {
-        float delay = 0;
-        private DateTime lastDataUpdate = DateTime.Now;
-
-        public DelayedInfoCategory(DataConnections connection, DataAdapters adapter, ParameterExtractors extractor,
-            Player aligner,
-            DataType dataType, DisplayArea displayArea,
-            float delay): base(connection, adapter, extractor, aligner, dataType, displayArea)
-        {
-            this.delay = delay;
-        }
-
-        public override void Update()
-        {
-            // Only update data every `UpdateInterval` seconds
-            DateTime now = DateTime.Now;
-            if ((now - lastDataUpdate).TotalSeconds > delay)
-            {
-                lastDataUpdate = now;
-                Tick();
-            }
         }
     }
 }

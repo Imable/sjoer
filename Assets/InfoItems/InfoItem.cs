@@ -86,17 +86,17 @@ namespace Assets.InfoItems
 
         protected virtual void Reshape()
         {
-            GraphicFactory.Instance.getShapeProvider(meta.DataType).Get(this);
+            GraphicFactory.Instance.getShapeProvider(meta.DataType, meta.DisplayArea).Get(this);
         }
 
         protected virtual void Refill()
         {
-            if (IsTarget) GraphicFactory.Instance.GetFiller(meta.DataType).Fill(this);
+            if (IsTarget) GraphicFactory.Instance.GetFiller(meta.DataType, meta.DisplayArea).Fill(this);
         }
 
         protected virtual void Reposition()
         {
-            GraphicFactory.Instance.getPositioner(meta.DataType).Position(this, meta.DisplayArea);
+            GraphicFactory.Instance.getPositioner(meta.DataType, meta.DisplayArea).Position(this, meta.DisplayArea);
         }
 
         // Called on the new InfoItem

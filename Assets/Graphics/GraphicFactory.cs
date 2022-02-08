@@ -22,13 +22,16 @@ namespace Assets.Graphics
             aisPositioner = new AISPositioner(aligner);
         }
 
-        public Filler GetFiller(DataType dataType)
+        public Filler GetFiller(DataType dataType, DisplayArea displayArea)
         {
             Filler filler;
 
-            switch (dataType)
+            switch ((dataType, displayArea))
             {
-                case DataType.AIS:
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    filler = aisFiller;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
                     filler = aisFiller;
                     break;
                 default:
@@ -38,13 +41,17 @@ namespace Assets.Graphics
             return filler;
         }
 
-        public Positioner getPositioner(DataType dataType)
+        public Positioner getPositioner(DataType dataType, DisplayArea displayArea)
         {
             Positioner positioner;
 
-            switch (dataType)
+            switch ((dataType, displayArea))
             {
-                case DataType.AIS:
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    aisPositioner.SetAligner(aligner);
+                    positioner = aisPositioner;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
                     aisPositioner.SetAligner(aligner);
                     positioner = aisPositioner;
                     break;
@@ -55,13 +62,16 @@ namespace Assets.Graphics
             return positioner;
         }
 
-        public ShapeProvider getShapeProvider(DataType dataType)
+        public ShapeProvider getShapeProvider(DataType dataType, DisplayArea displayArea)
         {
             ShapeProvider shape;
 
-            switch (dataType)
+            switch ((dataType, displayArea))
             {
-                case DataType.AIS:
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    shape = aisShapeProvider;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
                     shape = aisShapeProvider;
                     break;
                 default:

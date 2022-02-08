@@ -4,7 +4,8 @@
     "UpdateInterval": 0.5,
     "LatitudeArea": 3000,
     "LongitudeArea": 3000,
-    "UIElementHeight": 0.0
+    "UIElementHeight": 0.0,
+    "SkyAreaHeight": 1.5
   },
   "VesselSettingsS": {
     "VesselName": "VesselName"

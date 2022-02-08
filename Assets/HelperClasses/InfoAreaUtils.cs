@@ -17,6 +17,16 @@ namespace Assets.HelperClasses
                 );
         }
 
+        public Vector3 UnityCoordsToSkyArea(Vector3 obj, Vector3 player)
+        {
+            Vector3 tmp = UnityCoordsToHorizonPlane(obj, player);
+            return new Vector3(
+                    tmp.x,
+                    tmp.y + (float)Config.Instance.conf.DataSettings["SkyAreaHeight"],
+                    tmp.z
+                );
+        }
+
         public void ScaleStick(GameObject target, float scale)
         {
             BoxCollider boxCollider = target.GetComponent<BoxCollider>();
