@@ -96,7 +96,7 @@ namespace Assets.InfoItems
 
         protected virtual void Reposition()
         {
-            GraphicFactory.Instance.getPositioner(meta.DataType, meta.DisplayArea).Position(this, meta.DisplayArea);
+            GraphicFactory.Instance.getPositioner(meta.DataType, meta.DisplayArea).Position(this);
         }
 
         // Called on the new InfoItem

@@ -39,7 +39,7 @@ namespace Assets.Graphics
         }
     }
 
-    class AISShapeProvider : ShapeProvider
+    class AISHorizonShapeProvider : ShapeProvider
     {
         public override void Get(InfoItem infoItem)
         {
@@ -67,6 +67,13 @@ namespace Assets.Graphics
             {
                 infoItem.Shape = GetShape(prefab);
             }
+        }
+    }
+
+    class AISSkyShapeProvider : ShapeProvider
+    {
+        public override void Get(InfoItem infoItem)
+        {
         }
     }
 }

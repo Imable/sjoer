@@ -11,15 +11,20 @@ namespace Assets.Graphics
     {
         public Player aligner = null;
 
-        AISShapeProvider aisShapeProvider;
+        AISHorizonShapeProvider aisHorizonShapeProvider;
+        AISSkyShapeProvider aisSkyShapeProvider;
         AISFiller aisFiller;
-        AISPositioner aisPositioner;
+        AISHorizonPositioner aisHorizonPositioner;
+        AISSkyPositioner aisSkyPositioner;
+
 
         public GraphicFactory()
         {
-            aisShapeProvider = new AISShapeProvider();
+            aisHorizonShapeProvider = new AISHorizonShapeProvider();
+            aisSkyShapeProvider = new AISSkyShapeProvider();
             aisFiller = new AISFiller();
-            aisPositioner = new AISPositioner(aligner);
+            aisHorizonPositioner = new AISHorizonPositioner(aligner);
+            aisSkyPositioner = new AISSkyPositioner(aligner);
         }
 
         public Filler GetFiller(DataType dataType, DisplayArea displayArea)
@@ -48,12 +53,12 @@ namespace Assets.Graphics
             switch ((dataType, displayArea))
             {
                 case (DataType.AIS, DisplayArea.HorizonPlane):
-                    aisPositioner.SetAligner(aligner);
-                    positioner = aisPositioner;
+                    aisHorizonPositioner.SetAligner(aligner);
+                    positioner = aisHorizonPositioner;
                     break;
                 case (DataType.AIS, DisplayArea.SkyArea):
-                    aisPositioner.SetAligner(aligner);
-                    positioner = aisPositioner;
+                    aisSkyPositioner.SetAligner(aligner);
+                    positioner = aisSkyPositioner;
                     break;
                 default:
                     throw new ArgumentException("No such data source", nameof(dataType));
@@ -69,10 +74,10 @@ namespace Assets.Graphics
             switch ((dataType, displayArea))
             {
                 case (DataType.AIS, DisplayArea.HorizonPlane):
-                    shape = aisShapeProvider;
+                    shape = aisHorizonShapeProvider;
                     break;
                 case (DataType.AIS, DisplayArea.SkyArea):
-                    shape = aisShapeProvider;
+                    shape = aisSkyShapeProvider;
                     break;
                 default:
                     throw new ArgumentException("No such data type", nameof(dataType));
