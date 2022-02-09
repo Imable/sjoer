@@ -52,6 +52,11 @@ namespace Assets.InfoItems
         {
             return infoItems.ContainsKey(i.Key);
         }
+
+        protected void AddNewInfoItem(InfoItem infoItem)
+        {
+            infoItems[infoItem.Key] = infoItem;
+        }
     }
 
     class ConnectedInfoCategory : InfoCategory
@@ -108,23 +113,13 @@ namespace Assets.InfoItems
             { 
                 if (IsInInfoItems(infoItem))
                 {
-                    MergeInfoItems(infoItem);
+                    infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
                 }
                 else
                 {
                     AddNewInfoItem(infoItem);
                 }
             }
-        }
-
-        private void AddNewInfoItem(InfoItem infoItem)
-        {
-            infoItems[infoItem.Key] = infoItem;
-        }
-
-        private void MergeInfoItems(InfoItem infoItem)
-        {
-            infoItems[infoItem.Key].Merge(infoItem.GetDTO);
         }
     }
 
@@ -165,7 +160,6 @@ namespace Assets.InfoItems
                     infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
                 } else
                 {
-                    // Force target
                     InfoItem newInfoItem = new AISInfoItem(
                         infoItem.GetDTO, 
                         dataType, 
@@ -174,7 +168,8 @@ namespace Assets.InfoItems
                     newInfoItem.Update();
 
                     newInfoItem.LinkTargetHandler(infoItem);
-                    infoItems[infoItem.Key] = newInfoItem;
+
+                    AddNewInfoItem(newInfoItem);
                 }
             } else
             {

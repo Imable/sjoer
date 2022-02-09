@@ -110,10 +110,10 @@ namespace Assets.InfoItems
         }
 
         // Called on the old InfoItem
-        public void Merge(DTO newDTO)
+        public void InjectNewDTO(DTO dto)
         {
             this.meta.PreviousTarget = this.meta.Target;
-            this.InjectNewDTO(newDTO);
+            this.dto = dto;
         }
 
         // Called on the InfoItem that contains the link
@@ -124,12 +124,6 @@ namespace Assets.InfoItems
             handler.SetLink(linkedHandler);
             // Equalize this and linked target status
             handler.IsTarget = linkedHandler.IsTarget;
-            
-        }
-
-        public void InjectNewDTO(DTO dto)
-        {
-            this.dto = dto;
         }
 
         public void DestroyMesh()
