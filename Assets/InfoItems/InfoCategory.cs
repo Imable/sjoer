@@ -114,10 +114,8 @@ namespace Assets.InfoItems
                 {
                     AddNewInfoItem(infoItem);
                 }
-                if (infoItem.IsTarget) Debug.Log($"TARGET {infoItem.Key}");
-
+            }
         }
-    }
 
         private void AddNewInfoItem(InfoItem infoItem)
         {
@@ -126,9 +124,7 @@ namespace Assets.InfoItems
 
         private void MergeInfoItems(InfoItem infoItem)
         {
-            // Inject the gameobject of the old infoItem into the new one
-            infoItem.Merge(infoItems[infoItem.Key]);
-            AddNewInfoItem(infoItem);
+            infoItems[infoItem.Key].Merge(infoItem.GetDTO);
         }
     }
 
@@ -153,15 +149,6 @@ namespace Assets.InfoItems
             {
                 HandleNewInfoItem(entry.Value);
             }
-
-
-            //DTO dto = null;
-            //// If we can connect, get data
-            //if (dataRetriever.isConnected()) dto = await this.dataRetriever.fetch();
-            //// If we could connect and data is valid, store that data
-            //if (dto != null && dto.Valid) lastDTO = dto;
-            //// Process new data is that was available, otherwise process old data if that is available
-            //if (lastDTO != null) HandleNewInfoItems(dto);
         }
 
         public override void OnDestroy()
@@ -175,18 +162,18 @@ namespace Assets.InfoItems
             {
                 if (IsInInfoItems(infoItem))
                 {
-                    // Update infoitem
                     infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
                 } else
                 {
+                    // Force target
                     InfoItem newInfoItem = new AISInfoItem(
                         infoItem.GetDTO, 
                         dataType, 
                         displayArea);
+                    newInfoItem.IsTarget = infoItem.IsTarget;
                     newInfoItem.Update();
 
                     newInfoItem.LinkTargetHandler(infoItem);
-                    newInfoItem.IsTarget = infoItem.IsTarget;
                     infoItems[infoItem.Key] = newInfoItem;
                 }
             } else

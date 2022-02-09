@@ -109,18 +109,22 @@ namespace Assets.InfoItems
             GraphicFactory.Instance.getPositioner(meta.DataType, meta.DisplayArea).Position(this);
         }
 
-        // Called on the new InfoItem
-        public void Merge(InfoItem oldInfoItem)
+        // Called on the old InfoItem
+        public void Merge(DTO newDTO)
         {
-            this.meta.PreviousTarget = oldInfoItem.IsTarget;
-            this.gameObject = oldInfoItem.gameObject;
+            this.meta.PreviousTarget = this.meta.Target;
+            this.InjectNewDTO(newDTO);
         }
 
         // Called on the InfoItem that contains the link
         public void LinkTargetHandler(InfoItem infoItem)
         {
             TargettableInfoItem handler = GetTargetHandler();
-            handler.SetLink(infoItem.GetTargetHandler());
+            TargettableInfoItem linkedHandler = infoItem.GetTargetHandler();
+            handler.SetLink(linkedHandler);
+            // Equalize this and linked target status
+            handler.IsTarget = linkedHandler.IsTarget;
+            
         }
 
         public void InjectNewDTO(DTO dto)
