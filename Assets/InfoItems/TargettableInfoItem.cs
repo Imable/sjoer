@@ -34,6 +34,7 @@ namespace Assets.InfoItems
     public class TargettableInfoItem : Targettable
     {
         private bool target = false;
+        private TargettableInfoItem link = null;
 
         public bool IsTarget
         {
@@ -41,9 +42,26 @@ namespace Assets.InfoItems
             set { target = value; }
         }
 
-        public bool ChangedThisRender
+        private bool HasLinkedInfoItem()
         {
-            set { target = value; }
+            return link != null;
+        }
+
+        public void SetLink(TargettableInfoItem link)
+        {
+            this.link = link;
+        }
+
+        public void DestroyLink()
+        {
+            this.link = null;
+        }
+
+        private void OnClick()
+        {
+            target = !target;
+            Debug.Log("target is now " + target);
+            if (HasLinkedInfoItem()) link.IsTarget = target;
         }
 
         public override void OnInputDown(InputEventData eventData)
@@ -51,7 +69,7 @@ namespace Assets.InfoItems
             if (eventData.MixedRealityInputAction == selectAction)
             {
                 Debug.Log("Select!");
-                target = !target;
+                OnClick();
             }
         }
     }

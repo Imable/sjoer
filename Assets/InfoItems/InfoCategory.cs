@@ -46,50 +46,12 @@ namespace Assets.InfoItems
 
         protected abstract void RetrieveInfoItems();
 
-        protected void HandleNewInfoItems(DTO dto)
-        {
-            //if (((AISDTOs)dto).vessels.Length > 0)
-            //{
-            //    Vector2 LatLon = Player.Instance.GetLatLon;
-            //    ((AISDTOs)dto).vessels[0] = new AISDTO
-            //    {
-            //        Valid = true,
-            //        SOG = 0,
-            //        COG = 0,
-            //        Draught = 0,
-            //        Name = "NORTH",
-            //        Key = "NORTH",
-            //        Target = true,
-            //        Latitude = LatLon.x + 1,
-            //        Longitude = LatLon.y
-            //    };
-            //}
-
-            foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
-            {
-                if (infoItems.ContainsKey(infoItem.Key))
-                {
-                    MergeInfoItems(infoItem);
-                } else
-                {
-                    AddNewInfoItem(infoItem);
-                }
-            }
-        }
-
-        private void AddNewInfoItem(InfoItem infoItem)
-        {
-            infoItems[infoItem.Key] = infoItem;
-        }
-
-        private void MergeInfoItems(InfoItem infoItem)
-        {
-            // Inject the gameobject of the old infoItem into the new one
-            infoItem.Merge(infoItems[infoItem.Key]);
-            AddNewInfoItem(infoItem);
-        }
-
         public abstract void OnDestroy();
+
+        protected bool IsInInfoItems(InfoItem i)
+        {
+            return infoItems.ContainsKey(i.Key);
+        }
     }
 
     class ConnectedInfoCategory : InfoCategory
@@ -123,23 +85,76 @@ namespace Assets.InfoItems
         {
             dataRetriever.OnDestroy();
         }
+        private void HandleNewInfoItems(DTO dto)
+        {
+            //if (((AISDTOs)dto).vessels.Length > 0)
+            //{
+            //    Vector2 LatLon = Player.Instance.GetLatLon;
+            //    ((AISDTOs)dto).vessels[0] = new AISDTO
+            //    {
+            //        Valid = true,
+            //        SOG = 0,
+            //        COG = 0,
+            //        Draught = 0,
+            //        Name = "NORTH",
+            //        Key = "NORTH",
+            //        Target = true,
+            //        Latitude = LatLon.x + 1,
+            //        Longitude = LatLon.y
+            //    };
+            //}
+
+            foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
+            { 
+                if (IsInInfoItems(infoItem))
+                {
+                    MergeInfoItems(infoItem);
+                }
+                else
+                {
+                    AddNewInfoItem(infoItem);
+                }
+                if (infoItem.IsTarget) Debug.Log($"TARGET {infoItem.Key}");
+
+        }
+    }
+
+        private void AddNewInfoItem(InfoItem infoItem)
+        {
+            infoItems[infoItem.Key] = infoItem;
+        }
+
+        private void MergeInfoItems(InfoItem infoItem)
+        {
+            // Inject the gameobject of the old infoItem into the new one
+            infoItem.Merge(infoItems[infoItem.Key]);
+            AddNewInfoItem(infoItem);
+        }
     }
 
     class InjectedInfoCategory : InfoCategory
     {
-        Func<List<InfoItem>> InfoItemInjector;
+        Func<Dictionary<string, InfoItem>> InfoItemInjector;
 
         public InjectedInfoCategory(
             Player aligner,
             DataType dataType, DisplayArea displayArea,
-            Func<List<InfoItem>> InfoItemInjector)
+            Func<Dictionary<string, InfoItem>> InfoItemInjector)
             : base(aligner, dataType, displayArea)
         {
             this.InfoItemInjector = InfoItemInjector;
         }
 
-        protected override async void RetrieveInfoItems()
+        protected override void RetrieveInfoItems()
         {
+            Dictionary<string, InfoItem> newInfoItems = this.InfoItemInjector();
+
+            foreach(KeyValuePair<string, InfoItem> entry in newInfoItems)
+            {
+                HandleNewInfoItem(entry.Value);
+            }
+
+
             //DTO dto = null;
             //// If we can connect, get data
             //if (dataRetriever.isConnected()) dto = await this.dataRetriever.fetch();
@@ -152,6 +167,36 @@ namespace Assets.InfoItems
         public override void OnDestroy()
         {
             //dataRetriever.OnDestroy();
+        }
+
+        private void HandleNewInfoItem(InfoItem infoItem)
+        {
+            if (infoItem.IsTarget)
+            {
+                if (IsInInfoItems(infoItem))
+                {
+                    // Update infoitem
+                    infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
+                } else
+                {
+                    InfoItem newInfoItem = new AISInfoItem(
+                        infoItem.GetDTO, 
+                        dataType, 
+                        displayArea);
+                    newInfoItem.Update();
+
+                    newInfoItem.LinkTargetHandler(infoItem);
+                    newInfoItem.IsTarget = infoItem.IsTarget;
+                    infoItems[infoItem.Key] = newInfoItem;
+                }
+            } else
+            {
+                if (IsInInfoItems(infoItem))
+                {
+                    infoItems[infoItem.Key].DestroyMesh();
+                    infoItems.Remove(infoItem.Key);
+                }
+            }
         }
     }
 }

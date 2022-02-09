@@ -6,6 +6,7 @@ using Assets.DataManagement;
 using Assets.Graphics;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections.Generic;
 
 namespace Assets.SceneManagement
 {
@@ -17,7 +18,7 @@ namespace Assets.SceneManagement
         Player aligner;
 
         private InfoCategory[] infoCategories;
-        private InfoItem[] allInfoItems;
+        private Dictionary<string, InfoItem> allInfoItems;
 
         private DateTime lastUpdate;
 
@@ -33,10 +34,10 @@ namespace Assets.SceneManagement
                     aligner, 
                     DataType.AIS, DisplayArea.HorizonPlane,
                     DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
-                new ConnectedInfoCategory(
+                new InjectedInfoCategory(
                     aligner,
                     DataType.AIS, DisplayArea.SkyArea,
-                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
+                    () => allInfoItems)
             };
         }
 
@@ -54,7 +55,7 @@ namespace Assets.SceneManagement
         {
             foreach (InfoCategory infoCategory in infoCategories)
             {
-                infoCategory.Update();
+                allInfoItems = infoCategory.Update();
             }
         }
 

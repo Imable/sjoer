@@ -74,7 +74,7 @@ namespace Assets.Graphics
     {
         public override void Get(InfoItem infoItem)
         {
-            infoItem.Shape = GetShape("AISPinTarget");
+            if (!infoItem.Shape) infoItem.Shape = GetShape("AISPinTarget");
         }
     }
 }

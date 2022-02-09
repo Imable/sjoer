@@ -23,11 +23,13 @@ namespace Assets.InfoItems
         {
             this.meta = new Meta(dto.Target, 0, dataType, displayArea);
             this.dto  = dto;
+            //Update();
         }
 
         public bool IsTarget
         {
             get { return this.meta.Target; }
+            set { this.meta.Target = value; }
         }
 
         public virtual string Key
@@ -53,6 +55,14 @@ namespace Assets.InfoItems
 
         public void Update()
         {
+            if (GetTargetHandler(true))
+            {
+                if (GetTargetHandler().IsTarget)
+                {
+                    Debug.Log("Target on " + Key);
+
+                }
+            }
             // First update the target from interactions
             Retarget();
             // Get new shape
@@ -66,7 +76,7 @@ namespace Assets.InfoItems
         // Update target in meta according to selected in scene or selected previously
         protected void Retarget ()
         {
-            this.meta.Target = IsTarget || (GetTargetHandler() && GetTargetHandler().IsTarget);
+            this.meta.Target = this.dto.Target || (GetTargetHandler() && GetTargetHandler().IsTarget);
         }
 
         public TargettableInfoItem GetTargetHandler(bool forceUpdate = false)
@@ -105,6 +115,23 @@ namespace Assets.InfoItems
             this.meta.PreviousTarget = oldInfoItem.IsTarget;
             this.gameObject = oldInfoItem.gameObject;
         }
+
+        // Called on the InfoItem that contains the link
+        public void LinkTargetHandler(InfoItem infoItem)
+        {
+            TargettableInfoItem handler = GetTargetHandler();
+            handler.SetLink(infoItem.GetTargetHandler());
+        }
+
+        public void InjectNewDTO(DTO dto)
+        {
+            this.dto = dto;
+        }
+
+        public void DestroyMesh()
+        {
+            UnityEngine.Object.Destroy(this.gameObject);
+        }
     }
 
     class AISInfoItem : InfoItem
@@ -119,6 +146,8 @@ namespace Assets.InfoItems
 
             for (int i = 0; i < aisDTOs.vessels.Length; i++)
             {
+
+                if (i > 0) break;
                 AISDTO aisDTO = aisDTOs.vessels[i];
                 if (aisDTO.Valid)
                 {
