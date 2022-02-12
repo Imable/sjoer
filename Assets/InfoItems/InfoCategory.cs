@@ -12,6 +12,7 @@ namespace Assets.InfoItems
 {
     abstract class InfoCategory
     {
+        protected string name;
         protected Dictionary<string, InfoItem> infoItems = new Dictionary<string, InfoItem>();
 
         protected DataType dataType;
@@ -20,18 +21,25 @@ namespace Assets.InfoItems
         protected DTO lastDTO;
 
         public InfoCategory(
+            string name,
             Player aligner,
             DataType dataType, DisplayArea displayArea)
         {
+            this.name = name;
             this.dataType = dataType;
             this.displayArea = displayArea;
         }
 
-        public Dictionary<string, InfoItem> Update()
+        public string Name
+        {
+            get { return this.name; }
+        }
+
+        public List<InfoItem> Update()
         {
             RetrieveInfoItems();
             Tick();
-            return infoItems;
+            return infoItems.Values.ToList();
         }
 
         protected void Tick()
@@ -64,10 +72,11 @@ namespace Assets.InfoItems
         private DataRetriever dataRetriever;
 
         public ConnectedInfoCategory(
+            string name,
             Player aligner,
             DataType dataType, DisplayArea displayArea,
             DataConnections connection, DataAdapters adapter, ParameterExtractors extractor)
-            : base(aligner, dataType, displayArea)
+            : base(name, aligner, dataType, displayArea)
         {
             this.dataRetriever = new DataRetriever(connection, adapter, extractor, aligner);
         }
@@ -125,24 +134,25 @@ namespace Assets.InfoItems
 
     class InjectedInfoCategory : InfoCategory
     {
-        Func<Dictionary<string, InfoItem>> InfoItemInjector;
+        Func<List<InfoItem>> InfoItemInjector;
 
         public InjectedInfoCategory(
+            string name,
             Player aligner,
             DataType dataType, DisplayArea displayArea,
-            Func<Dictionary<string, InfoItem>> InfoItemInjector)
-            : base(aligner, dataType, displayArea)
+            Func<List<InfoItem>> InfoItemInjector)
+            : base(name, aligner, dataType, displayArea)
         {
             this.InfoItemInjector = InfoItemInjector;
         }
 
         protected override void RetrieveInfoItems()
         {
-            Dictionary<string, InfoItem> newInfoItems = this.InfoItemInjector();
+            List<InfoItem> newInfoItems = this.InfoItemInjector();
 
-            foreach(KeyValuePair<string, InfoItem> entry in newInfoItems)
+            foreach(InfoItem i in newInfoItems)
             {
-                HandleNewInfoItem(entry.Value);
+                HandleNewInfoItem(i);
             }
         }
 

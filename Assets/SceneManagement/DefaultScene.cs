@@ -18,7 +18,7 @@ namespace Assets.SceneManagement
         Player aligner;
 
         private InfoCategory[] infoCategories;
-        private Dictionary<string, InfoItem> allInfoItems;
+        private Dictionary<string, List<InfoItem>> allInfoItems;
 
         private DateTime lastUpdate;
 
@@ -31,14 +31,28 @@ namespace Assets.SceneManagement
             infoCategories = new InfoCategory[2]
             {
                 new ConnectedInfoCategory(
+                    "AISHorizon",
                     aligner, 
                     DataType.AIS, DisplayArea.HorizonPlane,
                     DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
                 new InjectedInfoCategory(
+                    "AISSky",
                     aligner,
                     DataType.AIS, DisplayArea.SkyArea,
-                    () => allInfoItems)
+                    () => allInfoItems["AISHorizon"])
             };
+
+            this.InitAllInfoItems();
+        }
+
+        private void InitAllInfoItems()
+        {
+            this.allInfoItems = new Dictionary<string, List<InfoItem>>();
+
+            foreach (InfoCategory infoCategory in this.infoCategories)
+            {
+                this.allInfoItems[infoCategory.Name] = new List<InfoItem>();
+            }
         }
 
         void Update()
@@ -55,7 +69,7 @@ namespace Assets.SceneManagement
         {
             foreach (InfoCategory infoCategory in infoCategories)
             {
-                allInfoItems = infoCategory.Update();
+                allInfoItems[infoCategory.Name] = infoCategory.Update();
             }
         }
 
