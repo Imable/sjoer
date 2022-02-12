@@ -14,6 +14,7 @@ namespace Assets.Graphics
         AISHorizonShapeProvider aisHorizonShapeProvider;
         AISSkyShapeProvider aisSkyShapeProvider;
         AISFiller aisFiller;
+        Filler baseFiller;
         AISHorizonPositioner aisHorizonPositioner;
         AISSkyPositioner aisSkyPositioner;
 
@@ -23,20 +24,24 @@ namespace Assets.Graphics
             aisHorizonShapeProvider = new AISHorizonShapeProvider();
             aisSkyShapeProvider = new AISSkyShapeProvider();
             aisFiller = new AISFiller();
+            baseFiller = new Filler();
             aisHorizonPositioner = new AISHorizonPositioner(aligner);
             aisSkyPositioner = new AISSkyPositioner(aligner);
         }
 
-        public Filler GetFiller(DataType dataType, DisplayArea displayArea)
+        public Filler GetFiller(DataType dataType, DisplayArea displayArea, bool target)
         {
             Filler filler;
 
-            switch ((dataType, displayArea))
+            switch ((dataType, displayArea, target))
             {
-                case (DataType.AIS, DisplayArea.HorizonPlane):
+                case (_, _, false):
+                    filler = baseFiller;
+                    break;
+                case (DataType.AIS, DisplayArea.HorizonPlane, true):
                     filler = aisFiller;
                     break;
-                case (DataType.AIS, DisplayArea.SkyArea):
+                case (DataType.AIS, DisplayArea.SkyArea, true):
                     filler = aisFiller;
                     break;
                 default:

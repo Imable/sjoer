@@ -14,7 +14,11 @@ namespace Assets.Graphics
     {
         public virtual void Fill(InfoItem infoItem)
         {
-            throw new NotImplementedException();
+            string name = "";
+            if (infoItem.IsTarget) name += "[T] ";
+            name += $"{infoItem.Key} ({infoItem.DisplayArea})";
+
+            infoItem.Shape.name = name;
         }
     }
 
@@ -22,6 +26,7 @@ namespace Assets.Graphics
     {
         public override void Fill(InfoItem infoItem)
         {
+            base.Fill(infoItem);
             TargetFiller(infoItem);
         }
 

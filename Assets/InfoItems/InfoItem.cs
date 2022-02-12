@@ -32,6 +32,16 @@ namespace Assets.InfoItems
             set { this.meta.Target = value; }
         }
 
+        public DataType DataType
+        {
+            get { return this.meta.DataType; }
+        }
+
+        public DisplayArea DisplayArea
+        {
+            get { return this.meta.DisplayArea; }
+        }
+
         public virtual string Key
         {
             get { return dto.Key; }
@@ -101,7 +111,7 @@ namespace Assets.InfoItems
 
         protected virtual void Refill()
         {
-            if (IsTarget) GraphicFactory.Instance.GetFiller(meta.DataType, meta.DisplayArea).Fill(this);
+            GraphicFactory.Instance.GetFiller(meta.DataType, meta.DisplayArea, this.IsTarget).Fill(this);
         }
 
         protected virtual void Reposition()
@@ -144,8 +154,6 @@ namespace Assets.InfoItems
 
             for (int i = 0; i < aisDTOs.vessels.Length; i++)
             {
-
-                if (i > 0) break;
                 AISDTO aisDTO = aisDTOs.vessels[i];
                 if (aisDTO.Valid)
                 {
