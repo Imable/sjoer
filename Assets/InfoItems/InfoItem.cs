@@ -26,6 +26,12 @@ namespace Assets.InfoItems
             //Update();
         }
 
+        public override bool Equals(System.Object i)
+        {
+            var other = i as InfoItem;
+            return this.Key == other.Key;
+        }
+
         public bool IsTarget
         {
             get { return this.meta.Target; }

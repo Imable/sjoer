@@ -70,6 +70,9 @@ namespace Assets.SceneManagement
             foreach (InfoCategory infoCategory in infoCategories)
             {
                 allInfoItems[infoCategory.Name] = infoCategory.Update();
+                GraphicFactory.Instance
+                    .GetPostProcessor(infoCategory.DataType, infoCategory.DisplayArea)
+                    .PostProcess(allInfoItems[infoCategory.Name]);
             }
         }
 

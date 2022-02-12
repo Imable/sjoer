@@ -18,6 +18,10 @@ namespace Assets.Graphics
         AISHorizonPositioner aisHorizonPositioner;
         AISSkyPositioner aisSkyPositioner;
 
+        AISSkyPostProcessor aisSkyPostProcessor;
+        AISHorizonPostProcessor aisHorizonPostProcessor;
+
+
 
         public GraphicFactory()
         {
@@ -25,8 +29,32 @@ namespace Assets.Graphics
             aisSkyShapeProvider = new AISSkyShapeProvider();
             aisFiller = new AISFiller();
             baseFiller = new Filler();
-            aisHorizonPositioner = new AISHorizonPositioner(aligner);
-            aisSkyPositioner = new AISSkyPositioner(aligner);
+            aisHorizonPositioner = new AISHorizonPositioner();
+            aisSkyPositioner = new AISSkyPositioner();
+            aisSkyPostProcessor = new AISSkyPostProcessor();
+            aisHorizonPostProcessor = new AISHorizonPostProcessor();
+        }
+
+        public PostProcessor GetPostProcessor(DataType dataType, DisplayArea displayArea)
+        {
+            PostProcessor postProcessor;
+
+            switch ((dataType, displayArea))
+            {
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    aisHorizonPostProcessor.SetAligner(aligner);
+                    postProcessor = aisHorizonPostProcessor;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
+                    aisSkyPostProcessor.SetAligner(aligner);
+                    postProcessor = aisSkyPostProcessor;
+                    break;
+                default:
+                    throw new ArgumentException("No such data type", nameof(dataType));
+            }
+
+            return postProcessor;
+
         }
 
         public Filler GetFiller(DataType dataType, DisplayArea displayArea, bool target)

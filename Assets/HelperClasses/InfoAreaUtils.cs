@@ -15,6 +15,7 @@ namespace Assets.HelperClasses
                     (float)Config.Instance.conf.VesselSettingsD["BridgeHeight"] - (float)Config.Instance.conf.DataSettings["UIElementHeight"], // newPosition.y > align with the horizon. TODO: Get layer number
                     newPosition.z
                 );
+            
         }
 
         public Vector3 UnityCoordsToSkyArea(Vector3 obj, Vector3 player)
@@ -25,6 +26,23 @@ namespace Assets.HelperClasses
                     tmp.y + (float)Config.Instance.conf.DataSettings["SkyAreaHeight"],
                     tmp.z
                 );
+        }
+
+        // Calculates the new position on the SkyArea/HoriznPlane after moving by xDist
+        public Vector3 MoveAlongX(Vector3 obj, float xDist, Vector3 player)
+        {
+            obj += new Vector3(xDist, 0, 0);
+            Vector3 tmp = UnityCoordsToHorizonPlane(obj, player);
+            
+            return new Vector3(
+                tmp.x,
+                obj.y,
+                tmp.z);
+        }
+
+        public Quaternion FaceUser(Vector3 position, Vector3 player)
+        {
+            return Quaternion.LookRotation(player - position);
         }
 
         public void ScaleStick(GameObject target, float scale)

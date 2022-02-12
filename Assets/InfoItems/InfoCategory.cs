@@ -35,6 +35,16 @@ namespace Assets.InfoItems
             get { return this.name; }
         }
 
+        public DisplayArea DisplayArea
+        {
+            get { return this.displayArea; }
+        }
+
+        public DataType DataType
+        {
+            get { return this.dataType; }
+        }
+
         public List<InfoItem> Update()
         {
             RetrieveInfoItems();
