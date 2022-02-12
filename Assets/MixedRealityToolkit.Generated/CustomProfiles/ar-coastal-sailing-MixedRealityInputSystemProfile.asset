@@ -67,7 +67,7 @@ MonoBehaviour:
     componentName: Input Simulation Service
     priority: 0
     runtimePlatform: 208
-    deviceManagerProfile: {fileID: 11400000, guid: 41478039094d47641bf4e09c20e61a5a, type: 2}
+    deviceManagerProfile: {fileID: 11400000, guid: 65502d79fcf36ad488cdc9a2f708940c, type: 2}
   - componentType:
       reference: Microsoft.MixedReality.Toolkit.WindowsMixedReality.Input.WindowsMixedRealityEyeGazeDataProvider,
         Microsoft.MixedReality.Toolkit.Providers.WindowsMixedReality
@@ -122,6 +122,13 @@ MonoBehaviour:
     priority: 0
     runtimePlatform: 33
     deviceManagerProfile: {fileID: 11400000, guid: 8f48cb9c26fb518499c65c9f9e8bb4ed, type: 2}
+  - componentType:
+      reference: Microsoft.MixedReality.Toolkit.XRSDK.WindowsMixedReality.WindowsMixedRealityEyeGazeDataProvider,
+        Microsoft.MixedReality.Toolkit.Providers.XRSDK.WindowsMixedReality
+    componentName: XRSDK Windows Mixed Reality Eye Gaze Provider
+    priority: 0
+    runtimePlatform: 8
+    deviceManagerProfile: {fileID: 11400000, guid: 2d87dd11b18f700449c9dab320d19b99, type: 2}
   focusProviderType:
     reference: Microsoft.MixedReality.Toolkit.Input.FocusProvider, Microsoft.MixedReality.Toolkit.Services.InputSystem
   raycastProviderType:

@@ -34,12 +34,19 @@ namespace Assets.InfoItems
     public class TargettableInfoItem : Targettable
     {
         private bool target = false;
+        private bool hover = false;
         private TargettableInfoItem link = null;
 
         public bool IsTarget
         {
             get { return target; }
             set { target = value; }
+        }
+
+        public bool IsHover
+        {
+            get { return hover; }
+            set { hover = value; }
         }
 
         private bool HasLinkedInfoItem()
@@ -62,6 +69,19 @@ namespace Assets.InfoItems
             target = !target;
             Debug.Log("target is now " + target);
             if (HasLinkedInfoItem()) link.IsTarget = target;
+        }
+
+        public void OnHoverStart()
+        {
+            Debug.Log("Hover start");
+            hover = true;
+        }
+
+        public void OnHoverEnd()
+        {
+            Debug.Log("Hover end");
+
+            hover = false;
         }
 
         public override void OnInputDown(InputEventData eventData)
