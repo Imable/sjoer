@@ -56,46 +56,49 @@ namespace Assets.Graphics
     class AISSkyPostProcessor : PostProcessor
     {
         float rectWidth = 2f;
-        protected override void Process() 
+        protected override void Process()
         {
-            //if (infoItems.Count < 2) return;
+            if (infoItems.Count < 2) return;
 
-            //foreach (InfoItem infoItem in infoItems)
-            //{
-            //    Collider myCol = infoItem.Shape.GetComponent<Collider>();
-            //    List<InfoItem> colliders = new List<InfoItem>() { infoItem };
-            //    foreach (InfoItem other in infoItems)
-            //    {
-            //        if (infoItem == other) continue;
-            //        Collider theirCol = other.Shape.GetComponent<Collider>();
+            foreach (InfoItem infoItem in infoItems)
+            {
+                Collider myCol = infoItem.Shape.GetComponent<Collider>();
+                List<InfoItem> colliders = new List<InfoItem>() { infoItem };
+                foreach (InfoItem other in infoItems)
+                {
+                    if (infoItem == other) continue;
+                    Collider theirCol = other.Shape.GetComponent<Collider>();
 
-            //        if (myCol.bounds.Intersects(theirCol.bounds))
-            //        {
-            //            colliders.Add(other);
-            //        }
-            //    }
+                    if (myCol.bounds.Intersects(theirCol.bounds))
+                    {
+                        colliders.Add(other);
+                    }
+                }
 
-            //    Debug.Log($"Before sort: " + string.Join(" > ", colliders.Select(a => a.Key)));
+                if (colliders.Count <= 1) continue; 
 
-            //    InfoItem[] arr = colliders.ToArray();
+                Debug.Log($"Before sort: " + string.Join(" > ", colliders.Select(a => a.Key)));
 
-            //    QuickSort(arr, 0, colliders.Count - 1);
+                colliders.Sort((a, b) => a.TargetNum.CompareTo(b.TargetNum));
+                //    InfoItem[] arr = colliders.ToArray();
 
-            //    Debug.Log($"After sort: " + string.Join(" > ", arr.Select(a => a.Key)));
+                //    QuickSort(arr, 0, colliders.Count - 1);
 
-            //    for (int k = 0; k < arr.Length - 1; k++) 
-            //    {
-            //        while(Overlaps(arr[k], arr[k + 1])) {
-            //            arr[k + 1].Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.MoveAlongCircle(
-            //                arr[k + 1].Shape.transform.position,
-            //                (float) (Math.PI / 8),
-            //                aligner.transform.position);
-            //            arr[k + 1].Shape.transform.rotation = HelperClasses.InfoAreaUtils.Instance.FaceUser(
-            //                arr[k + 1].Shape.transform.position,
-            //                aligner.transform.position);
-            //        }
+                Debug.Log($"After sort: " + string.Join(" > ", colliders.Select(a => a.Key)));
 
-            //    }
+                for (int k = 0; k < colliders.Count - 1; k++)
+                {
+                    if (Overlaps(colliders[k], colliders[k + 1]))
+                    {
+                        colliders[k + 1].Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.MoveAlongCircle(
+                            colliders[k + 1].Shape.transform.position,
+                            (float)(-Math.PI / 8),
+                            aligner.transform.position);
+                        colliders[k + 1].Shape.transform.rotation = HelperClasses.InfoAreaUtils.Instance.FaceUser(
+                            colliders[k + 1].Shape.transform.position,
+                            aligner.transform.position);
+                    }
+                }
 
 
 
@@ -135,29 +138,30 @@ namespace Assets.Graphics
                 //    //}
                 //}
 
-            //}
+                //}
 
-            //Solution s = new Solution(float.PositiveInfinity);
+                //Solution s = new Solution(float.PositiveInfinity);
 
-            //foreach (InfoItem infoItem in infoItems)
-            //{
-            //    Solution newS = GetSolution(infoItem);
+                //foreach (InfoItem infoItem in infoItems)
+                //{
+                //    Solution newS = GetSolution(infoItem);
 
-            //    if (newS.Goodness < s.Goodness) s = newS;
+                //    if (newS.Goodness < s.Goodness) s = newS;
 
-            //        //o.Item.Shape.transform.position =
-            //        //    HelperClasses.InfoAreaUtils.Instance
-            //        //    .MoveAlongX(
-            //        //        o.Item.Shape.transform.position,
-            //        //        o.OffsetVector,
-            //        //        aligner.mainCamera.transform.position);
-            //        //o.Item.Shape.transform.rotation =
-            //        //    HelperClasses.InfoAreaUtils.Instance
-            //        //    .FaceUser(
-            //        //        o.Item.Shape.transform.position,
-            //        //        aligner.mainCamera.transform.position);
-            //}
-            //ExecuteSolution(s);
+                //        //o.Item.Shape.transform.position =
+                //        //    HelperClasses.InfoAreaUtils.Instance
+                //        //    .MoveAlongX(
+                //        //        o.Item.Shape.transform.position,
+                //        //        o.OffsetVector,
+                //        //        aligner.mainCamera.transform.position);
+                //        //o.Item.Shape.transform.rotation =
+                //        //    HelperClasses.InfoAreaUtils.Instance
+                //        //    .FaceUser(
+                //        //        o.Item.Shape.transform.position,
+                //        //        aligner.mainCamera.transform.position);
+                //}
+                //ExecuteSolution(s);
+            }
         }
 
         private void QuickSort(InfoItem[] arr, int start, int end)

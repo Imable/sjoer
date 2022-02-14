@@ -36,6 +36,11 @@ namespace Assets.InfoItems
             return this.Key.GetHashCode();
         }
 
+        public bool IsHover
+        {
+            get { return this.GetTargetHandler() && this.GetTargetHandler().IsHover; }
+        }
+
         public bool IsTarget
         {
             get { return this.meta.Target; }

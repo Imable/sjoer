@@ -38,7 +38,7 @@ namespace Assets.Graphics
                 .UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
             infoItem.Shape.transform.rotation =
                 HelperClasses.InfoAreaUtils.Instance
-                .FaceUser(position, aligner.mainCamera.transform.position);
+                .FaceUser(infoItem.Shape.transform.position, aligner.mainCamera.transform.position);
         }
     }
 
@@ -49,10 +49,10 @@ namespace Assets.Graphics
             Vector3 position = GetWorldTransform((AISDTO)infoItem.GetDTO);
             infoItem.Shape.transform.position = 
                 HelperClasses.InfoAreaUtils.Instance
-                .UnityCoordsToSkyArea(position, aligner.mainCamera.transform.position);
+                .UnityCoordsToSkyArea(position, aligner);
             infoItem.Shape.transform.rotation =
                 HelperClasses.InfoAreaUtils.Instance
-                .FaceUser(position, aligner.mainCamera.transform.position);
+                .FaceUser(infoItem.Shape.transform.position, aligner.mainCamera.transform.position);
         }
     }
 }

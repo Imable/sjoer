@@ -1,7 +1,7 @@
 ﻿{
   "VesselMode": false,
   "DataSettings": {
-    "UpdateInterval": 0.5,
+    "UpdateInterval": 0.25,
     "LatitudeArea": 3000,
     "LongitudeArea": 3000,
     "UIElementHeight": 0.0,

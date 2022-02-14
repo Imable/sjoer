@@ -44,28 +44,25 @@ namespace Assets.Graphics
         public override void Get(InfoItem infoItem)
         {
             if (!infoItem.Shape) InjectNewShape(infoItem);
-            else if (infoItem.TargetHasChanged()) TransferTarget(infoItem, InjectNewShape);
+
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
+
+            if (infoItem.TargetHasChanged())
+            {
+                UpdateShape(infoItem);
+            }
         }
 
-        private void TransferTarget(InfoItem infoItem, Action<InfoItem> Inject)
+        private void UpdateShape(InfoItem infoItem)
         {
-            bool target = infoItem.GetTargetHandler().IsTarget;
-            UnityEngine.Object.Destroy(infoItem.Shape);
-            Inject(infoItem);
-            infoItem.GetTargetHandler(true).IsTarget = target;
+            if (infoItem.IsTarget) HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
+            else HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0.25f);
         }
 
         private void InjectNewShape(InfoItem infoItem)
         {
             string prefab = "AISPin";
             infoItem.Shape = GetShape(prefab);
-
-            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
-
-            if (infoItem.IsTarget)
-            {
-                HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
-            }
         }
     }
 

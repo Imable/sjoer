@@ -4,6 +4,7 @@ using Assets.Resources;
 using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using Assets.Positional;
 
 namespace Assets.HelperClasses
 {
@@ -21,9 +22,9 @@ namespace Assets.HelperClasses
             
         }
 
-        public Vector3 UnityCoordsToSkyArea(Vector3 obj, Vector3 player)
+        public Vector3 UnityCoordsToSkyArea(Vector3 obj, Player player)
         {
-            Vector3 tmp = UnityCoordsToHorizonPlane(obj, player);
+            Vector3 tmp = UnityCoordsToHorizonPlane(obj, player.mainCamera.transform.position);
             return new Vector3(
                     tmp.x,
                     tmp.y + (float)Config.Instance.conf.DataSettings["SkyAreaHeight"],
@@ -94,7 +95,7 @@ namespace Assets.HelperClasses
             return Quaternion.LookRotation(player - position);
         }
 
-        public void ShowAISPinInfo(GameObject target, int numInfo)
+        public void ShowAISPinInfo(GameObject target, float numInfo)
         {
             BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
