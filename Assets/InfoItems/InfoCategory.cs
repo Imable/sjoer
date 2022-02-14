@@ -185,6 +185,7 @@ namespace Assets.InfoItems
                         dataType, 
                         displayArea);
                     newInfoItem.IsTarget = infoItem.IsTarget;
+                    newInfoItem.TargetNum = infoItem.TargetNum;
                     newInfoItem.Update();
 
                     newInfoItem.LinkTargetHandler(infoItem);

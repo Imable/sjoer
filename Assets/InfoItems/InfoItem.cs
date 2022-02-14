@@ -45,6 +45,8 @@ namespace Assets.InfoItems
         public int TargetNum
         {
             get { return this.meta.TargetNum; }
+            set { this.meta.TargetNum = value; }
+
         }
 
         public DataType DataType
@@ -90,9 +92,6 @@ namespace Assets.InfoItems
             }
             // First update the target from interactions
             Retarget();
-
-            if (TargetHasChanged()) OnTargetChange();
-
             // Get new shape
             Reshape();
             // Fill new shape if necessary
@@ -101,7 +100,7 @@ namespace Assets.InfoItems
             Reposition();
         }
 
-        protected void OnTargetChange()
+        protected void UpdateTargetNum()
         {
             if (this.IsTarget) this.meta.TargetNum = HelperClasses.TargetNumberProvider.Instance.GetTargetInt();
             else HelperClasses.TargetNumberProvider.Instance.HandInTargetInt(this.meta.TargetNum);
@@ -111,6 +110,8 @@ namespace Assets.InfoItems
         protected void Retarget ()
         {
             this.meta.Target = this.dto.Target || (GetTargetHandler() && GetTargetHandler().IsTarget);
+            // Only update the target number if the target has changed. This is the responsibility of the horizon plane
+            if (TargetHasChanged() && DisplayArea == DisplayArea.HorizonPlane) UpdateTargetNum();
         }
 
         public TargettableInfoItem GetTargetHandler(bool forceUpdate = false)

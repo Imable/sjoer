@@ -27,12 +27,7 @@ namespace Assets.Graphics
         protected virtual void NonTargetFiller(InfoItem infoItem) { }
 
 
-        protected void FillTextField(string fname, string value, GameObject g)
-        {
-            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/{fname}").gameObject;
-            TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
-            tmp.text = value;
-        }
+        protected virtual void FillTextField(string fname, string value, GameObject g) { }
     }
 
     class AISHorizonFiller : Filler
@@ -59,6 +54,12 @@ namespace Assets.Graphics
             FillTextField("2Value", dto.Heading.ToString() + "°", infoItem.Shape);
             FillTextField("TargetNum", infoItem.TargetNum.ToString(), infoItem.Shape);
         }
+        protected override void FillTextField(string fname, string value, GameObject g)
+        {
+            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/{fname}").gameObject;
+            TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
+            tmp.text = value;
+        }
     }
 
     class AISSkyFiller : Filler
@@ -75,11 +76,19 @@ namespace Assets.Graphics
             AISDTO dto = (AISDTO)infoItem.GetDTO;
 
             string name = dto.Name.Length > 16 ? dto.Name.Substring(0, 16) : dto.Name;
+            FillTextField("TargetNum", infoItem.TargetNum.ToString(), infoItem.Shape);
             FillTextField("Name", name, infoItem.Shape);
-            FillTextField("HDGValue", dto.Heading.ToString(), infoItem.Shape);
-            FillTextField("COGValue", dto.COG.ToString(), infoItem.Shape);
-            FillTextField("SOGValue", dto.SOG.ToString(), infoItem.Shape);
-            FillTextField("DRGValue", dto.Draught.ToString(), infoItem.Shape);
+            FillTextField("HDGValue", dto.Heading.ToString() + "°", infoItem.Shape);
+            FillTextField("COGValue", dto.COG.ToString() + "°", infoItem.Shape);
+            FillTextField("SOGValue", dto.SOG.ToString() + "kn", infoItem.Shape);
+            FillTextField("DRGValue", dto.Draught.ToString() + "m", infoItem.Shape);
+        }
+
+        protected override void FillTextField(string fname, string value, GameObject g)
+        {
+            GameObject obj = g.transform.Find($"PinAnchor/AISPinTarget/Canvas/{fname}").gameObject;
+            TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
+            tmp.text = value;
         }
     }
 }
