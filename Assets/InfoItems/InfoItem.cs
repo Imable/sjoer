@@ -21,7 +21,7 @@ namespace Assets.InfoItems
 
         public InfoItem(DTO dto, DataType dataType, DisplayArea displayArea)
         {
-            this.meta = new Meta(dto.Target, 0, dataType, displayArea);
+            this.meta = new Meta(dto.Target, dataType, displayArea);
             this.dto  = dto;
             //Update();
         }
@@ -31,11 +31,20 @@ namespace Assets.InfoItems
             var other = i as InfoItem;
             return this.Key == other.Key;
         }
+        public override int GetHashCode()
+        {
+            return this.Key.GetHashCode();
+        }
 
         public bool IsTarget
         {
             get { return this.meta.Target; }
             set { this.meta.Target = value; }
+        }
+
+        public int TargetNum
+        {
+            get { return this.meta.TargetNum; }
         }
 
         public DataType DataType
@@ -81,12 +90,21 @@ namespace Assets.InfoItems
             }
             // First update the target from interactions
             Retarget();
+
+            if (TargetHasChanged()) OnTargetChange();
+
             // Get new shape
             Reshape();
             // Fill new shape if necessary
             Refill();
             // Positional shape
             Reposition();
+        }
+
+        protected void OnTargetChange()
+        {
+            if (this.IsTarget) this.meta.TargetNum = HelperClasses.TargetNumberProvider.Instance.GetTargetInt();
+            else HelperClasses.TargetNumberProvider.Instance.HandInTargetInt(this.meta.TargetNum);
         }
 
         // Update target in meta according to selected in scene or selected previously

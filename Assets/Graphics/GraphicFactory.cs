@@ -13,7 +13,8 @@ namespace Assets.Graphics
 
         AISHorizonShapeProvider aisHorizonShapeProvider;
         AISSkyShapeProvider aisSkyShapeProvider;
-        AISFiller aisFiller;
+        AISHorizonFiller aisHorizonFiller;
+        AISSkyFiller aisSkyFiller;
         Filler baseFiller;
         AISHorizonPositioner aisHorizonPositioner;
         AISSkyPositioner aisSkyPositioner;
@@ -27,7 +28,8 @@ namespace Assets.Graphics
         {
             aisHorizonShapeProvider = new AISHorizonShapeProvider();
             aisSkyShapeProvider = new AISSkyShapeProvider();
-            aisFiller = new AISFiller();
+            aisHorizonFiller = new AISHorizonFiller();
+            aisSkyFiller = new AISSkyFiller();
             baseFiller = new Filler();
             aisHorizonPositioner = new AISHorizonPositioner();
             aisSkyPositioner = new AISSkyPositioner();
@@ -61,21 +63,19 @@ namespace Assets.Graphics
         {
             Filler filler;
 
-            switch ((dataType, displayArea, target))
+            switch ((dataType, displayArea))
             {
-                case (_, _, false):
-                    filler = baseFiller;
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    filler = aisHorizonFiller;
                     break;
-                case (DataType.AIS, DisplayArea.HorizonPlane, true):
-                    filler = aisFiller;
-                    break;
-                case (DataType.AIS, DisplayArea.SkyArea, true):
-                    filler = aisFiller;
+                case (DataType.AIS, DisplayArea.SkyArea):
+                    filler = aisSkyFiller;
                     break;
                 default:
                     throw new ArgumentException("No such data type", nameof(dataType));
             }
 
+            filler.Target = target;
             return filler;
         }
 

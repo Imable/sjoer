@@ -9,19 +9,28 @@ using UnityEngine;
 
 namespace Assets.Graphics
 {
-    class Overlapper
+    class Solution
     {
-        public Overlapper(InfoItem infoItem, float offsetVector)
+        public List<Tuple<InfoItem, float>> Moves;
+        public float Goodness;
+        public Solution(float e = 0)
         {
-            this.Item = infoItem;
-            this.OffsetVector = offsetVector;
+            Moves = new List<Tuple<InfoItem, float>>();
+            Goodness = e;
         }
 
-        public InfoItem Item { get; set; }
-        // -1 for left, 1 for right
-        public float OffsetVector { get; set; }
+        public void AddMove(InfoItem i, float o)
+        {
+            Moves.Add(new Tuple<InfoItem, float>(i, o));
+        }
 
-
+        public void Evaluate()
+        {
+            foreach (Tuple<InfoItem, float> item in Moves)
+            {
+                Goodness += (float) Math.Pow((1 + item.Item2), 2);
+            }
+        }
     }
 
     class PostProcessor
@@ -32,7 +41,7 @@ namespace Assets.Graphics
         public List<InfoItem> PostProcess(List<InfoItem> infoItems)
         {
             this.infoItems = infoItems;
-            Process();
+            //Process();
             return infoItems;
         }
 
@@ -49,63 +58,206 @@ namespace Assets.Graphics
         float rectWidth = 2f;
         protected override void Process() 
         {
-            Debug.Log("AISSKY Post proces");
-            foreach (InfoItem infoItem in infoItems)
+            //if (infoItems.Count < 2) return;
+
+            //foreach (InfoItem infoItem in infoItems)
+            //{
+            //    Collider myCol = infoItem.Shape.GetComponent<Collider>();
+            //    List<InfoItem> colliders = new List<InfoItem>() { infoItem };
+            //    foreach (InfoItem other in infoItems)
+            //    {
+            //        if (infoItem == other) continue;
+            //        Collider theirCol = other.Shape.GetComponent<Collider>();
+
+            //        if (myCol.bounds.Intersects(theirCol.bounds))
+            //        {
+            //            colliders.Add(other);
+            //        }
+            //    }
+
+            //    Debug.Log($"Before sort: " + string.Join(" > ", colliders.Select(a => a.Key)));
+
+            //    InfoItem[] arr = colliders.ToArray();
+
+            //    QuickSort(arr, 0, colliders.Count - 1);
+
+            //    Debug.Log($"After sort: " + string.Join(" > ", arr.Select(a => a.Key)));
+
+            //    for (int k = 0; k < arr.Length - 1; k++) 
+            //    {
+            //        while(Overlaps(arr[k], arr[k + 1])) {
+            //            arr[k + 1].Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.MoveAlongCircle(
+            //                arr[k + 1].Shape.transform.position,
+            //                (float) (Math.PI / 8),
+            //                aligner.transform.position);
+            //            arr[k + 1].Shape.transform.rotation = HelperClasses.InfoAreaUtils.Instance.FaceUser(
+            //                arr[k + 1].Shape.transform.position,
+            //                aligner.transform.position);
+            //        }
+
+            //    }
+
+
+
+
+
+                //colliders.Sort(
+                //    (a, b) =>
+                //        Vector3.Dot(a.Shape.transform.position, b.Shape.transform.position)
+                //        //HelperClasses.InfoAreaUtils.Instance.Vector3ToCircleT(b.Shape.transform.position, aligner.mainCamera.transform.position)
+                //        //.CompareTo(
+                //        //    HelperClasses.InfoAreaUtils.Instance.Vector3ToCircleT(a.Shape.transform.position, aligner.mainCamera.transform.position)
+                //        //)
+                //    );
+
+                //colliders.Sort(
+                //    (a, b) =>
+                //        Vector.Dot(a.Shape.transform.position
+                //        HelperClasses.InfoAreaUtils.Instance.Vector3ToCircleT(b.Shape.transform.position, aligner.mainCamera.transform.position)
+                //        .CompareTo(
+                //            HelperClasses.InfoAreaUtils.Instance.Vector3ToCircleT(a.Shape.transform.position, aligner.mainCamera.transform.position)
+                //        )
+                //    );
+
+                //for (int i = 0; i < colliders.Count - 1; i++)
+                //{
+                //    //while (Overlaps(colliders[i], colliders[i + 1]))
+                //    //{
+                //    float dist = (colliders[i].Shape.transform.position - colliders[i + 1].Shape.transform.position).magnitude;
+                //    double omtrek = 2 * 5 * Math.PI;
+                //    float rad = rectWidth - (dist / (float)omtrek);
+
+                //    colliders[i + 1].Shape.transform.SetPositionAndRotation(HelperClasses.InfoAreaUtils.Instance.MoveAlongCircle(
+                //        colliders[i + 1].Shape.transform.position, rad,
+                //        aligner.mainCamera.transform.position
+                //        ), HelperClasses.InfoAreaUtils.Instance.FaceUser(colliders[i + 1].Shape.transform.position,
+                //        aligner.mainCamera.transform.position));
+                //    //}
+                //}
+
+            //}
+
+            //Solution s = new Solution(float.PositiveInfinity);
+
+            //foreach (InfoItem infoItem in infoItems)
+            //{
+            //    Solution newS = GetSolution(infoItem);
+
+            //    if (newS.Goodness < s.Goodness) s = newS;
+
+            //        //o.Item.Shape.transform.position =
+            //        //    HelperClasses.InfoAreaUtils.Instance
+            //        //    .MoveAlongX(
+            //        //        o.Item.Shape.transform.position,
+            //        //        o.OffsetVector,
+            //        //        aligner.mainCamera.transform.position);
+            //        //o.Item.Shape.transform.rotation =
+            //        //    HelperClasses.InfoAreaUtils.Instance
+            //        //    .FaceUser(
+            //        //        o.Item.Shape.transform.position,
+            //        //        aligner.mainCamera.transform.position);
+            //}
+            //ExecuteSolution(s);
+        }
+
+        private void QuickSort(InfoItem[] arr, int start, int end)
+        {
+            int i;
+            if (start < end)
             {
-                List<Overlapper> overlappers = GetOverlappingInfoItems(infoItem);
-                foreach(Overlapper o in overlappers)
+                i = Partition(arr, start, end);
+
+                QuickSort(arr, start, i - 1);
+                QuickSort(arr, i + 1, end);
+            }
+        }
+
+        private int Partition(InfoItem[] arr, int start, int end)
+        {
+            InfoItem temp;
+            InfoItem p = arr[end];
+            int i = start - 1;
+
+            for (int j = start; j <= end - 1; j++)
+            {
+                if (IsLeft(arr[j].Shape.transform.position, p.Shape.transform.position, aligner.mainCamera.transform.position))
                 {
-                    o.Item.Shape.transform.position =
-                        HelperClasses.InfoAreaUtils.Instance
-                        .MoveAlongX(
-                            o.Item.Shape.transform.position,
-                            o.OffsetVector,
-                            aligner.mainCamera.transform.position);
-                    o.Item.Shape.transform.rotation =
-                        HelperClasses.InfoAreaUtils.Instance
-                        .FaceUser(
-                            o.Item.Shape.transform.position,
-                            aligner.mainCamera.transform.position);
+                    i++;
+                    temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
                 }
             }
 
+            temp = arr[i + 1];
+            arr[i + 1] = arr[end];
+            arr[end] = temp;
+            return i + 1;
         }
 
-        private List<Overlapper> GetOverlappingInfoItems(InfoItem i)
+        // Find out if A is on the left of B
+        private bool IsLeft(Vector3 a, Vector3 b, Vector3 player)
         {
-            List<Overlapper> colliders = new List<Overlapper>();
+            Vector3 delta = b - a;
+            Vector3 dir = player - a;
+            Vector3 cross = Vector3.Cross(delta, dir);
+            return Math.Sign(cross.y) >= 0;
+        } 
+
+        private void ExecuteSolution(Solution s)
+        {
+            foreach (Tuple<InfoItem, float> pair in s.Moves)
+            {
+                InfoItem i = pair.Item1;
+                float d = pair.Item2;
+
+                i.Shape.transform.position =
+                    HelperClasses.InfoAreaUtils.Instance
+                    .MoveAlongX(
+                        i.Shape.transform.position,
+                        d,
+                        aligner.mainCamera.transform.position);
+                i.Shape.transform.rotation =
+                    HelperClasses.InfoAreaUtils.Instance
+                    .FaceUser(
+                        i.Shape.transform.position,
+                        aligner.mainCamera.transform.position);
+            }
+        }
+
+        private Solution GetSolution(InfoItem i)
+        {
+            Solution s = new Solution();
+
             foreach (InfoItem o in infoItems)
             {
                 // Skip yourself
                 if (o == i) continue;
 
-                if (Overlaps(i, o)) colliders.Add(
-                    new Overlapper(
-                        o,
-                        CalculateOffsetVector(i, o)
-                    ));
+                if (Overlaps(i, o))
+                {
+                    s.AddMove(i, CalculateOffsetVector(i, o));
+                }
             }
-            return colliders;
+
+            s.Evaluate();
+
+            return s;
         }
 
         // How far does Y need to move to not be in X
         private float CalculateOffsetVector(InfoItem x, InfoItem y)
         {
-            float dist = (y.Shape.transform.position - x.Shape.transform.position).magnitude;
-            return dist < 0 ? -rectWidth - dist : rectWidth - dist;
+            Vector3 offset = (y.Shape.transform.position - x.Shape.transform.position);
+            Vector3 xToPlayer = aligner.mainCamera.transform.position - x.Shape.transform.position;
+            return offset.magnitude * Math.Sign(Vector3.Dot(xToPlayer, offset));
         }
-
-        // Is X overlapped by Y?
         private bool Overlaps(InfoItem x, InfoItem y)
         {
-            float minX, maxX;
-            minX = x.Shape.transform.position.x - rectWidth;
-            maxX = x.Shape.transform.position.x + rectWidth;
+            Collider xC = x.Shape.GetComponent<Collider>();
+            Collider yC = y.Shape.GetComponent<Collider>();
 
-            float yX = y.Shape.transform.position.x;
-
-            return yX > minX && yX < maxX;
-
+            return xC.bounds.Intersects(yC.bounds);
         }
     }
 

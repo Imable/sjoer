@@ -28,18 +28,18 @@ namespace Assets.SceneManagement
             Player aligner = player.GetComponent<Player>();
             GraphicFactory.Instance.aligner ??= aligner;
 
-            infoCategories = new InfoCategory[2]
+            infoCategories = new InfoCategory[1]
             {
                 new ConnectedInfoCategory(
                     "AISHorizon",
                     aligner, 
                     DataType.AIS, DisplayArea.HorizonPlane,
                     DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
-                new InjectedInfoCategory(
-                    "AISSky",
-                    aligner,
-                    DataType.AIS, DisplayArea.SkyArea,
-                    () => allInfoItems["AISHorizon"])
+                //new InjectedInfoCategory(
+                //    "AISSky",
+                //    aligner,
+                //    DataType.AIS, DisplayArea.SkyArea,
+                //    () => allInfoItems["AISHorizon"])
             };
 
             this.InitAllInfoItems();

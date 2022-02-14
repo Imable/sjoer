@@ -12,6 +12,8 @@ namespace Assets.Graphics
 {
     class Filler
     {
+        public bool Target { get; set; }
+
         public virtual void Fill(InfoItem infoItem)
         {
             string name = "";
@@ -20,17 +22,55 @@ namespace Assets.Graphics
 
             infoItem.Shape.name = name;
         }
+
+        protected virtual void TargetFiller(InfoItem infoItem) { }
+        protected virtual void NonTargetFiller(InfoItem infoItem) { }
+
+
+        protected void FillTextField(string fname, string value, GameObject g)
+        {
+            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/{fname}").gameObject;
+            TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
+            tmp.text = value;
+        }
     }
 
-    class AISFiller : Filler
+    class AISHorizonFiller : Filler
     {
         public override void Fill(InfoItem infoItem)
         {
             base.Fill(infoItem);
-            TargetFiller(infoItem);
+            if (Target) TargetFiller(infoItem);
+            else NonTargetFiller(infoItem);
+
         }
 
-        private void TargetFiller(InfoItem infoItem)
+        protected override void NonTargetFiller(InfoItem infoItem)
+        {
+
+        }
+
+        protected override void TargetFiller(InfoItem infoItem)
+        {
+            AISDTO dto = (AISDTO)infoItem.GetDTO;
+            FillTextField("1Label", "SOG", infoItem.Shape);
+            FillTextField("1Value", dto.SOG.ToString(), infoItem.Shape);
+            FillTextField("2Label", "HDG", infoItem.Shape);
+            FillTextField("2Value", dto.Heading.ToString() + "°", infoItem.Shape);
+            FillTextField("TargetNum", infoItem.TargetNum.ToString(), infoItem.Shape);
+        }
+    }
+
+    class AISSkyFiller : Filler
+    {
+        public override void Fill(InfoItem infoItem)
+        {
+            base.Fill(infoItem);
+            if (Target) TargetFiller(infoItem);
+            else NonTargetFiller(infoItem);
+        }
+
+        protected override void TargetFiller(InfoItem infoItem)
         {
             AISDTO dto = (AISDTO)infoItem.GetDTO;
 
@@ -40,13 +80,6 @@ namespace Assets.Graphics
             FillTextField("COGValue", dto.COG.ToString(), infoItem.Shape);
             FillTextField("SOGValue", dto.SOG.ToString(), infoItem.Shape);
             FillTextField("DRGValue", dto.Draught.ToString(), infoItem.Shape);
-        }
-
-        private void FillTextField(string fname, string value, GameObject g)
-        {
-            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/Canvas/{fname}").gameObject;
-            TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
-            tmp.text = value;
         }
     }
 }

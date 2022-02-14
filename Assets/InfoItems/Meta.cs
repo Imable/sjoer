@@ -10,18 +10,23 @@ namespace Assets.InfoItems
     class Meta
     {       
         bool target;
-        int layer;
         bool previousTarget;
+        int targetNum;
         protected DataType dataType;
         protected DisplayArea displayArea;
 
-        public Meta(bool target, int layer, DataType dataType, DisplayArea displayArea)
+        public Meta(bool target, DataType dataType, DisplayArea displayArea)
         {
             this.target = target;
-            this.layer = layer;
             this.dataType = dataType;
             this.displayArea = displayArea;
             this.previousTarget = target;
+        }
+
+        public int TargetNum
+        {
+            get { return this.targetNum; }
+            set { this.targetNum = value; }
         }
 
         public bool Target 

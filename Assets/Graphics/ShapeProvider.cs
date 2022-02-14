@@ -58,14 +58,13 @@ namespace Assets.Graphics
         private void InjectNewShape(InfoItem infoItem)
         {
             string prefab = "AISPin";
+            infoItem.Shape = GetShape(prefab);
+
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
+
             if (infoItem.IsTarget)
             {
-                prefab = "AISPinTarget";
-                infoItem.Shape = GetShape(prefab);
-                HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
-            } else
-            {
-                infoItem.Shape = GetShape(prefab);
+                HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
             }
         }
     }

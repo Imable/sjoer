@@ -11,6 +11,7 @@ namespace Assets.DataManagement
     {
         public string Key { get; set; }
         public bool Target { get; set; }
+        public int TargetNum { get; set; }
         public bool Valid { get; set; }
 
     }

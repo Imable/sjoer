@@ -129,7 +129,7 @@ namespace Assets.InfoItems
             //}
 
             foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
-            { 
+            {
                 if (IsInInfoItems(infoItem))
                 {
                     infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
