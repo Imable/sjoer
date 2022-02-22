@@ -67,7 +67,7 @@ namespace Assets.InfoItems
         private void OnClick()
         {
             target = !target;
-            Debug.Log("target is now " + target);
+            //Debug.Log("target is now " + target);
             if (HasLinkedInfoItem()) link.IsTarget = target;
         }
 

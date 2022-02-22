@@ -11,6 +11,7 @@ namespace Assets.InfoItems
     {       
         bool target;
         bool previousTarget;
+        bool expanded;
         int targetNum;
         protected DataType dataType;
         protected DisplayArea displayArea;
@@ -21,12 +22,19 @@ namespace Assets.InfoItems
             this.dataType = dataType;
             this.displayArea = displayArea;
             this.previousTarget = target;
+            this.expanded = false;
         }
 
         public int TargetNum
         {
             get { return this.targetNum; }
             set { this.targetNum = value; }
+        }
+
+        public bool Expanded
+        {
+            get { return this.expanded; }
+            set { this.expanded = value; }
         }
 
         public bool Target 

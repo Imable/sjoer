@@ -59,7 +59,7 @@ namespace Assets.Graphics
 
         }
 
-        public Filler GetFiller(DataType dataType, DisplayArea displayArea, bool target)
+        public Filler GetFiller(DataType dataType, DisplayArea displayArea)
         {
             Filler filler;
 
@@ -75,7 +75,6 @@ namespace Assets.Graphics
                     throw new ArgumentException("No such data type", nameof(dataType));
             }
 
-            filler.Target = target;
             return filler;
         }
 

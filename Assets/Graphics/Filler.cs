@@ -12,7 +12,6 @@ namespace Assets.Graphics
 {
     class Filler
     {
-        public bool Target { get; set; }
 
         public virtual void Fill(InfoItem infoItem)
         {
@@ -21,6 +20,9 @@ namespace Assets.Graphics
             name += $"{infoItem.Key} ({infoItem.DisplayArea})";
 
             infoItem.Shape.name = name;
+
+            if (infoItem.IsExpanded) TargetFiller(infoItem);
+            else NonTargetFiller(infoItem);
         }
 
         protected virtual void TargetFiller(InfoItem infoItem) { }
@@ -32,14 +34,6 @@ namespace Assets.Graphics
 
     class AISHorizonFiller : Filler
     {
-        public override void Fill(InfoItem infoItem)
-        {
-            base.Fill(infoItem);
-            if (Target) TargetFiller(infoItem);
-            else NonTargetFiller(infoItem);
-
-        }
-
         protected override void NonTargetFiller(InfoItem infoItem)
         {
 
@@ -64,13 +58,6 @@ namespace Assets.Graphics
 
     class AISSkyFiller : Filler
     {
-        public override void Fill(InfoItem infoItem)
-        {
-            base.Fill(infoItem);
-            if (Target) TargetFiller(infoItem);
-            else NonTargetFiller(infoItem);
-        }
-
         protected override void TargetFiller(InfoItem infoItem)
         {
             AISDTO dto = (AISDTO)infoItem.GetDTO;

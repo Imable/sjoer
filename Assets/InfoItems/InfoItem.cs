@@ -23,7 +23,6 @@ namespace Assets.InfoItems
         {
             this.meta = new Meta(dto.Target, dataType, displayArea);
             this.dto  = dto;
-            //Update();
         }
 
         public override bool Equals(System.Object i)
@@ -39,6 +38,12 @@ namespace Assets.InfoItems
         public bool IsHover
         {
             get { return this.GetTargetHandler() && this.GetTargetHandler().IsHover; }
+        }
+
+        public bool IsExpanded
+        {
+            get { return this.meta.Expanded; }
+            set { this.meta.Expanded = value; }
         }
 
         public bool IsTarget
@@ -114,7 +119,7 @@ namespace Assets.InfoItems
         // Update target in meta according to selected in scene or selected previously
         protected void Retarget ()
         {
-            this.meta.Target = this.dto.Target || (GetTargetHandler() && GetTargetHandler().IsTarget);
+            this.meta.Target = this.dto.Target || (GetTargetHandler() && (GetTargetHandler().IsTarget || GetTargetHandler().IsHover));
             // Only update the target number if the target has changed. This is the responsibility of the horizon plane
             if (TargetHasChanged() && DisplayArea == DisplayArea.HorizonPlane) UpdateTargetNum();
         }
@@ -141,7 +146,7 @@ namespace Assets.InfoItems
 
         protected virtual void Refill()
         {
-            GraphicFactory.Instance.GetFiller(meta.DataType, meta.DisplayArea, this.IsTarget).Fill(this);
+            GraphicFactory.Instance.GetFiller(meta.DataType, meta.DisplayArea).Fill(this);
         }
 
         protected virtual void Reposition()

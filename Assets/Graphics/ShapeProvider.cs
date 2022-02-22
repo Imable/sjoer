@@ -45,8 +45,6 @@ namespace Assets.Graphics
         {
             if (!infoItem.Shape) InjectNewShape(infoItem);
 
-            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
-
             if (infoItem.TargetHasChanged())
             {
                 UpdateShape(infoItem);
@@ -55,14 +53,27 @@ namespace Assets.Graphics
 
         private void UpdateShape(InfoItem infoItem)
         {
-            if (infoItem.IsTarget) HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
-            else HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0.25f);
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
+
+            if (infoItem.IsTarget)
+            {
+                if (!infoItem.IsExpanded) HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
+                infoItem.IsExpanded = true;
+            }
+            else
+            {
+                if (infoItem.IsExpanded) HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0.25f);
+                infoItem.IsExpanded = false;
+            }
         }
 
         private void InjectNewShape(InfoItem infoItem)
         {
             string prefab = "AISPin";
             infoItem.Shape = GetShape(prefab);
+
+            // A new shape always starts collapsed
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
         }
     }
 
