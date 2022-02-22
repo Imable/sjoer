@@ -186,6 +186,7 @@ namespace Assets.InfoItems
                         displayArea);
                     newInfoItem.IsTarget = infoItem.IsTarget;
                     newInfoItem.TargetNum = infoItem.TargetNum;
+                    newInfoItem.IsExpanded = infoItem.IsExpanded;
                     newInfoItem.Update();
 
                     newInfoItem.LinkTargetHandler(infoItem);

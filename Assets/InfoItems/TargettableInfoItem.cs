@@ -64,7 +64,7 @@ namespace Assets.InfoItems
             this.link = null;
         }
 
-        private void OnClick()
+        public void OnClick()
         {
             target = !target;
             //Debug.Log("target is now " + target);
@@ -88,7 +88,6 @@ namespace Assets.InfoItems
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {
-                Debug.Log("Select!");
                 OnClick();
             }
         }
