@@ -190,7 +190,7 @@ MonoBehaviour:
   - id: 1
     description: Select
     axisConstraint: 2
-  dwellTimeInSec: 0.8
+  dwellTimeInSec: 0.35
   onLookAtStart:
     m_PersistentCalls:
       m_Calls: []

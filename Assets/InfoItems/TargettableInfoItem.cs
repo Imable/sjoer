@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit;
+﻿using Assets.Resources;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
 
@@ -75,13 +76,26 @@ namespace Assets.InfoItems
         {
             Debug.Log("Hover start");
             hover = true;
+
+            if (HasLinkedInfoItem())
+            {
+                link.CancelInvoke();
+                link.IsHover = hover;
+            }
+
         }
 
         public void OnHoverEnd()
         {
             Debug.Log("Hover end");
+            // Define ms how long it takes before an infoitem disappears when looking at it
+            Invoke("InnerOnHoverEnd", (float)Config.Instance.conf.DataSettings["OnLookAwayDisappearDelay"]);
+        }
 
+        private void InnerOnHoverEnd()
+        {
             hover = false;
+            if (HasLinkedInfoItem()) link.IsHover = false;
         }
 
         public override void OnInputDown(InputEventData eventData)

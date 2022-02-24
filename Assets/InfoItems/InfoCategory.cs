@@ -188,7 +188,7 @@ namespace Assets.InfoItems
                     newInfoItem.TargetNum = infoItem.TargetNum;
                     newInfoItem.IsExpanded = infoItem.IsExpanded;
                     newInfoItem.Update();
-
+                    infoItem.LinkTargetHandler(newInfoItem);
                     newInfoItem.LinkTargetHandler(infoItem);
 
                     AddNewInfoItem(newInfoItem);
