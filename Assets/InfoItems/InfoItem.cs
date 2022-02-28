@@ -59,6 +59,19 @@ namespace Assets.InfoItems
 
         }
 
+        public ExpandState DesiredState
+        {
+            get { return this.meta.DesiredState; }
+            set { this.meta.DesiredState = value; }
+        }
+
+        public ExpandState CurrentState
+        {
+            get { return this.meta.CurrentState; }
+            set { this.meta.CurrentState = value; }
+
+        }
+
         public DataType DataType
         {
             get { return this.meta.DataType; }
@@ -92,16 +105,18 @@ namespace Assets.InfoItems
 
         public void Update()
         {
-            if (GetTargetHandler(true))
-            {
-                if (GetTargetHandler().IsTarget)
-                {
-                    Debug.Log("Target on " + Key);
+            //if (GetTargetHandler(true))
+            //{
+            //    if (GetTargetHandler().IsTarget)
+            //    {
+            //        Debug.Log("Target on " + Key);
 
-                }
-            }
+            //    }
+            //}
             // First update the target from interactions
             Retarget();
+
+            Debug.Log($"{Key} = {this.meta.DesiredState}");
             // Get new shape
             Reshape();
             // Fill new shape if necessary
@@ -112,14 +127,18 @@ namespace Assets.InfoItems
 
         protected void UpdateTargetNum()
         {
-            if (this.IsTarget) this.meta.TargetNum = HelperClasses.TargetNumberProvider.Instance.GetTargetInt();
+            if (this.DesiredState == ExpandState.Target) this.meta.TargetNum = HelperClasses.TargetNumberProvider.Instance.GetTargetInt();
             else HelperClasses.TargetNumberProvider.Instance.HandInTargetInt(this.meta.TargetNum);
         }
 
         // Update target in meta according to selected in scene or selected previously
         protected void Retarget ()
         {
-            this.meta.Target = this.dto.Target || (GetTargetHandler() && (GetTargetHandler().IsTarget || GetTargetHandler().IsHover));
+            this.meta.DesiredState =
+                (this.dto.Target || (GetTargetHandler() && (GetTargetHandler().IsTarget))) ? ExpandState.Target
+                : (GetTargetHandler() && (GetTargetHandler().IsHover)) ? ExpandState.Hover
+                : ExpandState.Collapsed;
+
             // Only update the target number if the target has changed. This is the responsibility of the horizon plane
             if (TargetHasChanged() && DisplayArea == DisplayArea.HorizonPlane) UpdateTargetNum();
         }
@@ -134,9 +153,13 @@ namespace Assets.InfoItems
             return targetHandler;
         }
 
+        // Either we were or became a target, but a change has taken place
         public bool TargetHasChanged()
         {
-            return this.meta.Target != this.meta.PreviousTarget;
+            return (
+                this.meta.DesiredState == ExpandState.Target 
+                || this.meta.CurrentState == ExpandState.Target) 
+                && this.meta.DesiredState != this.meta.CurrentState;
         }
 
         protected virtual void Reshape()
@@ -157,7 +180,8 @@ namespace Assets.InfoItems
         // Called on the old InfoItem
         public void InjectNewDTO(DTO dto)
         {
-            this.meta.PreviousTarget = this.meta.Target;
+            //this.meta.PreviousTarget = this.meta.Target;
+            this.meta.CurrentState = this.meta.DesiredState;
             this.dto = dto;
         }
 

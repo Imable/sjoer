@@ -76,6 +76,7 @@ namespace Assets.InfoItems
         {
             Debug.Log("Hover start");
             hover = true;
+            CancelInvoke();
 
             if (HasLinkedInfoItem())
             {
@@ -96,6 +97,17 @@ namespace Assets.InfoItems
         {
             hover = false;
             if (HasLinkedInfoItem()) link.IsHover = false;
+        }
+
+        public void OnSelect()
+        {
+            target = true;
+
+            if (HasLinkedInfoItem())
+            {
+                link.CancelInvoke();
+                link.IsTarget = true;
+            }
         }
 
         public override void OnInputDown(InputEventData eventData)

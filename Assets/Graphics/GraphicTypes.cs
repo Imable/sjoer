@@ -17,4 +17,11 @@ namespace Assets.Graphics
         SkyArea,
         HUD
     }
+
+    public enum ExpandState
+    {
+        Collapsed,
+        Hover,
+        Target
+    }
 }

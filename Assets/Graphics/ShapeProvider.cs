@@ -45,25 +45,25 @@ namespace Assets.Graphics
         {
             if (!infoItem.Shape) InjectNewShape(infoItem);
 
-            if (infoItem.TargetHasChanged())
-            {
-                UpdateShape(infoItem);
-            }
+             UpdateShape(infoItem);
         }
 
         private void UpdateShape(InfoItem infoItem)
         {
-            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.DesiredState);
+            HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0, true);
 
-            if (infoItem.IsTarget)
+            switch (infoItem.DesiredState)
             {
-                if (!infoItem.IsExpanded) HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
-                infoItem.IsExpanded = true;
-            }
-            else
-            {
-                if (infoItem.IsExpanded) HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0.25f);
-                infoItem.IsExpanded = false;
+                case (ExpandState.Collapsed):
+                    // Do nothing, already collapsed
+                    break;
+                case (ExpandState.Hover):
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 3);
+                    break;
+                case (ExpandState.Target):
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
+                    break;
             }
         }
 
@@ -73,7 +73,7 @@ namespace Assets.Graphics
             infoItem.Shape = GetShape(prefab);
 
             // A new shape always starts collapsed
-            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.IsTarget);
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, ExpandState.Collapsed);
         }
     }
 

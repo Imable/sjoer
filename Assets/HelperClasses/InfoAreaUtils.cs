@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using Assets.Positional;
+using Assets.Graphics;
 
 namespace Assets.HelperClasses
 {
@@ -95,33 +96,33 @@ namespace Assets.HelperClasses
             return Quaternion.LookRotation(player - position);
         }
 
-        public void ShowAISPinInfo(GameObject target, float numInfo)
+        public void ShowAISPinInfo(GameObject target, float numInfo, bool def = false)
         {
             BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
-            pin.transform.localScale = new Vector3(pin.transform.localScale.x, pin.transform.localScale.y * numInfo, pin.transform.localScale.z);
+            pin.transform.localScale = new Vector3(pin.transform.localScale.x, def ? 1 : pin.transform.localScale.y * numInfo, pin.transform.localScale.z);
             GameObject icon = target.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor").gameObject;
-            icon.transform.localScale = new Vector3(icon.transform.localScale.x, icon.transform.localScale.y, icon.transform.localScale.z / numInfo);
+            icon.transform.localScale = new Vector3(icon.transform.localScale.x, icon.transform.localScale.y, def ? 1 : icon.transform.localScale.z / numInfo);
 
-            boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + (numInfo - 1) * boxCollider.size.y, boxCollider.size.z);
-            boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.size.y / 2, boxCollider.center.z);
+            boxCollider.size = new Vector3(boxCollider.size.x, def ? 3 : boxCollider.size.y + (numInfo - 1) * boxCollider.size.y, boxCollider.size.z);
+            boxCollider.center = new Vector3(boxCollider.center.x, def ? 1.5f : boxCollider.size.y / 2, boxCollider.center.z);
         }
 
-        public void ToggleAISPinOverflowVisible(GameObject g, bool shouldBecomeVisible)
+        public void ToggleAISPinOverflowVisible(GameObject g, ExpandState expandState)
         {
             List<string> labels = new List<string>
             {
                 "1Label", "1Value",
-                "2Label", "2Value",
-                "TargetNum"
+                "2Label", "2Value"
             };
             foreach (string label in labels)
             {
-                GetAISPinComponent(g, label).enabled = shouldBecomeVisible;
+                GetAISPinComponent(g, label).enabled = (expandState == ExpandState.Target || expandState == ExpandState.Hover);
             }
 
+            GetAISPinComponent(g, "TargetNum").enabled = expandState == ExpandState.Target;
             // Lastly enable/disable the target image
-            g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/Target").gameObject.GetComponent<Image>().enabled = shouldBecomeVisible;
+            g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/Target").gameObject.GetComponent<Image>().enabled = expandState == ExpandState.Target; ;
         }
 
         private TextMeshProUGUI GetAISPinComponent(GameObject g, string fname)

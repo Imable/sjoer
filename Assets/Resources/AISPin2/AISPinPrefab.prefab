@@ -193,7 +193,19 @@ MonoBehaviour:
   dwellTimeInSec: 0.35
   onLookAtStart:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3734650484140717652}
+        m_TargetAssemblyTypeName: Assets.InfoItems.TargettableInfoItem, Assembly-CSharp
+        m_MethodName: OnHoverStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
   whileLookingAtTarget:
     m_PersistentCalls:
       m_Calls: []
@@ -214,25 +226,13 @@ MonoBehaviour:
         m_CallState: 1
   onDwell:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3734650484140717652}
-        m_TargetAssemblyTypeName: Assets.InfoItems.TargettableInfoItem, Assembly-CSharp
-        m_MethodName: OnHoverStart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onSelected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3734650484140717652}
         m_TargetAssemblyTypeName: Assets.InfoItems.TargettableInfoItem, Assembly-CSharp
-        m_MethodName: OnClick
+        m_MethodName: OnSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -241,7 +241,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
   onTapDown:
     m_PersistentCalls:
       m_Calls: []

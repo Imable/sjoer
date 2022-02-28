@@ -6,7 +6,7 @@
     "LongitudeArea": 3000,
     "UIElementHeight": 0.0,
     "SkyAreaHeight": 2.0,
-    "OnLookAwayDisappearDelay":  0.5
+    "OnLookAwayDisappearDelay":  0.75
   },
   "VesselSettingsS": {
     "VesselName": "VesselName"

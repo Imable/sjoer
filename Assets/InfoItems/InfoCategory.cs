@@ -133,6 +133,7 @@ namespace Assets.InfoItems
                 if (IsInInfoItems(infoItem))
                 {
                     infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
+                    //infoItems[infoItem.Key].TargetNum = infoItem.TargetNum;
                 }
                 else
                 {
@@ -173,23 +174,27 @@ namespace Assets.InfoItems
 
         private void HandleNewInfoItem(InfoItem infoItem)
         {
-            if (infoItem.IsTarget)
+            if (infoItem.DesiredState == ExpandState.Target)
             {
                 if (IsInInfoItems(infoItem))
                 {
                     infoItems[infoItem.Key].InjectNewDTO(infoItem.GetDTO);
-                } else
+                    infoItems[infoItem.Key].TargetNum = infoItem.TargetNum;
+                }
+                else
                 {
                     InfoItem newInfoItem = new AISInfoItem(
                         infoItem.GetDTO, 
                         dataType, 
                         displayArea);
-                    newInfoItem.IsTarget = infoItem.IsTarget;
+                    //newInfoItem.IsTarget = infoItem.IsTarget;
                     newInfoItem.TargetNum = infoItem.TargetNum;
-                    newInfoItem.IsExpanded = infoItem.IsExpanded;
+                    //newInfoItem.IsExpanded = infoItem.IsExpanded;
+                    //newInfoItem.CurrentState = infoItem.DesiredState;
+                    //newInfoItem.DesiredState = infoItem.DesiredState;
                     newInfoItem.Update();
-                    infoItem.LinkTargetHandler(newInfoItem);
                     newInfoItem.LinkTargetHandler(infoItem);
+                    infoItem.LinkTargetHandler(newInfoItem);
 
                     AddNewInfoItem(newInfoItem);
                 }

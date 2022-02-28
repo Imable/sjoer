@@ -13,16 +13,19 @@ namespace Assets.InfoItems
         bool previousTarget;
         bool expanded;
         int targetNum;
+        ExpandState desiredState;
+        ExpandState currentState;
         protected DataType dataType;
         protected DisplayArea displayArea;
 
         public Meta(bool target, DataType dataType, DisplayArea displayArea)
         {
-            this.target = target;
+            this.target = false;
             this.dataType = dataType;
             this.displayArea = displayArea;
             this.previousTarget = target;
-            this.expanded = false;
+            this.desiredState = ExpandState.Collapsed;
+            this.currentState = ExpandState.Collapsed;
         }
 
         public int TargetNum
@@ -35,6 +38,18 @@ namespace Assets.InfoItems
         {
             get { return this.expanded; }
             set { this.expanded = value; }
+        }
+
+        public ExpandState CurrentState
+        {
+            get { return this.currentState; }
+            set { this.currentState = value; }
+        }
+
+        public ExpandState DesiredState
+        {
+            get { return this.desiredState; }
+            set { this.desiredState = value; }
         }
 
         public bool Target 
