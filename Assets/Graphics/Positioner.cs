@@ -49,7 +49,7 @@ namespace Assets.Graphics
             Vector3 position = GetWorldTransform((AISDTO)infoItem.GetDTO);
             infoItem.Shape.transform.position = 
                 HelperClasses.InfoAreaUtils.Instance
-                .UnityCoordsToSkyArea(position, aligner);
+                .UnityCoordsToSkyArea(position, infoItem.DesiredState, aligner);
             infoItem.Shape.transform.rotation =
                 HelperClasses.InfoAreaUtils.Instance
                 .FaceUser(infoItem.Shape.transform.position, aligner.mainCamera.transform.position);

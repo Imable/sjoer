@@ -23,12 +23,12 @@ namespace Assets.HelperClasses
             
         }
 
-        public Vector3 UnityCoordsToSkyArea(Vector3 obj, Player player)
+        public Vector3 UnityCoordsToSkyArea(Vector3 obj,  ExpandState expandState, Player player)
         {
             Vector3 tmp = UnityCoordsToHorizonPlane(obj, player.mainCamera.transform.position);
             return new Vector3(
                     tmp.x,
-                    tmp.y + (float)Config.Instance.conf.DataSettings["SkyAreaHeight"],
+                    expandState == ExpandState.Target ? tmp.y + (float)Config.Instance.conf.DataSettings["SkyAreaHeightTarget"] : tmp.y + (float)Config.Instance.conf.DataSettings["SkyAreaHeightHover"],
                     tmp.z
                 );
         }
@@ -136,11 +136,26 @@ namespace Assets.HelperClasses
             BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject stick = target.transform.Find($"StickAnchor").gameObject;
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
+            GameObject distanceRuler = target.transform.Find($"StickAnchor/DistanceRuler").gameObject;
             stick.transform.localScale = new Vector3(stick.transform.localScale.x, stick.transform.localScale.y * scale, stick.transform.localScale.y);
             pin.transform.localScale = new Vector3(pin.transform.localScale.x, pin.transform.localScale.y * (1/scale), pin.transform.localScale.z);
+            distanceRuler.transform.localScale = new Vector3(pin.transform.localScale.x, pin.transform.localScale.y * (1 / scale), pin.transform.localScale.z);
 
             boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + (scale / boxCollider.size.y) * boxCollider.size.y, boxCollider.size.z);
             boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.center.y + (scale / boxCollider.center.y) * boxCollider.center.y, boxCollider.center.z);
+        }
+
+        public float GetStickScale(GameObject target)
+        {
+            GameObject stick = target.transform.Find($"StickAnchor").gameObject;
+            return stick.transform.localScale.y;
+        }
+
+        public float GetYPosOfDistanceRuler(GameObject target, float distanceToVessel)
+        {
+            float maxDistance = 2f; // HelperClasses.InfoAreaUtils.Instance.GetStickScale(target);
+            float maxDistanceR = (float)Config.Instance.conf.DataSettings["MaxRulerDistance"];
+            return (Math.Min(distanceToVessel, maxDistanceR) / maxDistanceR) * maxDistance;
         }
 
         public void ScalePin(GameObject target, float scale)

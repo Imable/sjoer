@@ -174,7 +174,7 @@ namespace Assets.InfoItems
 
         private void HandleNewInfoItem(InfoItem infoItem)
         {
-            if (infoItem.DesiredState == ExpandState.Target)
+            if (infoItem.DesiredState != ExpandState.Collapsed)
             {
                 if (IsInInfoItems(infoItem))
                 {

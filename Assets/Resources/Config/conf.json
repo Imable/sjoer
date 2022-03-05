@@ -5,8 +5,10 @@
     "LatitudeArea": 3000,
     "LongitudeArea": 3000,
     "UIElementHeight": 0.0,
-    "SkyAreaHeight": 2.0,
-    "OnLookAwayDisappearDelay":  0.75
+    "SkyAreaHeightTarget": 2.0,
+    "SkyAreaHeightHover": 1.0,
+    "OnLookAwayDisappearDelay": 1, // Should be at least > DWELL TIME * 2
+    "MaxRulerDistance": 1000 // in meters  
   },
   "VesselSettingsS": {
     "VesselName": "VesselName"

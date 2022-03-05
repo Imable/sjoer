@@ -1,5 +1,6 @@
 ﻿using Assets.DataManagement;
 using Assets.InfoItems;
+using Assets.Positional;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,12 @@ namespace Assets.Graphics
 {
     class Filler
     {
+        protected Player aligner;
+
+        public void SetAligner(Player aligner)
+        {
+            this.aligner = aligner;
+        }
 
         public virtual void Fill(InfoItem infoItem)
         {
@@ -44,6 +51,20 @@ namespace Assets.Graphics
                 FillTextField("2Label", "HDG", infoItem.Shape);
                 FillTextField("2Value", dto.Heading.ToString() + "°", infoItem.Shape);
             }
+
+            // Set rotation of ship icon
+            GameObject shipIcon = infoItem.Shape.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/ShipIcon").gameObject;
+            RectTransform rtf = shipIcon.GetComponent<RectTransform>();
+            rtf.localRotation = Quaternion.Euler(0, 0, dto != null && !Double.IsNaN(dto.Heading) ? (float)(dto.Heading - aligner.Heading) : 0);
+
+            // Set distance ruler
+            GameObject distanceRuler = infoItem.Shape.transform.Find($"StickAnchor/DistanceRuler").gameObject;
+            float dist = aligner.GetWorldTransform(dto.Latitude, dto.Longitude).magnitude;
+            distanceRuler.transform.localPosition = new Vector3(
+                distanceRuler.transform.localPosition.x,
+                HelperClasses.InfoAreaUtils.Instance.GetYPosOfDistanceRuler(infoItem.Shape, dist),
+                distanceRuler.transform.localPosition.z);
+
 
             if (infoItem.DesiredState == ExpandState.Target)
             {

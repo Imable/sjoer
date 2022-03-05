@@ -44,17 +44,16 @@ namespace Assets.Graphics
             switch ((dataType, displayArea))
             {
                 case (DataType.AIS, DisplayArea.HorizonPlane):
-                    aisHorizonPostProcessor.SetAligner(aligner);
                     postProcessor = aisHorizonPostProcessor;
                     break;
                 case (DataType.AIS, DisplayArea.SkyArea):
-                    aisSkyPostProcessor.SetAligner(aligner);
                     postProcessor = aisSkyPostProcessor;
                     break;
                 default:
                     throw new ArgumentException("No such data type", nameof(dataType));
             }
 
+            postProcessor.SetAligner(aligner);
             return postProcessor;
 
         }
@@ -75,6 +74,7 @@ namespace Assets.Graphics
                     throw new ArgumentException("No such data type", nameof(dataType));
             }
 
+            filler.SetAligner(aligner);
             return filler;
         }
 
