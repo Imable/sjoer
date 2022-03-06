@@ -53,7 +53,7 @@ namespace Assets.Graphics
             }
 
             // Set rotation of ship icon
-            GameObject shipIcon = infoItem.Shape.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/ShipIcon").gameObject;
+            GameObject shipIcon = infoItem.Shape.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/CanvasIcon/ShipIcon").gameObject;
             RectTransform rtf = shipIcon.GetComponent<RectTransform>();
             rtf.localRotation = Quaternion.Euler(0, 0, dto != null && !Double.IsNaN(dto.Heading) ? (float)(dto.Heading - aligner.Heading) : 0);
 
@@ -73,7 +73,7 @@ namespace Assets.Graphics
         }
         protected override void FillTextField(string fname, string value, GameObject g)
         {
-            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/{fname}").gameObject;
+            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/TopPinAnchor/TopPinAnchor2/CanvasTxt/{fname}").gameObject;
             TextMeshProUGUI tmp = obj.GetComponent<TextMeshProUGUI>();
             tmp.text = value;
         }

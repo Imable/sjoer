@@ -51,7 +51,11 @@ namespace Assets.Graphics
         private void UpdateShape(InfoItem infoItem)
         {
             HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.DesiredState);
+
+            // Reset sizing of these things
             HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0, true);
+            HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 0, true);
+
 
             switch (infoItem.DesiredState)
             {
@@ -59,10 +63,11 @@ namespace Assets.Graphics
                     // Do nothing, already collapsed
                     break;
                 case (ExpandState.Hover):
-                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 3);
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float) Config.Instance.conf.DataSettings["NumItemsOnHover"]); //3
                     break;
                 case (ExpandState.Target):
-                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 4);
+                    HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float) Config.Instance.conf.DataSettings["NumItemsOnHover"] + 1); //4
                     break;
             }
         }

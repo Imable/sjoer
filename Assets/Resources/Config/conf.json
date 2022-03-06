@@ -8,7 +8,8 @@
     "SkyAreaHeightTarget": 2.0,
     "SkyAreaHeightHover": 1.0,
     "OnLookAwayDisappearDelay": 1, // Should be at least > DWELL TIME * 2
-    "MaxRulerDistance": 1000 // in meters  
+    "MaxRulerDistance": 1000, // in meters  
+    "NumItemsOnHover":  1
   },
   "VesselSettingsS": {
     "VesselName": "VesselName"

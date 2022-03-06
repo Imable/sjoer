@@ -103,6 +103,8 @@ namespace Assets.HelperClasses
             pin.transform.localScale = new Vector3(pin.transform.localScale.x, def ? 1 : pin.transform.localScale.y * numInfo, pin.transform.localScale.z);
             GameObject icon = target.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor").gameObject;
             icon.transform.localScale = new Vector3(icon.transform.localScale.x, icon.transform.localScale.y, def ? 1 : icon.transform.localScale.z / numInfo);
+            GameObject labels = target.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/TopPinAnchor").gameObject;
+            labels.transform.localScale = new Vector3(labels.transform.localScale.x, labels.transform.localScale.y, def ? 1 : labels.transform.localScale.z / numInfo);
 
             boxCollider.size = new Vector3(boxCollider.size.x, def ? 3 : boxCollider.size.y + (numInfo - 1) * boxCollider.size.y, boxCollider.size.z);
             boxCollider.center = new Vector3(boxCollider.center.x, def ? 1.5f : boxCollider.size.y / 2, boxCollider.center.z);
@@ -110,39 +112,37 @@ namespace Assets.HelperClasses
 
         public void ToggleAISPinOverflowVisible(GameObject g, ExpandState expandState)
         {
-            List<string> labels = new List<string>
-            {
-                "1Label", "1Value",
-                "2Label", "2Value"
-            };
-            foreach (string label in labels)
-            {
-                GetAISPinComponent(g, label).enabled = (expandState == ExpandState.Target || expandState == ExpandState.Hover);
-            }
+            int n = (int) Config.Instance.conf.DataSettings["NumItemsOnHover"];
+
+            GetAISPinComponent(g, "1Label").enabled = n > 0 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "1Value").enabled = n > 0 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "2Label").enabled = n > 1 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "2Value").enabled = n > 1 && expandState != ExpandState.Collapsed;
 
             GetAISPinComponent(g, "TargetNum").enabled = expandState == ExpandState.Target;
+
             // Lastly enable/disable the target image
-            g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/Target").gameObject.GetComponent<Image>().enabled = expandState == ExpandState.Target; ;
+            g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/TopPinAnchor/TopPinAnchor2/CanvasTxt/Target").GetComponent<Image>().enabled = expandState == ExpandState.Target; ;
         }
 
         private TextMeshProUGUI GetAISPinComponent(GameObject g, string fname)
         {
-            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/ShipIconAnchor/Canvas/{fname}").gameObject;
+            GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/TopPinAnchor/TopPinAnchor2/CanvasTxt/{fname}").gameObject;
             return obj.GetComponent<TextMeshProUGUI>(); ;
         }
 
-        public void ScaleStick(GameObject target, float scale)
+        public void ScaleStick(GameObject target, float scale, bool def = false)
         {
             BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject stick = target.transform.Find($"StickAnchor").gameObject;
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
             GameObject distanceRuler = target.transform.Find($"StickAnchor/DistanceRuler").gameObject;
-            stick.transform.localScale = new Vector3(stick.transform.localScale.x, stick.transform.localScale.y * scale, stick.transform.localScale.y);
-            pin.transform.localScale = new Vector3(pin.transform.localScale.x, pin.transform.localScale.y * (1/scale), pin.transform.localScale.z);
-            distanceRuler.transform.localScale = new Vector3(pin.transform.localScale.x, pin.transform.localScale.y * (1 / scale), pin.transform.localScale.z);
+            stick.transform.localScale = new Vector3(stick.transform.localScale.x, def ? 1 : stick.transform.localScale.y * scale, stick.transform.localScale.y);
+            pin.transform.localScale = new Vector3(pin.transform.localScale.x, def ? 1 : pin.transform.localScale.y * (1/scale), pin.transform.localScale.z);
+            distanceRuler.transform.localScale = new Vector3(def ? 0.1f : distanceRuler.transform.localScale.x * (1 / scale), distanceRuler.transform.localScale.y, distanceRuler.transform.localScale.z);
 
-            boxCollider.size = new Vector3(boxCollider.size.x, boxCollider.size.y + (scale / boxCollider.size.y) * boxCollider.size.y, boxCollider.size.z);
-            boxCollider.center = new Vector3(boxCollider.center.x, boxCollider.center.y + (scale / boxCollider.center.y) * boxCollider.center.y, boxCollider.center.z);
+            boxCollider.size = new Vector3(boxCollider.size.x, def ? 3.25f : boxCollider.size.y + (scale / boxCollider.size.y) * boxCollider.size.y, boxCollider.size.z);
+            boxCollider.center = new Vector3(boxCollider.center.x, def ? 1.625f :  boxCollider.center.y + (scale / boxCollider.center.y) * boxCollider.center.y, boxCollider.center.z);
         }
 
         public float GetStickScale(GameObject target)
