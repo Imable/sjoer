@@ -13,7 +13,7 @@ using Assets.InfoItems;
 
 namespace Assets.Graphics
 {
-    
+
     class ShapeProvider
     {
         public virtual void Get(InfoItem infoItem)
@@ -24,8 +24,8 @@ namespace Assets.Graphics
         protected GameObject GetShape(string fname)
         {
             GameObject gameObject = GameObject.Instantiate(
-                    AssetManager.Instance.objects[fname], 
-                    Vector3.zero, 
+                    AssetManager.Instance.objects[fname],
+                    Vector3.zero,
                     Quaternion.identity
                 );
 
@@ -45,7 +45,7 @@ namespace Assets.Graphics
         {
             if (!infoItem.Shape) InjectNewShape(infoItem);
 
-             UpdateShape(infoItem);
+            UpdateShape(infoItem);
         }
 
         private void UpdateShape(InfoItem infoItem)
@@ -63,11 +63,11 @@ namespace Assets.Graphics
                     // Do nothing, already collapsed
                     break;
                 case (ExpandState.Hover):
-                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float) Config.Instance.conf.DataSettings["NumItemsOnHover"]); //3
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float)Config.Instance.conf.DataSettings["NumItemsOnHover"]); //3
                     break;
                 case (ExpandState.Target):
                     HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
-                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float) Config.Instance.conf.DataSettings["NumItemsOnHover"] + 1); //4
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float)Config.Instance.conf.DataSettings["NumItemsOnHover"] + 1); //4
                     break;
             }
         }
@@ -87,6 +87,13 @@ namespace Assets.Graphics
         public override void Get(InfoItem infoItem)
         {
             if (!infoItem.Shape) infoItem.Shape = GetShape("AISPinTarget");
+
+            UpdateShape(infoItem);
+        }
+
+        private void UpdateShape(InfoItem infoItem)
+        {
+            HelperClasses.InfoAreaUtils.Instance.ToggleTargetActive(infoItem.Shape, infoItem.DesiredState);
         }
     }
 }

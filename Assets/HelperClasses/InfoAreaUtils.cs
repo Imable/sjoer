@@ -125,6 +125,12 @@ namespace Assets.HelperClasses
             g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/TopPinAnchor/TopPinAnchor2/CanvasTxt/Target").GetComponent<Image>().enabled = expandState == ExpandState.Target; ;
         }
 
+        public void ToggleTargetActive(GameObject g, ExpandState expandState)
+        {
+            g.transform.Find($"PinAnchor/AISPinTarget/Canvas/TargetButtonA").GetComponent<Image>().enabled = expandState == ExpandState.Target;
+            g.transform.Find($"PinAnchor/AISPinTarget/Canvas/TargetButtonP").GetComponent<Image>().enabled = expandState != ExpandState.Target;
+        }
+
         private TextMeshProUGUI GetAISPinComponent(GameObject g, string fname)
         {
             GameObject obj = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/TopPinAnchor/TopPinAnchor2/CanvasTxt/{fname}").gameObject;
