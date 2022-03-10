@@ -13,7 +13,7 @@ using Assets.InfoItems;
 
 namespace Assets.Graphics
 {
-    
+
     class ShapeProvider
     {
         public virtual void Get(InfoItem infoItem)
@@ -24,8 +24,8 @@ namespace Assets.Graphics
         protected GameObject GetShape(string fname)
         {
             GameObject gameObject = GameObject.Instantiate(
-                    AssetManager.Instance.objects[fname], 
-                    Vector3.zero, 
+                    AssetManager.Instance.objects[fname],
+                    Vector3.zero,
                     Quaternion.identity
                 );
 
@@ -39,34 +39,61 @@ namespace Assets.Graphics
         }
     }
 
-    class AISShapeProvider : ShapeProvider
+    class AISHorizonShapeProvider : ShapeProvider
     {
         public override void Get(InfoItem infoItem)
         {
             if (!infoItem.Shape) InjectNewShape(infoItem);
-            else if (infoItem.TargetHasChanged()) TransferTarget(infoItem, InjectNewShape);
+
+            UpdateShape(infoItem);
         }
 
-        private void TransferTarget(InfoItem infoItem, Action<InfoItem> Inject)
+        private void UpdateShape(InfoItem infoItem)
         {
-            bool target = infoItem.GetTargetHandler().IsTarget;
-            UnityEngine.Object.Destroy(infoItem.Shape);
-            Inject(infoItem);
-            infoItem.GetTargetHandler(true).IsTarget = target;
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, infoItem.DesiredState);
+
+            // Reset sizing of these things
+            HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0, true);
+            HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 0, true);
+
+
+            switch (infoItem.DesiredState)
+            {
+                case (ExpandState.Collapsed):
+                    // Do nothing, already collapsed
+                    break;
+                case (ExpandState.Hover):
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float)Config.Instance.conf.DataSettings["NumItemsOnHover"]); //3
+                    break;
+                case (ExpandState.Target):
+                    HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
+                    HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float)Config.Instance.conf.DataSettings["NumItemsOnHover"] + 1); //4
+                    break;
+            }
         }
 
         private void InjectNewShape(InfoItem infoItem)
         {
             string prefab = "AISPin";
-            if (infoItem.IsTarget)
-            {
-                prefab = "AISPinTarget";
-                infoItem.Shape = GetShape(prefab);
-                HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
-            } else
-            {
-                infoItem.Shape = GetShape(prefab);
-            }
+            infoItem.Shape = GetShape(prefab);
+
+            // A new shape always starts collapsed
+            HelperClasses.InfoAreaUtils.Instance.ToggleAISPinOverflowVisible(infoItem.Shape, ExpandState.Collapsed);
+        }
+    }
+
+    class AISSkyShapeProvider : ShapeProvider
+    {
+        public override void Get(InfoItem infoItem)
+        {
+            if (!infoItem.Shape) infoItem.Shape = GetShape("AISPinTarget");
+
+            UpdateShape(infoItem);
+        }
+
+        private void UpdateShape(InfoItem infoItem)
+        {
+            HelperClasses.InfoAreaUtils.Instance.ToggleTargetActive(infoItem.Shape, infoItem.DesiredState);
         }
     }
 }

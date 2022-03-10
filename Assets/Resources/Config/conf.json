@@ -1,10 +1,15 @@
 ﻿{
   "VesselMode": false,
   "DataSettings": {
-    "UpdateInterval": 0.5,
+    "UpdateInterval": 0.1,
     "LatitudeArea": 3000,
     "LongitudeArea": 3000,
-    "UIElementHeight": 0.0
+    "UIElementHeight": 0.0,
+    "SkyAreaHeightTarget": 2.0,
+    "SkyAreaHeightHover": 1.0,
+    "OnLookAwayDisappearDelay": 1, // Should be at least > DWELL TIME * 2
+    "MaxRulerDistance": 1000, // in meters  
+    "NumItemsOnHover":  1
   },
   "VesselSettingsS": {
     "VesselName": "VesselName"

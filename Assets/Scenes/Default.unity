@@ -268,7 +268,7 @@ MonoBehaviour:
   objects:
     _pairs:
     - _key: AISPin
-      _value: {fileID: 1249124949357603249, guid: db1fb0e518ef1b146a7b1a1eb5ab4867, type: 3}
+      _value: {fileID: 1249124949357603249, guid: a8ba61f9100773f4dac0568bcdf6a714, type: 3}
     - _key: AISPinTarget
       _value: {fileID: 1249124949357603249, guid: 5bfba848a0d297e49b927f5778d8106b, type: 3}
 --- !u!4 &482147196

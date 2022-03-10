@@ -5,6 +5,8 @@ using Assets.Resources;
 using Assets.DataManagement;
 using Assets.Graphics;
 using UnityEngine.SceneManagement;
+using System;
+using System.Collections.Generic;
 
 namespace Assets.SceneManagement
 {
@@ -16,27 +18,61 @@ namespace Assets.SceneManagement
         Player aligner;
 
         private InfoCategory[] infoCategories;
-        private InfoItem[] allInfoItems;
+        private Dictionary<string, List<InfoItem>> allInfoItems;
+
+        private DateTime lastUpdate;
 
         void Start()
         {
+            lastUpdate = DateTime.Now;
             Player aligner = player.GetComponent<Player>();
             GraphicFactory.Instance.aligner ??= aligner;
 
-            infoCategories = new InfoCategory[1]
+            infoCategories = new InfoCategory[2]
             {
-                new DelayedInfoCategory(
-                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS, 
+                new ConnectedInfoCategory(
+                    "AISHorizon",
                     aligner, 
                     DataType.AIS, DisplayArea.HorizonPlane,
-                    (float) Config.Instance.conf.DataSettings["UpdateInterval"])
+                    DataConnections.BarentswatchAIS, DataAdapters.BarentswatchAIS, ParameterExtractors.BarentswatchAIS),
+                new InjectedInfoCategory(
+                    "AISSky",
+                    aligner,
+                    DataType.AIS, DisplayArea.SkyArea,
+                    () => allInfoItems["AISHorizon"])
             };
+
+            this.InitAllInfoItems();
+        }
+
+        private void InitAllInfoItems()
+        {
+            this.allInfoItems = new Dictionary<string, List<InfoItem>>();
+
+            foreach (InfoCategory infoCategory in this.infoCategories)
+            {
+                this.allInfoItems[infoCategory.Name] = new List<InfoItem>();
+            }
         }
 
         void Update()
         {
-            foreach (InfoCategory infoCategory in infoCategories) {
-                infoCategory.Update();
+            DateTime now = DateTime.Now;
+            if ((now - lastUpdate).TotalSeconds > Config.Instance.conf.DataSettings["UpdateInterval"])
+            {
+                lastUpdate = now;
+                UpdateInfoCategoriesInOrder();
+            }
+        }
+
+        void UpdateInfoCategoriesInOrder()
+        {
+            foreach (InfoCategory infoCategory in infoCategories)
+            {
+                allInfoItems[infoCategory.Name] = infoCategory.Update();
+                GraphicFactory.Instance
+                    .GetPostProcessor(infoCategory.DataType, infoCategory.DisplayArea)
+                    .PostProcess(allInfoItems[infoCategory.Name]);
             }
         }
 

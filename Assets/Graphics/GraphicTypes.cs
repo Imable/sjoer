@@ -14,6 +14,14 @@ namespace Assets.Graphics
     public enum DisplayArea
     {
         HorizonPlane,
+        SkyArea,
         HUD
+    }
+
+    public enum ExpandState
+    {
+        Collapsed,
+        Hover,
+        Target
     }
 }

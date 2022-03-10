@@ -11,42 +11,86 @@ namespace Assets.Graphics
     {
         public Player aligner = null;
 
-        AISShapeProvider aisShapeProvider;
-        AISFiller aisFiller;
-        AISPositioner aisPositioner;
+        AISHorizonShapeProvider aisHorizonShapeProvider;
+        AISSkyShapeProvider aisSkyShapeProvider;
+        AISHorizonFiller aisHorizonFiller;
+        AISSkyFiller aisSkyFiller;
+        Filler baseFiller;
+        AISHorizonPositioner aisHorizonPositioner;
+        AISSkyPositioner aisSkyPositioner;
+
+        AISSkyPostProcessor aisSkyPostProcessor;
+        AISHorizonPostProcessor aisHorizonPostProcessor;
+
+
 
         public GraphicFactory()
         {
-            aisShapeProvider = new AISShapeProvider();
-            aisFiller = new AISFiller();
-            aisPositioner = new AISPositioner(aligner);
+            aisHorizonShapeProvider = new AISHorizonShapeProvider();
+            aisSkyShapeProvider = new AISSkyShapeProvider();
+            aisHorizonFiller = new AISHorizonFiller();
+            aisSkyFiller = new AISSkyFiller();
+            baseFiller = new Filler();
+            aisHorizonPositioner = new AISHorizonPositioner();
+            aisSkyPositioner = new AISSkyPositioner();
+            aisSkyPostProcessor = new AISSkyPostProcessor();
+            aisHorizonPostProcessor = new AISHorizonPostProcessor();
         }
 
-        public Filler GetFiller(DataType dataType)
+        public PostProcessor GetPostProcessor(DataType dataType, DisplayArea displayArea)
         {
-            Filler filler;
+            PostProcessor postProcessor;
 
-            switch (dataType)
+            switch ((dataType, displayArea))
             {
-                case DataType.AIS:
-                    filler = aisFiller;
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    postProcessor = aisHorizonPostProcessor;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
+                    postProcessor = aisSkyPostProcessor;
                     break;
                 default:
                     throw new ArgumentException("No such data type", nameof(dataType));
             }
 
+            postProcessor.SetAligner(aligner);
+            return postProcessor;
+
+        }
+
+        public Filler GetFiller(DataType dataType, DisplayArea displayArea)
+        {
+            Filler filler;
+
+            switch ((dataType, displayArea))
+            {
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    filler = aisHorizonFiller;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
+                    filler = aisSkyFiller;
+                    break;
+                default:
+                    throw new ArgumentException("No such data type", nameof(dataType));
+            }
+
+            filler.SetAligner(aligner);
             return filler;
         }
 
-        public Positioner getPositioner(DataType dataType)
+        public Positioner getPositioner(DataType dataType, DisplayArea displayArea)
         {
             Positioner positioner;
 
-            switch (dataType)
+            switch ((dataType, displayArea))
             {
-                case DataType.AIS:
-                    aisPositioner.SetAligner(aligner);
-                    positioner = aisPositioner;
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    aisHorizonPositioner.SetAligner(aligner);
+                    positioner = aisHorizonPositioner;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
+                    aisSkyPositioner.SetAligner(aligner);
+                    positioner = aisSkyPositioner;
                     break;
                 default:
                     throw new ArgumentException("No such data source", nameof(dataType));
@@ -55,14 +99,17 @@ namespace Assets.Graphics
             return positioner;
         }
 
-        public ShapeProvider getShapeProvider(DataType dataType)
+        public ShapeProvider getShapeProvider(DataType dataType, DisplayArea displayArea)
         {
             ShapeProvider shape;
 
-            switch (dataType)
+            switch ((dataType, displayArea))
             {
-                case DataType.AIS:
-                    shape = aisShapeProvider;
+                case (DataType.AIS, DisplayArea.HorizonPlane):
+                    shape = aisHorizonShapeProvider;
+                    break;
+                case (DataType.AIS, DisplayArea.SkyArea):
+                    shape = aisSkyShapeProvider;
                     break;
                 default:
                     throw new ArgumentException("No such data type", nameof(dataType));

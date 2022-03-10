@@ -15,12 +15,26 @@ namespace Assets.DataManagement
     abstract class Connection
     {
         public bool connected = false;
+        private float connectDelay = 5; // in seconds
+        private DateTime lastConnectAttempt = DateTime.Now;
         protected Connection()
         {
             this.connect();
         }
 
-        protected abstract void connect();
+        protected async virtual void connect()
+        {
+            while (!this.connected)
+            {
+                DateTime now = DateTime.Now;
+                if ((now - lastConnectAttempt).TotalSeconds > connectDelay)
+                {
+                    lastConnectAttempt = now;
+                    this.connected = await myConnect();
+                }
+            }
+        }
+        protected abstract Task<bool> myConnect();
         public abstract Task<string> get(params string[] param);
         public virtual void OnDestroy()
         {
@@ -30,9 +44,9 @@ namespace Assets.DataManagement
 
     class HardcodedGPSConnection : Connection
     {
-        protected override void connect()
+        protected override Task<bool> myConnect()
         {
-            this.connected = true;
+            return Task.Run(() => true);
         }
         public override Task<string> get(params string[] param)
         {
@@ -46,13 +60,9 @@ namespace Assets.DataManagement
         private HttpClient httpClient = new HttpClient();
         private string token = "";
 
-        protected override void connect()
+        protected override async Task<bool> myConnect()
         {
-            this.myConnect();
-        }
-
-        protected async void myConnect()
-        {
+            bool conn = false;
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
@@ -76,12 +86,14 @@ namespace Assets.DataManagement
                 response.EnsureSuccessStatusCode();
                 content = await response.Content.ReadAsStringAsync();
                 this.token = JObject.Parse(content)["access_token"].ToString();
-                this.connected = true;
+                conn = true;
             }
             catch (Exception e)
             {
                 Debug.Log(e);
             }
+
+            return await Task.Run(() => conn);
         }
 
         private Uri getUriwithParams(string lonMin, string lonMax, string latMin, string latMax)
@@ -113,7 +125,7 @@ namespace Assets.DataManagement
             catch (Exception e)
             {
                 Debug.Log(e);
-                return await Task.Run(() => "[]");
+                return await Task.Run(() => "err");
 
             }
 
@@ -127,7 +139,7 @@ namespace Assets.DataManagement
         public volatile bool running;
         private string lastReading = "";
 
-        protected override void connect()
+        protected override Task<bool> myConnect()
         {
             try
             {
@@ -141,7 +153,7 @@ namespace Assets.DataManagement
                 Debug.Log("On client connect exception " + e);
             }
 
-            this.connected = true;
+            return Task.Run(() => true);
         }
 
         private void ListenForData()
@@ -411,12 +423,12 @@ namespace Assets.DataManagement
             return await Task.Run(() => lastReading);
         }
 
-        protected override void connect()
+        protected override Task<bool> myConnect()
         {
             last = DateTime.Now;
             span = 2;
             splitText = text.Split('$');
-            connected = true;
+            return Task.Run(() => true);
         }
 
         protected void TakeNext()

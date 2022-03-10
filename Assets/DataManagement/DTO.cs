@@ -11,6 +11,8 @@ namespace Assets.DataManagement
     {
         public string Key { get; set; }
         public bool Target { get; set; }
+        public int TargetNum { get; set; }
+        public bool Valid { get; set; }
 
     }
 
@@ -21,7 +23,6 @@ namespace Assets.DataManagement
 
     public class AISDTO : DTO
     {
-        public bool Valid { get; set; }
         public DateTime TimeStamp { get; set; }
         public int MMSI { get; set; }
         public double SOG { get; set; }

@@ -13,66 +13,46 @@ namespace Assets.Graphics
     abstract class Positioner
     {
         protected Player aligner;
-        protected Action<InfoItem> InnerPosition;
-
-        public Positioner(Player aligner)
-        {
-            this.aligner = aligner;
-        }
 
         public void SetAligner (Player aligner)
         {
             this.aligner = aligner;
         }
 
-        protected abstract Action<InfoItem> GetInnerPositioner(DisplayArea displayArea);
+        public abstract void Position(InfoItem infoItem);
 
-        public void Position(InfoItem infoItem, DisplayArea displayArea)
+        protected Vector3 GetWorldTransform(AISDTO aisDTO)
         {
-            this.GetInnerPositioner(displayArea)(infoItem);
-        }
-
-        protected void FaceUser(GameObject g)
-        {
-            g.transform.rotation = Quaternion.LookRotation(aligner.mainCamera.transform.position - g.transform.position);
+            return aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
         }
     }
 
-    class AISPositioner : Positioner
+    class AISHorizonPositioner : Positioner
     {
-        // VS was complaining, so I added this, but it shouldn't be necessary...
-        public AISPositioner(Player aligner) : base(aligner)
-        {
-
-        }
-
-        protected override Action<InfoItem> GetInnerPositioner(DisplayArea displayArea)
-        {
-            Action<InfoItem> positionFunc = HorizonPlane;
-            switch (displayArea)
-            {
-                case DisplayArea.HorizonPlane:
-                    positionFunc = HorizonPlane;
-                    break;
-                case DisplayArea.HUD:
-                    break;
-                default:
-                    break;
-            }
-
-            return positionFunc;
-        }
-
-        protected void HorizonPlane(InfoItem infoItem)
+        public override void Position(InfoItem infoItem)
         {
             Vector3 position = GetWorldTransform((AISDTO)infoItem.GetDTO);
-            infoItem.Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
-            FaceUser(infoItem.Shape);
+            //infoItem.Shape.transform.position = HelperClasses.InfoAreaUtils.Instance.UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
+            infoItem.Shape.transform.position =
+                HelperClasses.InfoAreaUtils.Instance
+                .UnityCoordsToHorizonPlane(position, aligner.mainCamera.transform.position);
+            infoItem.Shape.transform.rotation =
+                HelperClasses.InfoAreaUtils.Instance
+                .FaceUser(infoItem.Shape.transform.position, aligner.mainCamera.transform.position);
         }
+    }
 
-        private Vector3 GetWorldTransform(AISDTO aisDTO)
+    class AISSkyPositioner : Positioner
+    {
+        public override void Position(InfoItem infoItem)
         {
-            return aligner.GetWorldTransform(aisDTO.Latitude, aisDTO.Longitude);
+            Vector3 position = GetWorldTransform((AISDTO)infoItem.GetDTO);
+            infoItem.Shape.transform.position = 
+                HelperClasses.InfoAreaUtils.Instance
+                .UnityCoordsToSkyArea(position, infoItem.DesiredState, aligner);
+            infoItem.Shape.transform.rotation =
+                HelperClasses.InfoAreaUtils.Instance
+                .FaceUser(infoItem.Shape.transform.position, aligner.mainCamera.transform.position);
         }
     }
 }

@@ -55,8 +55,16 @@ namespace Assets.DataManagement
         public override DTO convert(string input)
         {
             AISDTOs dto = new AISDTOs();
+
+            if (input == "err")
+            {
+                dto.Valid = false;
+                return dto;
+            }
+
             JArray vessels = JsonConvert.DeserializeObject<JArray>(input);
             dto.vessels = new AISDTO[vessels.Count];
+            dto.Valid = true;
 
             int i = 0;
             foreach (JObject vessel in vessels)

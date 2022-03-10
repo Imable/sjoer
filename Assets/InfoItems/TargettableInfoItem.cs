@@ -1,4 +1,5 @@
-﻿using Microsoft.MixedReality.Toolkit;
+﻿using Assets.Resources;
+using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using UnityEngine;
 
@@ -34,6 +35,8 @@ namespace Assets.InfoItems
     public class TargettableInfoItem : Targettable
     {
         private bool target = false;
+        private bool hover = false;
+        private TargettableInfoItem link = null;
 
         public bool IsTarget
         {
@@ -41,17 +44,77 @@ namespace Assets.InfoItems
             set { target = value; }
         }
 
-        public bool ChangedThisRender
+        public bool IsHover
         {
-            set { target = value; }
+            get { return hover; }
+            set { hover = value; }
+        }
+
+        private bool HasLinkedInfoItem()
+        {
+            return link != null;
+        }
+
+        public void SetLink(TargettableInfoItem link)
+        {
+            this.link = link;
+        }
+
+        public void DestroyLink()
+        {
+            this.link = null;
+        }
+
+        public void OnClick()
+        {
+            target = !target;
+            //Debug.Log("target is now " + target);
+            if (HasLinkedInfoItem()) link.IsTarget = target;
+        }
+
+        public void OnHoverStart()
+        {
+            Debug.Log("Hover start");
+            hover = true;
+            CancelInvoke();
+
+            if (HasLinkedInfoItem())
+            {
+                link.CancelInvoke();
+                link.IsHover = hover;
+            }
+
+        }
+
+        public void OnHoverEnd()
+        {
+            Debug.Log("Hover end");
+            // Define ms how long it takes before an infoitem disappears when looking at it
+            Invoke("InnerOnHoverEnd", (float)Config.Instance.conf.DataSettings["OnLookAwayDisappearDelay"]);
+        }
+
+        private void InnerOnHoverEnd()
+        {
+            hover = false;
+            if (HasLinkedInfoItem()) link.IsHover = false;
+        }
+
+        public void OnSelect()
+        {
+            target = true;
+
+            if (HasLinkedInfoItem())
+            {
+                link.CancelInvoke();
+                link.IsTarget = true;
+            }
         }
 
         public override void OnInputDown(InputEventData eventData)
         {
             if (eventData.MixedRealityInputAction == selectAction)
             {
-                Debug.Log("Select!");
-                target = !target;
+                OnClick();
             }
         }
     }
