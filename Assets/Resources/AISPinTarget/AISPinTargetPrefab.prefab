@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 8795641127875696134}
   - component: {fileID: 4002465874333880438}
   m_Layer: 5
-  m_Name: DRG (1)
+  m_Name: 5Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -342,7 +342,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DRG
+  m_text: BCT
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 96833c9fda311cb429749574f3130654, type: 2}
   m_sharedMaterial: {fileID: 5040297266024992611, guid: 96833c9fda311cb429749574f3130654, type: 2}
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 2279763038158457733}
   - component: {fileID: 4606289069544071827}
   m_Layer: 5
-  m_Name: SOG
+  m_Name: 3Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 6627001860105249513}
   - component: {fileID: 1326581553938468271}
   m_Layer: 5
-  m_Name: DRG
+  m_Name: 4Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -710,7 +710,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DRG
+  m_text: BCR
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 96833c9fda311cb429749574f3130654, type: 2}
   m_sharedMaterial: {fileID: 5040297266024992611, guid: 96833c9fda311cb429749574f3130654, type: 2}
@@ -791,7 +791,7 @@ GameObject:
   - component: {fileID: 4084438977300324559}
   - component: {fileID: 3791533136951695925}
   m_Layer: 5
-  m_Name: DRGValue (1)
+  m_Name: 5Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -925,7 +925,7 @@ GameObject:
   - component: {fileID: 5341993837631105890}
   - component: {fileID: 242715145889293476}
   m_Layer: 5
-  m_Name: COGValue
+  m_Name: 2Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1240,7 +1240,7 @@ GameObject:
   - component: {fileID: 2397922721127123252}
   - component: {fileID: 6185151019682069323}
   m_Layer: 5
-  m_Name: SOGValue
+  m_Name: 3Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1583,7 +1583,7 @@ GameObject:
   - component: {fileID: 970980266695433935}
   - component: {fileID: 4993519466625475506}
   m_Layer: 5
-  m_Name: COG
+  m_Name: 2Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1636,7 +1636,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: COG
+  m_text: RNG
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 96833c9fda311cb429749574f3130654, type: 2}
   m_sharedMaterial: {fileID: 5040297266024992611, guid: 96833c9fda311cb429749574f3130654, type: 2}
@@ -1792,7 +1792,7 @@ GameObject:
   - component: {fileID: 9175710849362352228}
   - component: {fileID: 1033551504147467624}
   m_Layer: 5
-  m_Name: DRGValue
+  m_Name: 4Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1926,7 +1926,7 @@ GameObject:
   - component: {fileID: 8443664342319771849}
   - component: {fileID: 3877119097889941867}
   m_Layer: 5
-  m_Name: HDG
+  m_Name: 1Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2210,7 +2210,7 @@ GameObject:
   - component: {fileID: 7585536781508935045}
   - component: {fileID: 4117992054787386924}
   m_Layer: 5
-  m_Name: HDGValue
+  m_Name: 1Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

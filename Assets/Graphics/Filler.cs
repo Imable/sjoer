@@ -85,13 +85,42 @@ namespace Assets.Graphics
         {
             AISDTO dto = (AISDTO)infoItem.GetDTO;
 
+            float bcr = -1;
+            TimeSpan bct = TimeSpan.MaxValue;
+            Vector3 wtf = aligner.GetWorldTransform(dto.Latitude, dto.Longitude);
+            float rng = wtf.magnitude / 1852;
+
+            // If both our vessel and the target vessel are moving
+            if (aligner.SOG > 0.1 && dto.SOG > 0.1)
+            {
+                // Calculate bow crossing range
+                bcr = (float) HelperClasses.InfoAreaUtils.Instance.CalculateBCR(
+                        Vector2.zero,
+                        new Vector2(wtf.x, wtf.z),
+                        HelperClasses.InfoAreaUtils.Instance.DegreesToWorldVec((float)aligner.Heading, aligner.Unity2TrueNorth),
+                        HelperClasses.InfoAreaUtils.Instance.DegreesToWorldVec((float)dto.Heading, aligner.Unity2TrueNorth)
+                    )/1852;
+            }
+            
+            // If the bows cross
+            if (bcr > 0)
+            {
+                // 1 knot = 1 NM per hour
+                Debug.Log("BCR: " + bcr);
+                // Calculate the time it takes
+                bct = TimeSpan.FromSeconds((bcr / 1) * 360); 
+            }
+
+
+
             string name = dto.Name.Length > 16 ? dto.Name.Substring(0, 16) : dto.Name;
             FillTextField("Name", name, infoItem.Shape);
-            FillTextField("HDGValue", dto.Heading.ToString() + "°", infoItem.Shape);
-            FillTextField("COGValue", dto.COG.ToString() + "°", infoItem.Shape);
-            FillTextField("SOGValue", dto.SOG.ToString() + "kn", infoItem.Shape);
-            FillTextField("DRGValue", dto.Draught.ToString() + "m", infoItem.Shape);
-            
+            FillTextField("1Value", dto.Heading.ToString() + "°", infoItem.Shape);
+            FillTextField("2Value", Math.Round(rng, 3).ToString() + "NM", infoItem.Shape);
+            FillTextField("3Value", dto.SOG.ToString() + "kn", infoItem.Shape);
+            FillTextField("4Value", bcr > 0 ? Math.Round(bcr, 3).ToString() + "NM" : "NA", infoItem.Shape);
+            FillTextField("5Value", bcr > 0 ? bct.ToString(@"hh\:mm\:ss") : "NA", infoItem.Shape);
+
             FillTextField("TargetNum", infoItem.DesiredState != ExpandState.Target ? "?" : infoItem.TargetNum.ToString(), infoItem.Shape);
         }
 

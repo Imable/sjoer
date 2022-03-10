@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Assets.Positional;
 using Assets.Graphics;
+using Assets.DataManagement;
 
 namespace Assets.HelperClasses
 {
@@ -55,6 +56,54 @@ namespace Assets.HelperClasses
                 v.x * Mathf.Cos(delta) - v.y * Mathf.Sin(delta),
                 v.x * Mathf.Sin(delta) + v.y * Mathf.Cos(delta)
             );
+        }
+
+        public Vector2 DegreesToWorldVec(float deg, Quaternion toWorld)
+        {
+            float rad = DegreesToRadians(deg);
+            return toWorld * new Vector2(
+                    (float)Math.Cos(rad), (float)Math.Sin(rad)
+                );
+        }
+
+        // BCR in meters if result > 0. If -1: no collision
+        public double CalculateBCR(Vector2 ast, Vector2 bst, Vector2 ad, Vector2 bd)
+        {
+            Vector2 intersect = Vector2.zero;
+            if (DoRaysIntersect(ast, bst, ad, bd))
+            {
+                intersect = GetPointOfIntersection(ast, bst, ad, bd);
+            }
+
+            return (ast - intersect).magnitude;
+        }
+
+        bool DoRaysIntersect(Vector2 ast, Vector2 bst, Vector2 ad, Vector2 bd)
+        {
+            float dx, dy, det, u, v;
+            dx = bst.x - ast.x;
+            dy = bst.y - ast.y;
+            det = bd.x * ad.y - bd.y * ad.x;
+            u = (dy * bd.x - dx * bd.y) / det;
+            v = (dy * ad.x - dx * ad.y) / det;
+            return u > 0 && v > 0;
+        }
+
+        Vector2 GetPointOfIntersection(Vector2 p1, Vector2 p2, Vector2 n1, Vector2 n2)
+        {
+            Vector2 p1End = p1 + n1; // another point in line p1->n1
+            Vector2 p2End = p2 + n2; // another point in line p2->n2
+
+            float m1 = (p1End.y - p1.y) / (p1End.x - p1.x); // slope of line p1->n1
+            float m2 = (p2End.y - p2.y) / (p2End.x - p2.x); // slope of line p2->n2
+
+            float b1 = p1.y - m1 * p1.x; // y-intercept of line p1->n1
+            float b2 = p2.y - m2 * p2.x; // y-intercept of line p2->n2
+
+            float px = (b2 - b1) / (m1 - m2); // collision x
+            float py = m1 * px + b1; // collision y
+
+            return new Vector2(px, py); // return statement
         }
 
         public Vector3 MoveAlongCircle(Vector3 pt, float step, Vector3 center)
@@ -114,10 +163,10 @@ namespace Assets.HelperClasses
         {
             int n = (int) Config.Instance.conf.DataSettings["NumItemsOnHover"];
 
-            GetAISPinComponent(g, "1Label").enabled = n > 0 && expandState != ExpandState.Collapsed;
-            GetAISPinComponent(g, "1Value").enabled = n > 0 && expandState != ExpandState.Collapsed;
-            GetAISPinComponent(g, "2Label").enabled = n > 1 && expandState != ExpandState.Collapsed;
-            GetAISPinComponent(g, "2Value").enabled = n > 1 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "1Label").enabled = n > 1 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "1Value").enabled = n > 1 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "2Label").enabled = n > 2 && expandState != ExpandState.Collapsed;
+            GetAISPinComponent(g, "2Value").enabled = n > 2 && expandState != ExpandState.Collapsed;
 
             GetAISPinComponent(g, "TargetNum").enabled = expandState == ExpandState.Target;
 

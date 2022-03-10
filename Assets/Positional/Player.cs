@@ -41,6 +41,16 @@ namespace Assets.Positional
             get { return lastGPSUpdate != null ? lastGPSUpdate.Heading : 0; }
         }
 
+        public Double SOG
+        {
+            get { return lastGPSUpdate != null ? lastGPSUpdate.SOG : 0; }
+        }
+
+        public Quaternion Unity2TrueNorth
+        {
+            get { return unityToTrueNorthRotation; }
+        }
+
         // Start is called before the first frame update
         void Start()
         {
