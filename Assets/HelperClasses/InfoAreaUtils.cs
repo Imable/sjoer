@@ -159,6 +159,12 @@ namespace Assets.HelperClasses
             boxCollider.center = new Vector3(boxCollider.center.x, def ? 1.5f : boxCollider.size.y / 2, boxCollider.center.z);
         }
 
+        public void ToggleHelperStick(GameObject g, bool enable)
+        {
+            GameObject helperStick = g.transform.Find($"StickAnchor/Stick/PinAnchor/AISPinTarget/StickConnection").gameObject;
+            helperStick.SetActive(enable);
+        }
+
         public void ToggleAISPinOverflowVisible(GameObject g, ExpandState expandState)
         {
             int n = (int) Config.Instance.conf.DataSettings["NumItemsOnHover"];
@@ -191,10 +197,11 @@ namespace Assets.HelperClasses
             BoxCollider boxCollider = target.GetComponent<BoxCollider>();
             GameObject stick = target.transform.Find($"StickAnchor").gameObject;
             GameObject pin = target.transform.Find($"StickAnchor/Stick/PinAnchor").gameObject;
+            pin.transform.localPosition = def ? Vector3.up * 1.25f : Vector3.up * 1.25f * scale;
             GameObject distanceRuler = target.transform.Find($"StickAnchor/DistanceRuler").gameObject;
-            stick.transform.localScale = new Vector3(stick.transform.localScale.x, def ? 1 : stick.transform.localScale.y * scale, stick.transform.localScale.y);
-            pin.transform.localScale = new Vector3(pin.transform.localScale.x, def ? 1 : pin.transform.localScale.y * (1/scale), pin.transform.localScale.z);
-            distanceRuler.transform.localScale = new Vector3(def ? 0.1f : distanceRuler.transform.localScale.x * (1 / scale), distanceRuler.transform.localScale.y, distanceRuler.transform.localScale.z);
+            //stick.transform.localScale = new Vector3(stick.transform.localScale.x, def ? 1 : stick.transform.localScale.y * scale, stick.transform.localScale.y);
+            //pin.transform.localScale = new Vector3(pin.transform.localScale.x, def ? 1 : pin.transform.localScale.y * (1/scale), pin.transform.localScale.z);
+            //distanceRuler.transform.localScale = new Vector3(def ? 0.1f : distanceRuler.transform.localScale.x * (1 / scale), distanceRuler.transform.localScale.y, distanceRuler.transform.localScale.z);
 
             boxCollider.size = new Vector3(boxCollider.size.x, def ? 3.25f : boxCollider.size.y + (scale / boxCollider.size.y) * boxCollider.size.y, boxCollider.size.z);
             boxCollider.center = new Vector3(boxCollider.center.x, def ? 1.625f :  boxCollider.center.y + (scale / boxCollider.center.y) * boxCollider.center.y, boxCollider.center.z);
