@@ -55,7 +55,7 @@ namespace Assets.Graphics
             // Reset sizing of these things
             HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, 0, true);
             HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 0, true);
-
+            HelperClasses.InfoAreaUtils.Instance.ToggleHelperStick(infoItem.Shape, false); //4
 
             switch (infoItem.DesiredState)
             {
@@ -68,6 +68,8 @@ namespace Assets.Graphics
                 case (ExpandState.Target):
                     HelperClasses.InfoAreaUtils.Instance.ScaleStick(infoItem.Shape, 2f);
                     HelperClasses.InfoAreaUtils.Instance.ShowAISPinInfo(infoItem.Shape, (float)Config.Instance.conf.DataSettings["NumItemsOnHover"] + 1); //4
+                    HelperClasses.InfoAreaUtils.Instance.ToggleHelperStick(infoItem.Shape, true); //4
+
                     break;
             }
         }
