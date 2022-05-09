@@ -1,6 +1,10 @@
-# AR Facilitated Vessel Navigation (HoloLens 2)
+![sjør](https://user-images.githubusercontent.com/50890336/167385653-c38614ab-2dc5-4988-937b-74b2a163acf5.png)
+
+# Sjør: AR Supported Maritime Navigation
 
 ## About
+
+"Sjør" is a framework for Microsoft HoloLens 2 
 
 ## Installation Guide
 
