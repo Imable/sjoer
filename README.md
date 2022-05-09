@@ -1,10 +1,10 @@
-![sjør](https://user-images.githubusercontent.com/50890336/167385653-c38614ab-2dc5-4988-937b-74b2a163acf5.png)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/50890336/167386203-90c31e9e-8a93-4310-b9c6-73246a8ae4e9.png" width="200" >
+</p>
 
-# Sjør: AR Supported Maritime Navigation
+<h1 align="center"><i>AR Supported Maritime Navigation</i></h1>
 
-## About
-
-"Sjør" is a framework for Microsoft HoloLens 2 
+"Sjør" is a framework for Microsoft HoloLens 2 developed by Abel van Beek at the University of Bergen
 
 ## Installation Guide
 
