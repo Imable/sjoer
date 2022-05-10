@@ -19,8 +19,9 @@
 
 ### Run the App
 
-* Download Sjør_ARM64.appx from the `Build/` directory
-* Open `Windows Device Portal > Views > Apps > Local Storage > Browse > Sjør_ARM64.appx` 
+* Download Sjør_v1.0.2.0_ARM64.zip from the `Compiled/` directory
+* Unpack to your local machine
+* Open `Windows Device Portal > Views > Apps > Local Storage > Browse > Navigate to unpacked folder > ar-coastal-sailing_1.0.2.0_ARM64.appx` 
 
 ## Start Developing
 
