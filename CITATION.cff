@@ -3,7 +3,7 @@ message: "If you use this software, please cite it as below."
 authors:
   - family-names: van Beek
     given-names: Abel
-title: "Framework for Maritime AR"
+title: "Sjør: AR Supported Maritime Navigation"
 version: 1.0.0
-date-released: 2022-04-13
-url: "https://github.com/Imable/ar-coastal-sailing"
+date-released: 2022-05-10
+url: "https://github.com/Imable/sjoer"
