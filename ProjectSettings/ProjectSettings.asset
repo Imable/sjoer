@@ -662,6 +662,7 @@ PlayerSettings:
       InternetClientServer: False
       SpatialPerception: True
       InternetClient: True
+      WebCam: True
       Microphone: True
   metroTargetDeviceFamilies:
     Holographic: False

@@ -111,22 +111,61 @@ namespace Assets.InfoItems
         }
         private void HandleNewInfoItems(DTO dto)
         {
-            //if (((AISDTOs)dto).vessels.Length > 0)
-            //{
-            //    Vector2 LatLon = Player.Instance.GetLatLon;
-            //    ((AISDTOs)dto).vessels[0] = new AISDTO
-            //    {
-            //        Valid = true,
-            //        SOG = 0,
-            //        COG = 0,
-            //        Draught = 0,
-            //        Name = "NORTH",
-            //        Key = "NORTH",
-            //        Target = true,
-            //        Latitude = LatLon.x + 1,
-            //        Longitude = LatLon.y
-            //    };
-            //}
+            if (((AISDTOs)dto).vessels.Length > 0)
+            {
+                Vector2 LatLon = Player.Instance.GetLatLon;
+                ((AISDTOs)dto).vessels[0] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "NORTH",
+                    Key = "NORTH",
+                    Target = true,
+                    Latitude = LatLon.x + 1,
+                    Longitude = LatLon.y
+                };
+
+                ((AISDTOs)dto).vessels[1] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "SOUTH",
+                    Key = "SOUTH",
+                    Target = true,
+                    Latitude = LatLon.x - 1,
+                    Longitude = LatLon.y
+                };
+
+                ((AISDTOs)dto).vessels[2] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "EAST",
+                    Key = "EAST",
+                    Target = true,
+                    Latitude = LatLon.x,
+                    Longitude = LatLon.y + 1
+                };
+
+                ((AISDTOs)dto).vessels[3] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "WEST",
+                    Key = "WEST",
+                    Target = true,
+                    Latitude = LatLon.x,
+                    Longitude = LatLon.y - 1
+                };
+            }
 
             foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
             {
