@@ -116,7 +116,7 @@ namespace Assets.InfoItems
             // First update the target from interactions
             Retarget();
 
-            Debug.Log($"{Key} = {this.meta.DesiredState}");
+            //Debug.Log($"{Key} = {this.meta.DesiredState}");
             // Get new shape
             Reshape();
             // Fill new shape if necessary

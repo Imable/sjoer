@@ -25,10 +25,10 @@ namespace Assets.Positional
         {
             lastGPSUpdate = (AISDTO) await gpsRetriever.fetch();
             unitytoTrueNorth();
-            Debug.Log("Heading: " + lastGPSUpdate.Heading);
-            Debug.Log("SOG: " + lastGPSUpdate.SOG);
-            Debug.Log("Lat: " + lastGPSUpdate.Latitude);
-            Debug.Log("Lon: " + lastGPSUpdate.Longitude);
+            //Debug.Log("Heading: " + lastGPSUpdate.Heading);
+            //Debug.Log("SOG: " + lastGPSUpdate.SOG);
+            //Debug.Log("Lat: " + lastGPSUpdate.Latitude);
+            //Debug.Log("Lon: " + lastGPSUpdate.Longitude);
         }
 
         public Vector2 GetLatLon
@@ -147,7 +147,7 @@ namespace Assets.Positional
             }
             else
             {
-                Debug.Log("Invalid GPS. Using default.");
+                //Debug.Log("Invalid GPS. Using default.");
                 lat = Config.Instance.conf.NonVesselSettings["Latitude"];
                 lon = Config.Instance.conf.NonVesselSettings["Longitude"];
             }
@@ -178,7 +178,7 @@ namespace Assets.Positional
             float CurrentHDGVessel = lastGPSUpdate != null && lastGPSUpdate.Valid ? (float)lastGPSUpdate.Heading : 0;
             float UpdateDiff = CurrentHDGVessel - CalibrationHDGVessel;
 
-            Debug.Log("Unity to true north");
+            //Debug.Log("Unity to true north");
             unityToTrueNorthRotation = Quaternion.Euler(0, -(CalibrationDiff + UpdateDiff), 0);
         }
     }

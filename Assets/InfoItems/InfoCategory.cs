@@ -59,7 +59,7 @@ namespace Assets.InfoItems
                 infoItem.Update();
             }
 
-            Debug.Log($"There are {infoItems.Count} InfoItems in the scene.");
+            //Debug.Log($"There are {infoItems.Count} InfoItems in the scene.");
         }
 
         protected abstract void RetrieveInfoItems();
@@ -111,86 +111,62 @@ namespace Assets.InfoItems
         }
         private void HandleNewInfoItems(DTO dto)
         {
-            //if (((AISDTOs)dto).vessels.Length > 0)
-            //{
-            //    Vector2 LatLon = Player.Instance.GetLatLon;
-            //    ((AISDTOs)dto).vessels[0] = new AISDTO
-            //    {
-            //        Valid = true,
-            //        SOG = 0,
-            //        COG = 0,
-            //        Draught = 0,
-            //        Name = "NORTH",
-            //        Key = "NORTH",
-            //        Target = true,
-            //        Latitude = LatLon.x + 1,
-            //        Longitude = LatLon.y
-            //    };
-
-            //    ((AISDTOs)dto).vessels[1] = new AISDTO
-            //    {
-            //        Valid = true,
-            //        SOG = 0,
-            //        COG = 0,
-            //        Draught = 0,
-            //        Name = "SOUTH",
-            //        Key = "SOUTH",
-            //        Target = true,
-            //        Latitude = LatLon.x - 1,
-            //        Longitude = LatLon.y
-            //    };
-
-            //    ((AISDTOs)dto).vessels[2] = new AISDTO
-            //    {
-            //        Valid = true,
-            //        SOG = 0,
-            //        COG = 0,
-            //        Draught = 0,
-            //        Name = "EAST",
-            //        Key = "EAST",
-            //        Target = true,
-            //        Latitude = LatLon.x,
-            //        Longitude = LatLon.y + 1
-            //    };
-            //
-            //    ((AISDTOs)dto).vessels[3] = new AISDTO
-            //    {
-            //        Valid = true,
-            //        SOG = 0,
-            //        COG = 0,
-            //        Draught = 0,
-            //        Name = "WEST",
-            //        Key = "WEST",
-            //        Target = true,
-            //        Latitude = LatLon.x,
-            //        Longitude = LatLon.y - 1
-            //    };
-            //}
-
-
-            if (((AISDTOs)dto).vessels.Length > 0)
+            if (((AISDTOs)dto).vessels.Length > 3)
             {
-                int closestVesselID = 0;
-                double closestVesselDistance = 1000000000;
-                double vesselDistance;
-                //double Lat = Player.Instance.GetLatLon.x; double Lon = Player.Instance.GetLatLon.y;         // for use with GPS
-                double Lat = 60.403029; double Lon = 5.322799;                                              // for use with hardcoded location
+                //double Lat = 60.403029; double Lon = 5.32279;
+                double Lat = Player.Instance.GetLatLon.x; double Lon = Player.Instance.GetLatLon.y;
 
-                for (int currentVesselID = 0; currentVesselID < ((AISDTOs)dto).vessels.Length; currentVesselID++)
+                ((AISDTOs)dto).vessels[0] = new AISDTO
                 {
-                    vesselDistance = ((Lat - ((AISDTOs)dto).vessels[currentVesselID].Latitude) *
-                        (Lat - ((AISDTOs)dto).vessels[currentVesselID].Latitude)) +
-                        ((Lon - ((AISDTOs)dto).vessels[currentVesselID].Longitude) *
-                        (Lon - ((AISDTOs)dto).vessels[currentVesselID].Longitude));
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "NORTH",
+                    Key = "NORTH",
+                    Target = true,
+                    Latitude = Lat + 1,
+                    Longitude = Lon
+                };
 
-                    if (vesselDistance < closestVesselDistance)
-                    {
-                        closestVesselDistance = vesselDistance;
-                        closestVesselID = currentVesselID;
-                    }
-                }
+                ((AISDTOs)dto).vessels[1] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "SOUTH",
+                    Key = "SOUTH",
+                    Target = true,
+                    Latitude = Lat - 1,
+                    Longitude = Lon
+                };
 
-                ((AISDTOs)dto).vessels[closestVesselID].Target = true;
+                ((AISDTOs)dto).vessels[2] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "EAST",
+                    Key = "EAST",
+                    Target = true,
+                    Latitude = Lat,
+                    Longitude = Lon + 1
+                };
+
+                ((AISDTOs)dto).vessels[3] = new AISDTO
+                {
+                    Valid = true,
+                    SOG = 0,
+                    COG = 0,
+                    Draught = 0,
+                    Name = "WEST",
+                    Key = "WEST",
+                    Target = true,
+                    Latitude = Lat,
+                    Longitude = Lon - 1
+                };
             }
 
             foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
@@ -263,7 +239,8 @@ namespace Assets.InfoItems
 
                     AddNewInfoItem(newInfoItem);
                 }
-            } else
+            } 
+            else
             {
                 if (IsInInfoItems(infoItem))
                 {
