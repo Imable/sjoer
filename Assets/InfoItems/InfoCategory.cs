@@ -111,63 +111,63 @@ namespace Assets.InfoItems
         }
         private void HandleNewInfoItems(DTO dto)
         {
-            if (((AISDTOs)dto).vessels.Length > 3)
-            {
-                //double Lat = 60.403029; double Lon = 5.32279;
-                double Lat = Player.Instance.GetLatLon.x; double Lon = Player.Instance.GetLatLon.y;
+            //if (((AISDTOs)dto).vessels.Length > 3)
+            //{
+            //    double Lat = 60.397908; double Lon = 5.317065;
+            //    //double Lat = Player.Instance.GetLatLon.x; double Lon = Player.Instance.GetLatLon.y;
 
-                ((AISDTOs)dto).vessels[0] = new AISDTO
-                {
-                    Valid = true,
-                    SOG = 0,
-                    COG = 0,
-                    Draught = 0,
-                    Name = "NORTH",
-                    Key = "NORTH",
-                    Target = true,
-                    Latitude = Lat + 1,
-                    Longitude = Lon
-                };
+            //    ((AISDTOs)dto).vessels[0] = new AISDTO
+            //    {
+            //        Valid = true,
+            //        SOG = 0,
+            //        COG = 0,
+            //        Draught = 0,
+            //        Name = "NORTH",
+            //        Key = "NORTH",
+            //        Target = true,
+            //        Latitude = Lat + 1,
+            //        Longitude = Lon
+            //    };
 
-                ((AISDTOs)dto).vessels[1] = new AISDTO
-                {
-                    Valid = true,
-                    SOG = 0,
-                    COG = 0,
-                    Draught = 0,
-                    Name = "SOUTH",
-                    Key = "SOUTH",
-                    Target = true,
-                    Latitude = Lat - 1,
-                    Longitude = Lon
-                };
+            //    ((AISDTOs)dto).vessels[1] = new AISDTO
+            //    {
+            //        Valid = true,
+            //        SOG = 0,
+            //        COG = 0,
+            //        Draught = 0,
+            //        Name = "SOUTH",
+            //        Key = "SOUTH",
+            //        Target = false,
+            //        Latitude = Lat - 1,
+            //        Longitude = Lon
+            //    };
 
-                ((AISDTOs)dto).vessels[2] = new AISDTO
-                {
-                    Valid = true,
-                    SOG = 0,
-                    COG = 0,
-                    Draught = 0,
-                    Name = "EAST",
-                    Key = "EAST",
-                    Target = true,
-                    Latitude = Lat,
-                    Longitude = Lon + 1
-                };
+            //    ((AISDTOs)dto).vessels[2] = new AISDTO
+            //    {
+            //        Valid = true,
+            //        SOG = 0,
+            //        COG = 0,
+            //        Draught = 0,
+            //        Name = "EAST",
+            //        Key = "EAST",
+            //        Target = true,
+            //        Latitude = Lat,
+            //        Longitude = Lon + 1
+            //    };
 
-                ((AISDTOs)dto).vessels[3] = new AISDTO
-                {
-                    Valid = true,
-                    SOG = 0,
-                    COG = 0,
-                    Draught = 0,
-                    Name = "WEST",
-                    Key = "WEST",
-                    Target = true,
-                    Latitude = Lat,
-                    Longitude = Lon - 1
-                };
-            }
+            //    ((AISDTOs)dto).vessels[3] = new AISDTO
+            //    {
+            //        Valid = true,
+            //        SOG = 0,
+            //        COG = 0,
+            //        Draught = 0,
+            //        Name = "WEST",
+            //        Key = "WEST",
+            //        Target = false,
+            //        Latitude = Lat,
+            //        Longitude = Lon - 1
+            //    };
+            //}
 
             foreach (InfoItem infoItem in AISInfoItem.Generate(dto, dataType, displayArea))
             {
