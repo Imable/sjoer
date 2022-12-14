@@ -44,10 +44,10 @@
   * Create an account
   * Create a client below "Mine klienter"
   * Create a file in `Assets/Resources/Config/` named `barentswatch_conf.json` with the following content, where you replace `...` with the credentials provided by Barentswatch
-```
+```barentswatch_conf.json
 {
-    "token_url": "...",
-    "ais_url": "...",
+    "token_url": "https://id.barentswatch.no/connect/token",
+    "ais_url": "https://www.barentswatch.no/bwapi/v2/geodata/ais/openpositions?Xmin={0}&Xmax={1}&Ymin={2}&Ymax={3}",
     "auth_format": "client_id={0}&scope=api&client_secret={1}&grant_type=client_credentials",
     "client_id": "...",
     "client_secret": "..."
