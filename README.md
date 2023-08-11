@@ -6,9 +6,9 @@
 
 "Sjør" is a framework for Microsoft HoloLens 2 developed by Abel van Beek at the University of Bergen. 
 
-<figure>
+<figure style="display: flex; flex-flow: column; align="center;">
 <img src="https://github.com/Imable/sjoer/assets/50890336/476acc8e-e59c-466b-808a-1226c29e5d12" width="400" alt="POV screenshot of the product on a vessel, showing information about other vessels on the horizon">
-<figcaption>POV screenshot of the product on a vessel, showing information about other vessels on the horizon</figcaption>
+<figcaption style="font: italic smaller; text-align: center; padding: 4px;">POV screenshot of the product on a vessel, showing information about other vessels on the horizon</figcaption>
 </figure>
 
 ## Getting Started
