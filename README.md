@@ -1,10 +1,15 @@
 <p align="center">
-<img src="https://user-images.githubusercontent.com/50890336/167386203-90c31e9e-8a93-4310-b9c6-73246a8ae4e9.png" width="200" >
+<img src="https://user-images.githubusercontent.com/50890336/167386203-90c31e9e-8a93-4310-b9c6-73246a8ae4e9.png" width="200" alt="The Sjør logo">
 </p>
 
 <h1 align="center"><i>AR Supported Maritime Navigation</i></h1>
 
-"Sjør" is a framework for Microsoft HoloLens 2 developed by Abel van Beek at the University of Bergen
+"Sjør" is a framework for Microsoft HoloLens 2 developed by Abel van Beek at the University of Bergen. 
+
+<figure>
+<img src="https://github.com/Imable/sjoer/assets/50890336/476acc8e-e59c-466b-808a-1226c29e5d12" width="400" alt="POV screenshot of the product on a vessel, showing information about other vessels on the horizon">
+<figcaption>POV screenshot of the product on a vessel, showing information about other vessels on the horizon</figcaption>
+</figure>
 
 ## Getting Started
 
